@@ -7,9 +7,10 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title> visit Aventon </title>
     </head>
     <body>
+        <p> THIS IS THE CONTENT OF PROJECT </p>
         <?php
         // put your code here
         ?>
