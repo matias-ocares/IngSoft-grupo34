@@ -5,10 +5,8 @@
 <body>	
 
 <?php echo validation_errors(); ?>
-
-<?php echo form_open('form'); ?>
     
-    <form method = "post"   enctype="multipart/form-data">
+    <form method = "post" action="register/validar"  enctype="multipart/form-data">
 	
 	<legend>Datos Personales</legend>
 	Email (*) <br>
