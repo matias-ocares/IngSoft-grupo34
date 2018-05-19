@@ -1,8 +1,9 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH.'controllers/controller.php';
 
-class register extends CI_Controller {
+class register extends controller {
 
     public function __construct() {
         parent::__construct();
@@ -13,17 +14,13 @@ class register extends CI_Controller {
     }
 
     public function index() {
-        $data['title'] = 'Register Aventon';
-        //load view and pass the data
-        $this->load->view('templates/header', $data);
-        $this->load->view('view_register');
-        $this->load->view('templates/footer');
+        parent::index_page('view_register');
     }
 
     function existEmail() {
         $email = $this->input->post('email');
         //verifies email exists in DB
-        return (!($this->user_model->is_registered($email)));
+        return (!($this->model_user->is_registered($email)));
     }
 
     public function validar() {

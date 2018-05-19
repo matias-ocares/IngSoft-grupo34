@@ -1,8 +1,9 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH.'controllers/controller.php';
 
-class login extends CI_Controller {
+class login extends controller {
 
     public function __construct() {
         parent::__construct();
@@ -13,11 +14,7 @@ class login extends CI_Controller {
     }
 
     public function index() {
-        $data['title'] = 'Login Aventon';
-        //load view and pass the data
-        $this->load->view('templates/header', $data);
-        $this->load->view('view_login');
-        $this->load->view('templates/footer');
+        parent::index_page('view_login');
     }
 
     function existEmail() {
