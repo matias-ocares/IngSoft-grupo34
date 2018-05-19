@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class user_model extends CI_Model {
+class model_user extends CI_Model {
     public function __construct()
     {   parent::__construct();
         $this->load->database();
