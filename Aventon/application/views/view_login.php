@@ -21,9 +21,13 @@
       <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Ingresar a Aventon</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Correo electrónico" required autofocus>
+      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Correo electrónico" required autofocus 
+             >
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" required>
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" required
+             >
+ 
+ 
       <?php if ($error): ?>
         <p> <?php echo $error ?> </p>
       <?php endif; ?>
