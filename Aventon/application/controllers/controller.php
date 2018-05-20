@@ -8,10 +8,10 @@ class controller extends CI_Controller {
         parent::__construct();
     }
 
-    public function index_page ($view) {
+    public function index_page ($view, $data) {
         //load view and pass the data
         $this->load->view('templates/header');
-        $this->load->view($view);
+        $this->load->view($view, $data);
         $this->load->view('templates/footer');
     }
 

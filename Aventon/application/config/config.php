@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   | a PHP script and you can easily do that on your own.
   |
  */
-$config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/aventon/';
+$config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/aventon/index.php';
 
 /*
   |--------------------------------------------------------------------------
@@ -325,7 +325,7 @@ $config['cache_query_string'] = FALSE;
   | https://codeigniter.com/user_guide/libraries/encryption.html
   |
  */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'cl4v3s3sy0n';
 
 /*
   |--------------------------------------------------------------------------

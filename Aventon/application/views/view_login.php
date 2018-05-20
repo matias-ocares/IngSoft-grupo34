@@ -16,20 +16,27 @@
     <link href="../assets/css/signin.css" rel="stylesheet">
 </head>
 <body class="text-center">
-    <form method="post" action="login/validar" class="form-signin">
+    
+    <form method="post" action="login/login" class="form-signin">
       <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Ingresar a Aventon</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Correo electrónico" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" required>
+      <?php if ($error): ?>
+        <p> <?php echo $error ?> </p>
+      <?php endif; ?>
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" value="remember-me"> Recordarme
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
+      <button class="btn btn-lg btn-primary btn-block" type="reset">Limpiar</button>
+
+ 
+      <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
   
 
