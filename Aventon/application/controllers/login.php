@@ -46,10 +46,20 @@ class login extends controller {
         );
         return $config;
     }
-
+    
+    private function set_flash_campos_login(){
+       $campos_data = array(
+                        'email' => $this->input->post('email'),
+                       // 'password' => $this->input->post('password')
+               );
+           $this->session->set_flashdata($campos_data);           
+    
+    }
     public function login() {
 
         if ($this->input->post()) {
+            
+            $this->set_flash_campos_login();
 
             $this->form_validation->set_rules($this->validation_rules());
 
@@ -61,7 +71,6 @@ class login extends controller {
                 if ($usuario) {
                     $usuario_data = array(
                         'id' => $usuario->email,
-                        'pass' => $usuario->password,
                         'nombre' => $usuario->nombre,
                         'logueado' => TRUE
                     );
