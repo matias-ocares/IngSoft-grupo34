@@ -28,13 +28,15 @@ class model_user extends CI_Model {
     }
 
     public function user_by_name_pass($email, $password) {
-        $this->db->select('password, email, nombre');
+        $this->db->select('password, email, nombre, apellido, id_user');
         $this->db->from('user');
         $this->db->where('email', $email);
         $this->db->where('password', $password);
         $consulta = $this->db->get();
         $resultado = $consulta->row();
         return $resultado;
+        //$resultado = $consulta->result();
+      //return $resultado;
     }
 
     /*

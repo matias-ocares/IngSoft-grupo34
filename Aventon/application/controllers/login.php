@@ -70,8 +70,9 @@ class login extends controller {
                 $usuario = $this->model_user->user_by_name_pass($email, $password);
                 if ($usuario) {
                     $usuario_data = array(
-                        'id' => $usuario->email,
+                        'email' => $usuario->email,
                         'nombre' => $usuario->nombre,
+                        'id_user'=>$usuario-> id_user,
                         'logueado' => TRUE
                     );
                     $this->session->set_userdata($usuario_data);
