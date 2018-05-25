@@ -40,6 +40,13 @@ class viaje extends controller {
         return $config;
     }
 
+    public function ver($id) {
+        //Neccesary to pass "id" as a parameter
+        $viaje_id = $this->uri->segment(3);
+        $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+        parent::index_page('viaje/view_viaje_info', $data);
+    }
+
     public function index($rowno = 0) {
 
         $this->pagination->initialize($this->set_config());
@@ -47,13 +54,21 @@ class viaje extends controller {
         // Get Results from Data Base 
         $search_text = "";
         $rowperpage = 5;
-        $data['lista_viajes'] = $this->model_viaje->getData($rowno, $rowperpage, $search_text);
+        //Get all "viajes" with all columns
+        $lista_viajes = $this->model_viaje->getViajes($rowno, $rowperpage, $search_text);
 
         //Set header for the table
         $header = array('ID', 'Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Duración Viaje (en horas)');
         $this->table->set_heading($header);
 
-        parent::index_page('view_tabla_viajes', $data);
+        //Configure columns to be displayed on table
+        foreach ($lista_viajes as $viaje) {
+            $this->table->add_row($viaje['id_viaje'], $viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], $viaje['duracion_horas'], anchor('viaje/ver/' . $viaje['id_viaje'], 'Ver'));
+        }
+
+        //Call view
+        $data = array();
+        parent::index_page('viaje/view_viajes_ver', $data);
     }
 
 }

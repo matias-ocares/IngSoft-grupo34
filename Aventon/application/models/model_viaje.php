@@ -13,27 +13,30 @@ class model_viaje extends CI_Model {
 
     // cuando se implemente las búsquedas $search debería ser un array, 
     // ya que hay más de un criterio (orígen, destino, fecha, etc) 
-    public function getData($rowno, $rowperpage, $search = "") {
-
-        //Add columns to be displayed on table
-        $this->db->select('id_viaje, origen, destino, fecha, hora_inicio, duracion_horas');
-        $this->db->from('viaje');
-
+    public function getViajes($rowno, $rowperpage, $search = "") {
         /*
           if ($search != '') {
           $this->db->like('title', $search);
           $this->db->or_like('content', $search);
           }
          */
-        $this->db->limit($rowperpage, $rowno);
         //ordered desc to display the new element at the top
         $this->db->order_by('id_viaje', 'desc');
-        $query = $this->db->get();
+        $query = $this->db->get('viaje',$rowperpage,$rowno);
 
         return $query->result_array();
         //result_array() returns the query result as a pure array, 
         //or an empty array when no result is produced.
     }
+    
+    public function viaje_por_id($id){
+      
+      $this->db->where('id_viaje', $id);
+      $consulta = $this->db->get('viaje');
+      $resultado = $consulta->row(); //This function returns a single result row
+      return $resultado;
+   }
+    
 
     // Select total records
     public function getrecordCount($search = "") {

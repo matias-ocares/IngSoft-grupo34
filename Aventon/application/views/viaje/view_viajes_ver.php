@@ -38,7 +38,7 @@
         <h1> Lista de Viajes </h1>
 
         <div id="table_with_pagination">
-            <?php echo $this->table->generate($lista_viajes); ?>
+            <?php echo $this->table->generate(); ?>
             <?php echo $this->pagination->create_links(); ?>
         </div>
     </div>
