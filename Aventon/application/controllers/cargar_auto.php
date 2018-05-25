@@ -31,7 +31,7 @@ class cargar_auto extends controller {
             'marca' => $this->input->post('marca'),
             'modelo' => $this->input->post('modelo'),
             'patente' => $this->input->post('patente'),
-            'plazas' => $this->input->post('plazas'),
+            'color' => $this->input->post('color'),
         );
         $this->session->set_flashdata($campos_data);
     }
@@ -59,12 +59,12 @@ class cargar_auto extends controller {
             array(
                 'field' => 'patente',
                 'label' => 'Patente',
-                'rules' => 'required|exact_length[6]|alpha_numeric|callback_existPatente'
+                'rules' => 'required|min_length[6]|alpha_numeric|callback_existPatente'
             ),
             array(
-                'field' => 'plazas',
-                'label' => 'Plazas',
-                'rules' => 'required|min_length[1]|is_natural'
+                'field' => 'color',
+                'label' => 'Color',
+                'rules' => 'required|alpha'
             )
         );
         return $config;
@@ -75,8 +75,7 @@ class cargar_auto extends controller {
         $auto['marca'] = $this->input->post('marca');
         $auto ['modelo'] = $this->input->post('modelo');
         $auto ['num_patente'] = $this->input->post('patente');
-        //$auto['color'] = $this->input->post('marca');
-        $auto ['plazas'] = $this->input->post('plazas');
+        $auto ['color'] = $this->input->post('color');
         $auto['id_user'] = $this->session->userdata('id_user'); //con este guardo el id de usuario que obtuve al guardar la sesion iniciada.
         return $auto;
     }
@@ -88,10 +87,14 @@ class cargar_auto extends controller {
             $this->form_validation->set_rules($this->validation_rules());
             if ($this->form_validation->run() == TRUE) {
                 $auto = $this->array_auto();
-                $this->model_auto->register_auto($auto);
+               if( $this->model_auto->register_auto($auto)== TRUE) {
                 $this->session->set_flashdata('notifico', 'Se cargó el auto exitosamente.');
-                redirect('login/logueado');
-            } else {
+               redirect('login/logueado');}
+               else {
+                   $this->session->set_flashdata('notifico', 'Por el momento no pudo cargarse el auto.');
+               redirect('login/logueado');}
+        }
+             else {
                 $this->session->set_flashdata('notifico', validation_errors());
                 redirect('cargar_auto');
             }

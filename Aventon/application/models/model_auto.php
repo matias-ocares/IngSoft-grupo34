@@ -21,6 +21,10 @@ class model_auto extends CI_Model {
     public function register_auto($auto) {
 
         $this->db->insert('auto', $auto);
+        $this->db->where('num_patente', $auto['num_patente']);
+        $amount_results = $this->db->count_all_results('auto');
+        return ($amount_results == 1);
+        
     }
 
   

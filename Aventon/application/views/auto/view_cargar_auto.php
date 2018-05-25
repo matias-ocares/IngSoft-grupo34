@@ -13,32 +13,72 @@
 </div>
 -->  
 <!--Custom styles for this template --> 
-<link href="../assets/css/signin.css" rel="stylesheet">
+<link href="../assets/css/signin.css" rel="stylesheet"> 
 </head>
 <body class="text-center">
 
-    <form method="post" action="cargar_auto/cargar_auto" class="form-signin">
+
+    <form id="formAuto" name="formAuto" method="post" action="cargar_auto/cargar_auto" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Cargar auto</h1>
 
 
 
-        <label for="inputMarca" class="sr-only">Marca</label>            
-        <input type="text" id="inputMarca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">        
-        <label for="inputModelo" class="sr-only">Modelo</label>           
-        <input type="text" id="inputModelo" name="modelo" class="form-control" placeholder="Modelo"  required autofocus value="<?php echo $this->session->flashdata('modelo'); ?>">        
-        <label for="inputPatente" class="sr-only">Patente</label>                       
-        <input type="text" id="inputPatente" name="patente" class="form-control" placeholder="Patente"  required autofocus value="<?php echo $this->session->flashdata('patente'); ?>">
-        <label for="inputPlazas" class="sr-only">Plazas</label>                       
-        <input type="number" id="inputPlazas" name="plazas" class="form-control" placeholder="Plazas disponibles"  required autofocus value="">
+        <label for="marca" class="sr-only">Marca</label>            
+        <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">        
+        <label for="modelo" class="sr-only">Modelo</label>           
+        <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo"  required autofocus value="<?php echo $this->session->flashdata('modelo'); ?>">        
+        <label for="patente" class="sr-only">Patente</label>                       
+        <input type="text" id="patente" name="patente" class="form-control" placeholder="Patente"  required autofocus value="<?php echo $this->session->flashdata('patente'); ?>">
+        <label for="color" class="sr-only">Color</label>                       
+        <input type="text" id="color" name="color" class="form-control" placeholder="Color"  required autofocus value="<?php echo $this->session->flashdata('color'); ?>">
+
+        </br>
+        </br>
+
+
         <?php if ($notifico): ?>
 
             <p> <?php echo $notifico ?> </p>
 
         <?php endif; ?>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Cargar auto</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onClick="return validacion();">Cargar auto</button>
         <button class="btn btn-lg btn-primary btn-block" type="reset">Limpiar</button>
 
 
         <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
+</body>
+<script>
+    function validacion() {
+        marca = document.getElementById("marca");
+        modelo = document.getElementById("modelo");
+        patente = document.getElementById("patente");
+        color = document.getElementById("color");
+        var expresion_regular_texto = /[A-Za-z\s]+$/;
+        var expresion_regular_Mayus = /[A-Z]/;
+        var expresion_regular_Min = /[a-z]/;
+        var expresion_regular_patente = /[0-9|A-Za-z\s]/;
+        if (marca.value === "" || marca.length === 0 || /^\s+$/.test(marca.value)) {
+            alert('[ERROR] El campo Marca es obligatorio.');
+            return false;
+        } else
+
+        if (modelo.value === "" || modelo.length === 0 || /^\s+$/.test(modelo.value)) {
+            alert('[ERROR] El campo Modelo es obligatorio.');
+            return false;
+        } else
+        if (patente.value === "" || patente.length === 0 || /^\s+$/.test(patente.value)) {
+            alert('[ERROR] El campo Patente es obligatorio.');
+            return false;
+        } else
+
+        if (color.value === "" || color.length === 0 || /^\s+$/.test(color.value)) {
+            alert('[ERROR] El campo Color es obligatorio.');
+            return false;
+        } else
+            // Si el script ha llegado a este punto, todas las condiciones
+            // se han cumplido, por lo que se devuelve el valor true
+            return true;
+    }
+</script>
