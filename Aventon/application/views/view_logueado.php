@@ -18,6 +18,7 @@
         <?php endif; ?>
         <p>
             <a href="<?php echo base_url() ?>login/cerrar_sesion" > Cerrar sesión</a>
+            <a href="<?php echo base_url() ?>editar_perfil"> Editar perfil </a>
             <a href="<?php echo base_url() ?>cargar_auto"> Cargar auto </a>
            
         </p>

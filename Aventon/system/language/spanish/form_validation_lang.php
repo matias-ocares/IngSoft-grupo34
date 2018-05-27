@@ -37,16 +37,15 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['form_validation_required']		= 'El campo {field} es obligatorio.';
+$lang['form_validation_required']		= 'El {field} es obligatorio.';
 $lang['form_validation_isset']			= 'The {field} field must have a value.';
-$lang['form_validation_valid_email']		= 'El campo {name} debe contener un formato v·lido.';
+$lang['form_validation_valid_email']		= 'El campo {name} debe contener un formato v√°lido.';
 $lang['form_validation_valid_emails']		= 'The {field} field must contain all valid email addresses.';
 $lang['form_validation_valid_url']		= 'The {field} field must contain a valid URL.';
 $lang['form_validation_valid_ip']		= 'The {field} field must contain a valid IP.';
 $lang['form_validation_min_length']		= 'El campo {field} debe contener al menos {param} caracteres.';
-$lang['form_validation_max_length']		= 'El campo {field} no puede contener m·s de {param} caracteres.';
+$lang['form_validation_max_length']		= 'El campo {field} no puede contener m√°s de {param} caracteres.';
 $lang['form_validation_exact_length']		= 'The {field} field must be exactly {param} characters in length.';
-$lang['form_validation_alpha']			= 'The {field} field may only contain alphabetical characters.';
 $lang['form_validation_alpha_numeric']		= 'The {field} field may only contain alpha-numeric characters.';
 $lang['form_validation_alpha_numeric_spaces']	= 'The {field} field may only contain alpha-numeric characters and spaces.';
 $lang['form_validation_alpha_dash']		= 'The {field} field may only contain alpha-numeric characters, underscores, and dashes.';
@@ -54,7 +53,6 @@ $lang['form_validation_numeric']		= 'The {field} field must contain only numbers
 $lang['form_validation_is_numeric']		= 'The {field} field must contain only numeric characters.';
 $lang['form_validation_integer']		= 'The {field} field must contain an integer.';
 $lang['form_validation_regex_match']		= 'The {field} field is not in the correct format.';
-$lang['form_validation_matches']		= 'The {field} field does not match the {param} field.';
 $lang['form_validation_differs']		= 'The {field} field must differ from the {param} field.';
 $lang['form_validation_is_unique'] 		= 'The {field} field must contain a unique value.';
 $lang['form_validation_is_natural']		= 'The {field} field must only contain digits.';
@@ -68,3 +66,9 @@ $lang['form_validation_error_message_not_set']	= 'Unable to access an error mess
 $lang['form_validation_in_list']		= 'The {field} field must be one of: {param}.';
 $lang['form_validation_existEmail']		= 'El Correo electronico no esta registrado.';
 $lang['form_validation_existPatente']		= 'Ya existe un auto con esa patente.';
+$lang['form_validation_existEmail']		= 'El correo electronico ingresado no se encuentra registrado.';
+$lang['form_validation_notExistEmail']		= 'El correo electronico ingresado ya se encuentra registrado.';
+$lang['form_validation_matchesPassword']		= 'Las claves no coinciden.';
+$lang['form_validation_alpha']			= 'El {field} solo admite caracteres alfabeticos.';
+$lang['form_validation_matches']		= 'Las claves no coinciden.';
+
