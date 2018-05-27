@@ -10,7 +10,12 @@ class controller extends CI_Controller {
 
     public function index_page ($view, $data) {
         //load view and pass the data
-        $this->load->view('templates/header');
+        if($this->session->userdata('logueado')==true){
+        $this->load->view('templates/header');}
+        else{
+        $this->load->view('templates/header-logout');    
+        }
+        
         $this->load->view($view, $data);
         $this->load->view('templates/footer');
     }

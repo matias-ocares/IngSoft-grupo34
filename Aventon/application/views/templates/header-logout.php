@@ -47,7 +47,7 @@ left: 0;
         <li><a href="#">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="<?php echo base_url() ?>login/cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span> Cerrar sesión</a></li>
+        <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Registrarme</a></li>
       </ul>
     </div>
   </div>
