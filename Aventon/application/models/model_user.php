@@ -38,7 +38,43 @@ class model_user extends CI_Model {
         //$resultado = $consulta->result();
       //return $resultado;
     }
+    
 
+    public function register_user($user){        
+        $this->db->insert('user', $user); 
+    }
+    
+    
+            public function get_contents() {
+                $this->db->select('*');
+                $this->db->from('user');
+                $query = $this->db->get();
+                return $result = $query->result();
+            }
+
+
+            public function entry_update( $id ) {
+
+                $this->db->select('*');
+                $this->db->from('user');
+                $this->db->where('id',$id );
+                $query = $this->db->get();
+                return $result = $query->row_array();
+
+            }
+            public function entry_update1($id) {
+              $data = array(
+
+        'name' => $this->input->post('name'),
+        'surname' => $this->input->post('surname'),
+        'email' => $this->input->post('email')
+                );
+
+                 $this->db->where('id', $id);
+                $this->db->update('user', $data);
+
+            }
+ 
     /*
       public function is_register($email){
       $this->db->select('*');

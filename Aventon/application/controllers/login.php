@@ -30,7 +30,7 @@ class login extends controller {
     }
 
     private function validation_rules() {
-        //funcón provada que crea las reglas de validación
+        //función privada que crea las reglas de validación
 
         $config = array(
             array(
@@ -68,6 +68,8 @@ class login extends controller {
                 $password = $this->input->post('password');
 
                 $usuario = $this->model_user->user_by_name_pass($email, $password);
+                
+                
                 if ($usuario) {
                     $usuario_data = array(
                         'email' => $usuario->email,
