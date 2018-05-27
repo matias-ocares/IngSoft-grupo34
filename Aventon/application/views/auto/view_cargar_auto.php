@@ -24,7 +24,7 @@
 
 
 
-        <label for="marca" class="sr-only">Marca</label>            
+        <label for="marca" class="sr-only">Marca</label> 
         <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">        
         <label for="modelo" class="sr-only">Modelo</label>           
         <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo"  required autofocus value="<?php echo $this->session->flashdata('modelo'); ?>">        
