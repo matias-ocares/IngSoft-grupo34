@@ -3,11 +3,11 @@
             <title>user registration</title>
         </head>
         <body>
-            <form  action="edit"  method="POST" name="myform">
-                <input type="hidden" name="id" value="<?php echo $result['id']; ?>">
-                username :<input type="text" name="name" value="<?php echo $result['name'] ?>"></br>
-                age      :<input type="text" name="age" value="<?php echo $result['age'] ?>"></br>
-                Address  :<input type="text" name="address" value="<?php echo $result['address'] ?>"></br>
+            <form  action="editar_perfil/edit"  method="POST" name="myform">
+                <input type="hidden" name="id" value="<?php echo $user['id_user'] ?>">
+                username :<input type="text" name="name" value="<?php echo $user['name'] ?>"></br>
+                age      :<input type="text" name="surname" value="<?php echo $user['surname'] ?>"></br>
+                Address  :<input type="text" name="email" value="<?php echo $user['email'] ?>"></br>
 
                 <input type="submit" value="update" name="submit">
             </form>
