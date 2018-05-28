@@ -58,8 +58,14 @@ class viaje extends controller {
         $lista_viajes = $this->model_viaje->getViajes($rowno, $rowperpage, $search_text);
 
         //Set header for the table
-        $header = array('ID', 'Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Duración Viaje (en horas)');
+        $header = array('ID', 'Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Duración Viaje (en horas)', 'Accciones');
         $this->table->set_heading($header);
+        //estilos
+       // $tmpl = array ( 'table_open'  => '<table style="width:100%">' );
+        
+        $tmpl = array ('table_open' => '<table border="1" cellpadding="4" cellspacing="0" style="width:100%">',     
+                       'table_close' => '</table>');
+        $this->table->set_template($tmpl);
 
         //Configure columns to be displayed on table
         foreach ($lista_viajes as $viaje) {
