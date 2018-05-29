@@ -18,13 +18,11 @@ class editar_perfil extends controller {
         parent::index_page('view_editarPerfil',$data);
     }
     public function edit() {
-            $data = array();
-            $get = $this->uri->uri_to_assoc();
-            $data['result'] = $this->usermodel->entry_update( $get['id'] );
-
-            $this->load->view('useredit', $data);
-             if ($this->input->post('submit')) {
-
+        $data = array();
+        $get = $this->uri->uri_to_assoc();
+        $data['user'] = $this->model_user->entry_update( $get['id'] );
+        $this->load->view('view_editarPerfil', $data);
+            if ($this->input->post('submit')) {
                 $this->usermodel->entry_update1($get['id']);
             }
         }

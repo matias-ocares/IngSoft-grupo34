@@ -57,7 +57,7 @@ class model_user extends CI_Model {
 
                 $this->db->select('*');
                 $this->db->from('user');
-                $this->db->where('id',$id );
+                $this->db->where('id_user',$id );
                 $query = $this->db->get();
                 return $result = $query->row_array();
 
@@ -70,7 +70,7 @@ class model_user extends CI_Model {
         'email' => $this->input->post('email')
                 );
 
-                 $this->db->where('id', $id);
+                 $this->db->where('id_user', $id);
                 $this->db->update('user', $data);
 
             }
