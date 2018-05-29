@@ -37,10 +37,10 @@ class cargar_auto extends controller {
     }
 
      function existPatente() {
-        $patente = $this->input->post('patente');      
+        $patente = $this->input->post('patente');
         //verifies patente exists in DB
-        return (!$this->model_auto->is_registered($patente));}
-    
+        return (!$this->model_auto->is_registered($patente));
+    }
 
     private function validation_rules() {
         //funcón provada que crea las reglas de validación

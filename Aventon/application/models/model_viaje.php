@@ -21,7 +21,7 @@ class model_viaje extends CI_Model {
           }
          */
         //ordered desc to display the new element at the top
-        $this->db->order_by('fecha', 'asc');
+        $this->db->order_by('id_viaje', 'desc');
         $query = $this->db->get('viaje',$rowperpage,$rowno);
 
         return $query->result_array();
