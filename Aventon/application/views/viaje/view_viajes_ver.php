@@ -1,46 +1,24 @@
 
-<style>
+<?php if ($this->session->flashdata('notifico')): ?>
 
-    body {
-        text-align: center;
-    }
+    <p> <?php echo $this->session->flashdata('notifico') ?></p>
 
-    #pagination {
-        display: inline-block;
-        text-align: center;
-        margin-top: 10px;
-    }
+<?php endif; ?>
 
-    #pagination a {
-        color: black;
-        padding: 8px 16px;
-        text-decoration: none;
-    }
-
-    #pagination a:active {
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 5px;
-    }
-
-    #pagination a:hover {
-        background-color: #ddd;
-        border-radius: 5px;
-    }
-
-</style>
-
-</head>
-
-<body>
-    
-    <div class="center">
-        <h1> Lista de Viajes </h1>
-
-        <div id="table_with_pagination">
+<div class="col-sm-8 text-left"> 
+    <h1>Listado de viajes</h1>
+    <div class="container">    
+        <div class="table-responsive">   
             <?php echo $this->table->generate(); ?>
-            <?php echo $this->pagination->create_links(); ?>
         </div>
-    </div>
+        <?php echo $this->pagination->create_links(); ?>
+
+    </div>    
+</div> 
+    
+
+
+
+
 
 

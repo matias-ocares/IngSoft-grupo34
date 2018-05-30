@@ -23,16 +23,12 @@
         <h1 class="h3 mb-3 font-weight-normal">Ingresar a Aventon</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Correo electrónico"  required autofocus 
-               value="<?php echo $this->session->flashdata('email'); ?>"  >
+              value="<?php echo $this->session->flashdata('email'); ?>"  >
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" required>
 
 
-        <?php if ($error): ?>
-
-            <p> <?php echo $error ?> </p>
-
-        <?php endif; ?>
+    <!-- php error-->
 
         <div class="checkbox mb-3">
             <label>
