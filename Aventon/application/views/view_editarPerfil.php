@@ -3,13 +3,14 @@
             <title>user registration</title>
         </head>
         <body>
-            <form  action="editar_perfil/edit"  method="POST" name="myform">
-                <input type="hidden" name="id" value="<?php echo $user['id_user'] ?>">
-                username :<input type="text" name="name" value="<?php echo $user['name'] ?>"></br>
-                age      :<input type="text" name="surname" value="<?php echo $user['surname'] ?>"></br>
-                Address  :<input type="text" name="email" value="<?php echo $user['email'] ?>"></br>
+            <form  action="editar_perfil/edit"  method="POST">
+                <input type="hidden" name="id" value="<?php set_value('id', (isset($form['id_user'])) ? $form['id_user'] : '') ?>">
+                username :<input type="text" name="name" value="<?php set_value('nombre', (isset($form['nombre'])) ? $form['nombre'] : '') ?>"></br>
+                age      :<input type="text" name="surname" value="<?php set_value('apellido', (isset($form['apellido'])) ? $form['apellido'] : '') ?>"></br>
+                Address  :<input type="text" name="email" value="<?php set_value('email', (isset($form['email'])) ? $form['email'] : '') ?>"></br>
 
-                <input type="submit" value="update" name="submit">
+                <input type="submit" value="Actualizar" name="submit">
+
             </form>
         </body>
 
