@@ -75,7 +75,6 @@
             </ul>
         </div>
     </nav>     
-
     <div class="container-fluid text-center">    
       <div class="row content">
         <div class="col-sm-2 sidenav">
@@ -83,9 +82,9 @@
           <p><a href="#">Link</a></p>
           <p><a href="#">Link</a></p>
         </div>  
-            <?php if ($this->session->flashdata('notifico')): ?>
+        <?php if ($this->session->flashdata('notifico')): ?>
 
-            <p> <?php echo $this->session->flashdata('notifico') ?></p>
+            <p> <?php echo $this->session->flashdata('notifico') ?> </p>
 
         <?php endif; ?>
       
@@ -132,10 +131,10 @@
         </div>
       </div>
     </div>
-
 <footer class="container-fluid text-center">
   <p>© 2018</p>
 </footer>
-
+           
+        </p>
 </body>
 </html>

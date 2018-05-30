@@ -7,10 +7,12 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Aventon - Compartir viajes</title>
 
+
     <!-- Bootstrap -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
  
  
+
   
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
