@@ -51,34 +51,51 @@
 </body>
 <script>
     function validacion() {
-        marca = document.getElementById("marca");
-        modelo = document.getElementById("modelo");
-        patente = document.getElementById("patente");
-        color = document.getElementById("color");
-        var expresion_regular_texto = /[A-Za-z\s]+$/;
-        var expresion_regular_Mayus = /[A-Z]/;
-        var expresion_regular_Min = /[a-z]/;
-        var expresion_regular_patente = /[0-9|A-Za-z\s]/;
-        if (marca.value === "" || marca.length === 0 || /^\s+$/.test(marca.value)) {
-            alert('[ERROR] El campo Marca es obligatorio.');
+        marca = document.getElementById("marca").value;
+        modelo = document.getElementById("modelo").value;
+        patente = document.getElementById("patente").value;
+        color = document.getElementById("color").value;
+        
+        var expresion_regular_texto = /^[A-Za-z\s]+$/;
+        var expresion_regular_patente = /[A-Za-z0-9]/;
+        if (marca === ""|| marca.length === 0 || /^\s+$/.test(marca)) {
+            alert('[!] Todos los campos con son obligatorios.');
             return false;
-        } else
+        }
 
-        if (modelo.value === "" || modelo.length === 0 || /^\s+$/.test(modelo.value)) {
-            alert('[ERROR] El campo Modelo es obligatorio.');
+        if (modelo === ""|| modelo.length === 0 || /^\s+$/.test(modelo)) {
+            alert('[!] Todos los campos con son obligatorios.');
             return false;
-        } else
-        if (patente.value === "" || patente.length === 0 || /^\s+$/.test(patente.value)) {
-            alert('[ERROR] El campo Patente es obligatorio.');
+        } 
+        if (patente === ""|| patente.length === 0 || /^\s+$/.test(patente)) {
+            alert('[!] Todos los campos con son obligatorios.');
             return false;
-        } else
+        } 
 
-        if (color.value === "" || color.length === 0 || /^\s+$/.test(color.value)) {
-            alert('[ERROR] El campo Color es obligatorio.');
+        if (color === ""|| color.length === 0 || /^\s+$/.test(color)) {
+            alert('[!] Todos los campos con son obligatorios.');
             return false;
-        } else
+        } 
+        if (!expresion_regular_texto.test(marca)) {
+            alert("[!] El campo marca contiene caracteres no permitidos");
+            return false;
+	}
+        if (!expresion_regular_texto.test(modelo)) {
+            alert("[!] El campo modelo contiene caracteres no permitidos");
+            return false;
+	}
+        
+        if ( (patente.length < 6) || (expresion_regular_patente.test(patente)===false)) {
+            alert("[!] La patente debe tener al menos 6 caracteres y ser alfanumerica. Vuelva a ingresarla");
+            return false;
+	}
+        if (!expresion_regular_texto.test(color)) {
+            alert("[!] El campo color contiene caracteres no permitidos");
+            return false;
+	}
+        
             // Si el script ha llegado a este punto, todas las condiciones
             // se han cumplido, por lo que se devuelve el valor true
-            return true;
+            //return true;
     }
 </script>
