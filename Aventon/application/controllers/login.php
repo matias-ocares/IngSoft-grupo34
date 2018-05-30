@@ -99,7 +99,8 @@ class login extends controller {
              */
             $data = array();
             $data['nombre'] = $this->session->userdata('nombre');
-            parent::index_page('view_logueado', $data);
+            redirect('viaje/');
+            //parent::index_page('view_logueado', $data);
         } else {
             redirect('login');
         }

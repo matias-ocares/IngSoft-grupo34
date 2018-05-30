@@ -21,7 +21,7 @@ class model_viaje extends CI_Model {
           }
          */
         //ordered desc to display the new element at the top
-        $this->db->order_by('id_viaje', 'desc');
+        $this->db->order_by('fecha', 'asc');
         $query = $this->db->get('viaje',$rowperpage,$rowno);
 
         return $query->result_array();
@@ -52,4 +52,11 @@ class model_viaje extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    public function viaje_pertenece_user ($id_viaje, $id_user){
+        $this->db->where('id_viaje', $id_viaje);
+        $this->db->where('id_chofer', $id_user);
+        $amount_results = $this->db->count_all_results('viaje');
+        return ($amount_results == 1);
+    }
+    
 }

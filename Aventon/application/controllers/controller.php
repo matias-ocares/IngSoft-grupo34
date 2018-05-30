@@ -8,11 +8,18 @@ class controller extends CI_Controller {
         parent::__construct();
     }
 
-    public function index_page ($view, $data) {
+    public function index_page($view, $data) {
         //load view and pass the data
-        $this->load->view('templates/header');
-        $this->load->view($view, $data);
-        $this->load->view('templates/footer');
+        if ($this->session->userdata('logueado')) {
+            $this->load->view('templates/header');
+            $this->load->view('templates/navbar');
+            $this->load->view('templates/sidebar');
+            $this->load->view($view, $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->load->view('templates/header-logout');
+            $this->load->view($view, $data);
+        }
     }
 
 }

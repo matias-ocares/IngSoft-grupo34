@@ -29,13 +29,34 @@ class viaje extends controller {
         $config['per_page'] = '5';
         //Additional properties
         $config['num_links'] = 2;
-        $config['first_link'] = 'Primero';
-        $config['last_link'] = 'Ultimo';
-        //Properties that allow to applied css to pagination elements
-        $config['cur_tag_open'] = '<b class = "actual">';
-        $config['cur_tag_close'] = '</b>';
-        $config['full_tag_open'] = '<div id="pagination">';
-        $config['full_tag_close'] = '</div>';
+
+        /* Properties that allow to applied css to pagination elements
+          $config['first_link'] = 'Primero';
+          $config['last_link'] = 'Ultimo';
+          $config['cur_tag_open'] = '<b class = "actual">';
+          $config['cur_tag_close'] = '</b>';
+          $config['full_tag_open'] = '<div class="pagination">';
+          $config['full_tag_close'] = '</div>';
+         */
+        // --- PROBANDO ALGO NUEVO
+        $config["full_tag_open"] = '<ul class="pagination">';
+        $config["full_tag_close"] = '</ul>';
+        $config["first_link"] = "&laquo;";
+        $config["first_tag_open"] = "<li>";
+        $config["first_tag_close"] = "</li>";
+        $config["last_link"] = "&raquo;";
+        $config["last_tag_open"] = "<li>";
+        $config["last_tag_close"] = "</li>";
+        $config['next_link'] = '&gt;';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '<li>';
+        $config['prev_link'] = '&lt;';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '<li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
 
         return $config;
     }
@@ -44,6 +65,7 @@ class viaje extends controller {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
         $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+        //parent::index_page('viaje/view_viaje_info', $data);
         parent::index_page('viaje/view_viaje_info', $data);
     }
 
@@ -58,14 +80,30 @@ class viaje extends controller {
         $lista_viajes = $this->model_viaje->getViajes($rowno, $rowperpage, $search_text);
 
         //Set header for the table
-        $header = array('ID', 'Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Duración Viaje (en horas)');
+        $header = array('Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Acciones');
         $this->table->set_heading($header);
+
+        $tmpl = array('table_open' => '<table class="table table-hover">',
+            'heading_row_start' => '<tr style="background-color: #f1f1f1; font-weight:bold; color:black; text-align:left;">',
+            'heading_row_end' => '</tr>',
+            'heading_cell_start' => '<th style="text-align:left;" height=50 width=70>',
+            'heading_cell_end' => '</th>',
+            'cell_start' => '<td style="text-align:left;" height=25>',
+            'cell_end' => '</td>',
+            'cell_alt_start' => '<td style="text-align:left;" height=25>',
+            'cell_alt_end' => '</td>',
+            'table_close' => '</table>');
+        $this->table->set_template($tmpl);
 
         //Configure columns to be displayed on table
         foreach ($lista_viajes as $viaje) {
-            $this->table->add_row($viaje['id_viaje'], $viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], $viaje['duracion_horas'], anchor('viaje/ver/' . $viaje['id_viaje'], 'Ver'));
+            $pertenece = $this->model_viaje->viaje_pertenece_user($viaje['id_viaje'], $this->session->userdata('id_user'));
+            if ($pertenece) {
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>'));
+            } else {
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span class="glyphicon glyphicon-trash"></span>');
+            }
         }
-
         //Call view
         $data = array();
         parent::index_page('viaje/view_viajes_ver', $data);
