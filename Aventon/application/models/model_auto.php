@@ -27,5 +27,14 @@ class model_auto extends CI_Model {
         
     }
 
+    public function modify_auto($auto) {
+        $this->db->where('num_patente', $auto['num_patente']);
+        $this->db->update('auto', $auto);
+        $this->db->where('num_patente', $auto['num_patente']);
+        $amount_results = $this->db->count_all_results('auto');
+        return ($amount_results == 1);
+        
+    }
+
   
 }
