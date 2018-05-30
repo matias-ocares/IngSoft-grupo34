@@ -12,20 +12,27 @@ class editar_perfil extends controller {
         $this->load->library('form_validation');
         $this->load->helper('url');
     }
-        public function index() {
+    public function index() {
         $data=array();    
         $data['error'] = $this->session->flashdata('error');
         parent::index_page('view_editarPerfil',$data);
     }
-    public function edit() {
-        $data = array();
-        $get = $this->uri->uri_to_assoc();
-        $data['user'] = $this->model_user->entry_update( $get['id'] );
-        $this->load->view('view_editarPerfil', $data);
-            if ($this->input->post('submit')) {
-                $this->usermodel->entry_update1($get['id']);
-            }
-        }
+    
+    function create() {
+        $data = array('title' => 'Add Page', 'form' => NULL);
+        $this->load->view('form', $data);
+}
+        
+    function edit() {
+        $sql  = 'SELECT id_user, nombre, apellido, email ';
+        $sql .= '  FROM user WHERE id_user = ?';
+        $sql_params = array($id);
+        $query = $this->db->query($sql, $sql_params);
+        $form = $query->row_array();
+
+        redirect('register');
+    }
+    
     
 
      
