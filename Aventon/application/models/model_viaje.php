@@ -10,7 +10,29 @@ class model_viaje extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
+function getMisAutos()
+    {
+        
+ $id= $this -> session-> userdata('id_user');
+ 
+  $this->db->from('auto');
+ $this->db->where('id_user', $id);
+    $this->db->select('marca, modelo, num_patente');   
+      
+      $consulta = $this->db->get();
+      $resultado = $consulta->result();
+      return $resultado;
+    } 
+    
+ public function register_viaje($viaje) {
 
+        $this->db->insert('viaje', $viaje);
+        $this->db->where('fecha', $viaje['fecha']); //PENDIENTE - Cómo consulto si ese viaje fue creado.
+        $amount_results = $this->db->count_all_results('viaje');
+        return ($amount_results == 1);
+        
+    }   
+    
     // cuando se implemente las búsquedas $search debería ser un array, 
     // ya que hay más de un criterio (orígen, destino, fecha, etc) 
     public function getViajes($rowno, $rowperpage, $search = "") {

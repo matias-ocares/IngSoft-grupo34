@@ -93,14 +93,16 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
             <tr>
                 <td><p> Mi auto:  </p></td>
                 <td>
-                    <input list="auto" class="form-control" placeholder="Mi auto">
-                    <datalist id="auto">
-                        <option value="Internet Explorer">
-                        <option value="Firefox">
-                        <option value="Google Chrome">
-                        <option value="Opera">
-                        <option value="Safari">
-                    </datalist> 
+                   
+                    
+           
+                    
+            <select class="form-control">
+    <?php foreach($groups as $each){ ?>
+        <option value="<?php echo $each->num_patente ?>"><?php echo $each-> num_patente ?></option>';
+    <?php } ?> 
+</select>        
+                    
                 </td>
             </tr>
                     
@@ -135,6 +137,65 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
 <script>
     document.getElementById('#fecha').value = new Date().toDateInputValue();
 
+    function validacion() {
+        origen = document.getElementById("origen").value;
+        destino = document.getElementById("destino").value;
+        fecha = document.getElementById("fecha").value;
+        hora = document.getElementById("hora").value;
+        duracion = document.getElementById("duracion").value;
+        costo = document.getElementById("costo").value;
+        auto = document.getElementById("auto").value;
+        plazas = document.getElementById("plazas").value;
+        
+        var expresion_regular_texto = /^[A-Za-z\s]+$/;
+      
+        if (origen === ""|| origen.length === 0 || /^\s+$/.test(origen)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        }
 
+        if (destino === ""|| destino.length === 0 || /^\s+$/.test(destino)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        } 
+        if (fecha === ""|| fecha.length === 0 || /^\s+$/.test(fecha)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        } 
+
+        if (hora === ""|| hora.length === 0 || /^\s+$/.test(hora)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        } 
+        if (duracion === ""|| duracion.length === 0 || /^\s+$/.test(duracion)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        }
+
+        if (costo === ""|| costo.length === 0 || /^\s+$/.test(costo)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        } 
+        if (auto === ""|| auto.length === 0 || /^\s+$/.test(auto)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        } 
+
+        if (plazas === ""|| plazas.length === 0 || /^\s+$/.test(plazas)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        } 
+        if (!expresion_regular_texto.test(origen)) {
+            alert("[!] El campo origen contiene caracteres no permitidos");
+            return false;
+	}
+        if (!expresion_regular_texto.test(destino)) {
+            alert("[!] El campo destino contiene caracteres no permitidos");
+            return false;
+	}
+        
+      
+       
+    }
 
 </script>            
