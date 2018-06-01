@@ -74,6 +74,7 @@ class login extends controller {
                     $usuario_data = array(
                         'email' => $usuario->email,
                         'nombre' => $usuario->nombre,
+                        'apellido' => $usuario->apellido,
                         'id_user'=>$usuario-> id_user,
                         'logueado' => TRUE
                     );

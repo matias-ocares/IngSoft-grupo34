@@ -26,32 +26,26 @@ class register extends controller {
         //verifies email exists in DB
         return (!($this->model_user->is_registered($email)));
     }
-   /* function password_check ($str){
-        if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
-        return TRUE;
-        }
-        return FALSE;        
-    }
-    */
+
    private function set_flash_campos_register(){
         $campos_data = array(
-                    'name' => $this->input->post('name'),
-                    'surname' => $this->input->post('surname'),
+                    'nombre' => $this->input->post('nombre'),
+                    'apellido' => $this->input->post('apellido'),
                     'email' => $this->input->post('email'),
                );
         $this->session->set_flashdata($campos_data);     
     }
     
-    public function validation_rules(){
+    private function validation_rules(){
  
         $user=array(
             array(
-                'field' => 'name',
+                'field' => 'nombre',
                 'label' => 'nombre',
                 'rules' => 'required|alpha|trim'
             ),
             array(
-                'field' => 'surname',
+                'field' => 'apellido',
                 'label' => 'apellido',
                 'rules' => 'required|alpha|trim'
             ),
@@ -75,22 +69,7 @@ class register extends controller {
         return $user;
         
     } 
-    /*public function validar() {
-        // basic required field
-        $this->form_validation->set_rules('name', 'name', 'required|alpha');
-        $this->form_validation->set_rules('surname', 'surname', 'required|alpha');
-        $this->form_validation->set_rules('email', 'email', 'required|valid_email|callback_existEmail');
-        $this->form_validation->set_rules('password', 'password', 'required|min_leght[8]|alphanumeric|callback_password_check');
-        $this->form_validation->set_rules('passwordRepeat', 'passwordRepeat', 'required|matches[password]');
-        
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('fail');
-        } else {
-            // load success template...
-            $this->load->view('success');
-        }       
-    }*/
-    
+
     public function register() {
         if ($this->input->post()) {
             
@@ -101,8 +80,8 @@ class register extends controller {
             if ($this->form_validation->run() == TRUE) { 
                 
                 $user=array(
-                    'nombre' => $this->input->post('name'),
-                    'apellido' => $this->input->post('surname'),
+                    'nombre' => $this->input->post('nombre'),
+                    'apellido' => $this->input->post('apellido'),
                     'email' => $this->input->post('email'),
                     'password' => $this->input->post('password'),
                 );

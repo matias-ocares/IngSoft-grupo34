@@ -9,8 +9,8 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Perfil
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo base_url() ?>editar_perfil">Editar perfil</a></li>
-                    <li><a href="<?php echo base_url() ?>cargar_auto">Cargar auto</a></li>
+                    <li><a href="<?php echo base_url() ?>editar_perfil/">Editar perfil</a></li>
+                    <li><a href="<?php echo base_url() ?>cargar_auto/">Cargar auto</a></li>
                 </ul>
             </li>
 
