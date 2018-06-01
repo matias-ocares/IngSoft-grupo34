@@ -10,23 +10,17 @@ class model_user extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-
-    public function get_users() {
-        $query = $this->db->get('user');
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            return $result;
-        } else {
-            return false;
-        }
-    }
-
+    
     public function is_registered($email) {
         $this->db->where('email', $email);
         $amount_results = $this->db->count_all_results('user');
         return ($amount_results == 1);
     }
-
+    
+    public function register_user($user){        
+        $this->db->insert('user', $user); 
+    }
+    
     public function user_by_name_pass($email, $password) {
         $this->db->select('password, email, nombre, apellido, id_user');
         $this->db->from('user');
@@ -35,30 +29,21 @@ class model_user extends CI_Model {
         $consulta = $this->db->get();
         $resultado = $consulta->row();
         return $resultado;
-        //$resultado = $consulta->result();
-      //return $resultado;
     }
     
-
-    public function register_user($user){        
-        $this->db->insert('user', $user); 
+    public function update_user($user) {
+        $this->db->where('id_user', $user['id_user']);
+        $this->db->update('user', $user);
+        $this->db->where('id_user', $user['id_user']);
+        $amount_results = $this->db->count_all_results('user');
+        return ($amount_results == 1);
+        
     }
 
     
-    /*
-      public function is_register($email){
-      $this->db->select('*');
-      $this->db->from('user');
-      $this->db->where('email',$email);
-      //$this->db->where('user_password',$pass);
+    
+    
 
-      if($query=$this->db->get())
-      {
-      return $query->row_array();
-      }
-      else{
-      return false;
-      }
-      }
-     */
+    
+
 }

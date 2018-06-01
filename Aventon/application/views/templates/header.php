@@ -60,6 +60,13 @@
                 width: 90%;
                 margin: 25px;
             }
+            .btn_perfil{
+                display: block;
+                width: 100%;
+            }
+            .form_perfil{
+               width: 50%; 
+            }
         </style>
     </head>
     <body>
