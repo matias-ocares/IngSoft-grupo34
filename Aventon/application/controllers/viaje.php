@@ -10,6 +10,7 @@ class viaje extends controller {
         $this->load->model('model_viaje');
         $this->load->library(array('pagination', 'table'));
         $this->load->helper('url');
+        $this->load->library('session');
     }
 
     //Allow to send parameters to index method

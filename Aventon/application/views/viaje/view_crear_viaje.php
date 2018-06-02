@@ -1,24 +1,4 @@
-<!--<div class="container">
-    <h1>  What is Lorem Ipsum? </h1>
-    <p clas="lead">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-        when an unknown printer took a galley of type and scrambled it to make a type 
-        specimen book. It has survived not only five centuries, but also the leap into
-        electronic typesetting, remaining essentially unchanged. It was popularised in
-        the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-        and more recently with desktop publishing software like Aldus PageMaker
-        including versions of Lorem Ipsum.
-    </p>
-</div>
--->  
-<!--Custom styles for this template --> 
-
-<link href="../assets/css/signin.css" rel="stylesheet"> 
-</head>
-<body class="text-center">
-
-
+<div class="col-sm-8 text-left"> 
     <form id="formAuto" name="formAuto" method="post" action="viaje/crear_viaje" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Crear viaje</h1>
@@ -32,7 +12,7 @@
                     <input type="text" id="origen" name="origen" class="form-control" placeholder="Origen"  required autofocus value="<?php echo $this->session->flashdata('origen'); ?>">        
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td> <p> Hasta:  </p></td>
@@ -41,7 +21,7 @@
                     <input type="text" id="destino" name="destino" class="form-control" placeholder="Destino"  required autofocus value="<?php echo $this->session->flashdata('destino'); ?>">        
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td><p> Fecha:  </p></td>
@@ -49,24 +29,27 @@
                     <label for="fecha" class="sr-only">Fecha</label>  
                     <input type="date" id= "fecha" name="fecha" class="form-control" placeholder="Fecha: dd/mm/aaaa" required autofocus 
                            min="<?php $hoy = date("Y-m-d");
-echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
+echo $hoy;
+?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td><p> Hora:  </p></td>
                 <td>
                     <label for="hora" class="sr-only">Hora</label>
                     <input type="time" id= "hora" name="hora" class="form-control" placeholder="Hora de inicio" 
-                           value="<?php if ($this->session->flashdata('hora')) {
-    echo $this->session->flashdata('patente');
-} else {
-    echo "00:00";
-} ?>" >
+                           value="<?php
+                           if ($this->session->flashdata('hora')) {
+                               echo $this->session->flashdata('patente');
+                           } else {
+                               echo "00:00";
+                           }
+                           ?>" >
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td><p> Duración:  </p></td>
@@ -76,7 +59,7 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
                            min="1" value="<?php echo $this->session->flashdata('duracion'); ?>">
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td><p> Costo:  </p></td>
@@ -88,7 +71,7 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
                     </div>       
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td><p> Mi auto:  </p></td>
@@ -105,7 +88,7 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
                     
                 </td>
             </tr>
-                    
+
 
             <tr>
                 <td><p> Plazas disponibles:  </p></td>
@@ -120,7 +103,7 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
         </br>
 
 
-<?php if ($notifico): ?>
+        <?php if ($notifico): ?>
 
             <p> <?php echo $notifico ?> </p>
 
@@ -131,7 +114,7 @@ echo $hoy; ?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
 
         <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
-</body>
+</div>
 
 
 <script>

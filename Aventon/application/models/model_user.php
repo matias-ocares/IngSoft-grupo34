@@ -10,17 +10,17 @@ class model_user extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-    
+
     public function is_registered($email) {
         $this->db->where('email', $email);
         $amount_results = $this->db->count_all_results('user');
         return ($amount_results == 1);
     }
-    
-    public function register_user($user){        
-        $this->db->insert('user', $user); 
+
+    public function register_user($user) {
+        $this->db->insert('user', $user);
     }
-    
+
     public function user_by_name_pass($email, $password) {
         $this->db->select('password, email, nombre, apellido, id_user');
         $this->db->from('user');
@@ -30,20 +30,20 @@ class model_user extends CI_Model {
         $resultado = $consulta->row();
         return $resultado;
     }
-    
-    public function update_user($user) {
-        $this->db->where('id_user', $user['id_user']);
+
+    public function update_user($user, $id) {
+        $this->db->where('id_user', $id);
         $this->db->update('user', $user);
-        $this->db->where('id_user', $user['id_user']);
-        $amount_results = $this->db->count_all_results('user');
-        return ($amount_results == 1);
-        
+        $this->db->trans_complete();
+        return ($this->db->trans_status() === TRUE);
     }
 
-    
-    
-    
-
-    
+    public function user_by_id($id) {
+        //retorno todos los datos de un user, por "id"   
+        $this->db->where('id_user', $id);
+        $consulta = $this->db->get('user');
+        $resultado = $consulta->row_array();
+        return $resultado;
+    }
 
 }
