@@ -115,7 +115,7 @@ class editar_auto extends controller {
                     redirect('login/logueado');
                 }
             } else {
-                $this->session->set_flashdata('notifico', validation_errors());
+                //$this->session->set_flashdata('notifico', validation_errors());
                 redirect('editar_auto');
             }
         }

@@ -13,6 +13,7 @@ class login extends controller {
         //load code igniter library to validate form
         $this->load->library('form_validation');
         $this->load->helper('url');
+        $this->load->library('session');
     }
 
     public function index() {
@@ -68,8 +69,6 @@ class login extends controller {
                 $password = $this->input->post('password');
 
                 $usuario = $this->model_user->user_by_name_pass($email, $password);
-                
-                
                 if ($usuario) {
                     $usuario_data = array(
                         'email' => $usuario->email,

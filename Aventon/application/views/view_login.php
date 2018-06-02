@@ -18,27 +18,40 @@
 </head>
 <body class="text-center">
 
+    <?php if ($this->session->flashdata('notifico')): ?>
+
+        <p> <?php echo $this->session->flashdata('notifico') ?></p>
+
+    <?php endif; ?>
+
     <form method="post" action="login/login" onsubmit="return validateForm()" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Ingresar a Aventon</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Correo electrónico"  required autofocus 
-              value="<?php echo $this->session->flashdata('email'); ?>"  >
+               value="<?php echo $this->session->flashdata('email'); ?>"  >
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Contraseña" required>
 
 
-    <!-- php error-->
+        <!-- php error-->
 
         <div class="checkbox mb-3">
             <label>
                 <input type="checkbox" value="remember-me"> Recordarme
             </label>
         </div>
+
+        <?php if ($this->session->flashdata('error')): ?>
+
+            <p> <?php echo $this->session->flashdata('error') ?></p>
+
+        <?php endif; ?>
+
         <button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Iniciar sesión</button>
         <button class="btn btn-lg btn-primary btn-block" type="reset">Limpiar</button>
-        <button class="btn btn-lg btn-primary btn-block" onclick="location.href='http://localhost:1234/IngSoft-grupo34/Aventon/index.php/register'" type="button">Registrate</button>
-    
+        <button class="btn btn-lg btn-primary btn-block" onclick="location.href = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/register'" type="button">Registrate</button>
+
 
         <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
