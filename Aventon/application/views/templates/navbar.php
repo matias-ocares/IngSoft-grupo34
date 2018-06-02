@@ -25,7 +25,7 @@
         </ul> 
 
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="<?php echo base_url() ?>login/cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar sesion -> <?php echo $this->session->userdata('nombre'); ?> </a></li>
+            <li><a href="<?php echo base_url() ?>login/cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span> Cerrar sesion -> <?php echo $this->session->userdata('nombre'); ?> </a></li>
         </ul>
     </div>
 </nav>  
