@@ -29,10 +29,7 @@
         <?php endif; ?>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
-
-
-
-        <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
+        
     </form>
 </body>
 <script>

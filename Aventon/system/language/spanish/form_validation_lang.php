@@ -72,3 +72,4 @@ $lang['form_validation_matchesPassword']		= 'Las claves no coinciden.';
 $lang['form_validation_alpha']			= 'El {field} solo admite caracteres alfabeticos.';
 $lang['form_validation_matches']		= 'Las claves no coinciden.';
 
+

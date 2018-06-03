@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Bootstrap Example</title>
+        <title>Compartir coche para llegar directamente a donde quieras ir | Aventon</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,6 +11,39 @@
         <link href="../assets/css/signin.css" rel="stylesheet">
 
         <style>
+            .h10{
+                font-size: 24px;
+                margin-right: 50px;
+                margin-left:-70px;
+            }
+            .h11{
+                font-size: 35px;
+                margin-left:40px;
+            }
+            .h12{
+                font-size: 25px;
+                margin-left:40px;
+            }
+            #formulario1{
+                margin-top: 60px;
+                margin-bottom: 100px;
+                margin-right: 100px;
+                margin-left: 350px;
+
+            }
+            #formulario2{
+                margin-top: 40px;
+                margin-bottom: 100px;
+                margin-right: 100px;
+                margin-left: 350px;
+
+            }
+            .form-control{
+                width: 50%;
+            }
+            .input-group{
+                width: 50%;
+            }
             /* Remove the navbar's default margin-bottom and rounded borders */ 
             .navbar {
                 margin-bottom: 0;
@@ -53,6 +86,9 @@
             .col-sm-8 {
                 margin-right: 15px;
             }
+            .col-sm-2 {
+                height: 220%;
+            }
             
             .btn-block.col-sm-8 {
                 width:20px;
@@ -66,10 +102,26 @@
             }
             .btn_perfil{
                 display: block;
-                width: 100%;
+                width: 50%;
             }
             .form_perfil{
                width: 50%; 
+            }
+            .badge {
+                background-color: #5355bf;
+            }
+
+            /* Encuadrando imagen a 40px */
+            .navbar-brand{
+                position: relative;
+            }
+            .navbar-brand img{
+                position: relative;
+                top:-30px;
+                left: 0px;
+            }
+            .container{
+                width:1100px;
             }
         </style>
     </head>

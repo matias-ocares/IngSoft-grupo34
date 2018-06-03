@@ -17,24 +17,28 @@
 </head>
 <body class="text-center">
 
-
-    <form id="formAuto" name="formAuto" method="post" action="cargar_auto/cargar_auto" class="form-signin">
+<div class="col-sm-8 text-left"> 
+    <form id="formulario2" name="formAuto" method="post" action="cargar_auto/cargar_auto" class="form-signin form_perfil">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Cargar auto</h1>
-
-
-
-        <label for="marca" class="sr-only">Marca</label>            
-        <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">        
-        <label for="modelo" class="sr-only">Modelo</label>           
+        
+        <h1 class="h12 mb-3 font-weight-normal">Cargar auto</h1>
+        <br>
+        <p>Marca</p>
+        <label for="marca" class="sr-only">Marca</label>  
+        <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">
+        <br>
+        <p>Modelo</p>                
+        <label for="modelo" class="sr-only">Modelo</label>  
         <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo"  required autofocus value="<?php echo $this->session->flashdata('modelo'); ?>">        
-        <label for="patente" class="sr-only">Patente</label>                       
+        <br>
+        <p>Patente</p>        
+        <label for="patente" class="sr-only">Patente</label>
         <input type="text" id="patente" name="patente" class="form-control" placeholder="Patente"  required autofocus value="<?php echo $this->session->flashdata('patente'); ?>">
+        <br>
+        <p>Color</p>
         <label for="color" class="sr-only">Color</label>                       
         <input type="text" id="color" name="color" class="form-control" placeholder="Color"  required autofocus value="<?php echo $this->session->flashdata('color'); ?>">
-
-        </br>
-        </br>
+        <br>
 
 
         <?php if ($notifico): ?>
@@ -42,13 +46,12 @@
             <p> <?php echo $notifico ?> </p>
 
         <?php endif; ?>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" onClick="return validacion();">Cargar auto</button>
-        <button class="btn btn-lg btn-primary btn-block" type="reset">Limpiar</button>
+        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="submit" onClick="return validacion();">Cargar auto</button>
+        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="reset">Limpiar</button>
 
-
-        <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
 </body>
+</div>
 <script>
     function validacion() {
         marca = document.getElementById("marca").value;
