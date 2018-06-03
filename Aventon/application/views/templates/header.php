@@ -11,6 +11,16 @@
         <link href="../assets/css/signin.css" rel="stylesheet">
 
         <style>
+            .dropdown-1{
+                margin-left: 15px;
+            }
+
+            .logo{
+                display: block;
+                width: 40px;
+                height: 40px;
+                margin-top: -5px;                       
+            }
             .h10{
                 font-size: 24px;
                 margin-right: 50px;

@@ -1,17 +1,8 @@
 <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-             <a class="navbar-brand" href="#">
-            <i class="fa fa-gamepad" aria-hidden="true">
-            &nbsp;
-            </i>
-                 
-        </a>
-        </div>
-       
+    <div class="container-fluid">     
         <ul class="nav navbar-nav">
-            <li class="active"><a href="<?php echo base_url() ?>login/logueado">Home</a></li>
-            <li class="dropdown">
+            <li class="active"><a class="logo" href="<?php echo base_url() ?>login/logueado"><img class="logo" src="https://image.ibb.co/de39Y8/Logo.jpg" alt="Aventon logo"></img></a></li>
+            <li class="dropdown dropdown-1">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Perfil
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
