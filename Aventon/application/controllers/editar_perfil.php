@@ -12,6 +12,7 @@ class editar_perfil extends controller {
         $this->load->library('form_validation');
         $this->load->helper('url');
         $this->load->library('session');
+        $this->load->library('upload');
     }
 
     public function index() {
@@ -128,5 +129,6 @@ class editar_perfil extends controller {
             }
         }
     }
+    
 
 }
