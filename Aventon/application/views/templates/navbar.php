@@ -24,8 +24,8 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Auto
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo base_url() ?>cargar_auto/">Cargar auto</a></li>
-                    <li><a href="#">Mis autos</a></li>
+                    <li><a href="<?php echo base_url() ?>auto/guardar/">Cargar auto</a></li>
+                    <li><a href="<?php echo base_url() ?>auto/">Mis autos</a></li>
                 </ul>
             </li> 
         </ul> 
