@@ -6,7 +6,7 @@
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Regístrate en Aventon</h1> 
         
-        <input type="text" id="name" name="nombre" class="form-control" placeholder="Nombre"  required autofocus 
+        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre"  required autofocus 
                value="<?php echo $this->session->flashdata('nombre'); ?>">
         
         <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido"  required autofocus 
