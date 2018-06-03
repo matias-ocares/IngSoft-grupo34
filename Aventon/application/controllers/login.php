@@ -18,11 +18,14 @@ class login extends controller {
 
     public function index() {
 
-
+    if (!$this->session->userdata('logueado')) {
         $data = array();
         $data['error'] = $this->session->flashdata('error');
-        parent::index_page('view_login', $data);
+        parent::index_page('view_login', $data);}
+    else{
+    redirect('login/logueado');
     }
+        }
 
     function existEmail() {
         $email = $this->input->post('email');
