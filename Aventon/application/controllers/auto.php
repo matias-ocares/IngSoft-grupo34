@@ -121,10 +121,10 @@ class auto extends controller {
    
     function existPatente() {
         $patente_post = $this->input->post('patente');
-        $id_patente = $this->uri->segment(3);
-        if ($id_patente) { //estoy en modo = edición
+        $id_auto = $this->uri->segment(3);
+        if ($id_auto) { //estoy en modo = edición
             //$patente_session = $this->session->flashdata('num_patente');
-            $patente_session = $this->model_auto->patente_por_id($id_patente);
+            $patente_session = $this->model_auto->patente_por_id($id_auto);
             if ($patente_post == $patente_session['num_patente']) {
                 return true;
             }
