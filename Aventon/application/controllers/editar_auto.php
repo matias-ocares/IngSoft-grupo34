@@ -24,7 +24,6 @@ class editar_auto extends controller {
                 'color' => 'amarillo',);
 
             $data = array();
-            $data['notifico'] = $this->session->flashdata('notifico');
             $this->set_flash_auto_db($auto); //tiene que llegar el arreglo obtenido de la base de datos
             parent::index_page('/auto/view_editar_auto', $data);
         } else {

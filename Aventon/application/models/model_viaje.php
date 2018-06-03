@@ -73,7 +73,6 @@ class model_viaje extends CI_Model {
       $consulta = $this->db->get();
       $resultado = $consulta->row();
       return $resultado;
-        
     }
     public function consulta_id_viaje($viaje){
         $this->db->select('id_viaje');
