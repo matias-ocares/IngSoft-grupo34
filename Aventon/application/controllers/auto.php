@@ -1,10 +1,7 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . 'controllers/controller.php';
-
 class auto extends controller {
-
     public function __construct() {
         parent::__construct();
         $this->load->model('model_auto');
@@ -15,28 +12,22 @@ class auto extends controller {
    
     //Allow to send parameters to index method
     function _remap($method, $args) {
-
         if (method_exists($this, $method)) {
             $this->$method($args);
         } else {
             $this->index($method, $args);
         }
     }
-
     public function index($rowno = 0) {
-
         $this->pagination->initialize($this->set_config());
-
         // Get Results from Data Base 
         $search_text = "";
         $rowperpage = 5;
         //Get all "viajes" with all columns
         $lista_autos = $this->model_auto->getAutos($rowno, $rowperpage, $search_text);
-
         //Set header for the table
         $header = array('Id_Auto','Marca','Modelo','Numero Pantente','Color', 'Acciones');
         $this->table->set_heading($header);
-
         $tmpl = array('table_open' => '<table class="table table-hover">',
             'heading_row_start' => '<tr style="background-color: #f1f1f1; font-weight:bold; color:black; text-align:left;">',
             'heading_row_end' => '</tr>',
@@ -48,7 +39,6 @@ class auto extends controller {
             'cell_alt_end' => '</td>',
             'table_close' => '</table>');
         $this->table->set_template($tmpl);
-
         //Configure columns to be displayed on table
         foreach ($lista_autos as $auto) {
             $pertenece = $this->model_auto->auto_pertenece_user($auto['id_auto'], $this->session->userdata('id_user'));
@@ -60,7 +50,6 @@ class auto extends controller {
         $data = array();
         parent::index_page('auto/view_listar_autos', $data);
     }
-
     private function set_config() { //seteo la configuración 
         //Base properties
         $config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/auto/';
@@ -86,10 +75,8 @@ class auto extends controller {
         $config['cur_tag_close'] = '</a></li>';
         $config['num_tag_open'] = '<li>';
         $config['num_tag_close'] = '</li>';
-
         return $config;
     }
-
     public function ver($id) {
         //Neccesary to pass "id" as a parameter
         $auto_id = $this->uri->segment(3);
@@ -107,7 +94,6 @@ class auto extends controller {
         );
         $this->session->set_flashdata($ult_campos_data);
     }
-
     private function set_flash_campos_auto() {
         $campos_data = array(
             'marca' => $this->input->post('marca'),
@@ -117,7 +103,6 @@ class auto extends controller {
         );
         $this->session->set_flashdata($campos_data);
     }
-
    
     function existPatente() {
         $patente_post = $this->input->post('patente');
@@ -132,10 +117,8 @@ class auto extends controller {
         //verifies patente exists in DB
         return (!$this->model_auto->is_registered($patente_post));
     }
-
     private function validation_rules() {
         //funcón provada que crea las reglas de validación
-
         $config = array(
             array(
                 'field' => 'marca',
@@ -160,7 +143,6 @@ class auto extends controller {
         );
         return $config;
     }
-
     private function array_auto() {
         $auto = array();
         $auto['marca'] = $this->input->post('marca');
@@ -191,7 +173,6 @@ class auto extends controller {
             } else {
                 $this->set_flash_campos_auto();
             }
-
             $data['notifico'] = $this->session->flashdata('notifico');
             $data['id_auto'] = $id_auto;
             parent::index_page('/auto/view_editar_auto', $data);
@@ -199,7 +180,6 @@ class auto extends controller {
             redirect('login');
         }
     }
-
     public function guardar_post($id_auto=null) {
         if ($this->input->post()) {
             $id_auto = $this->uri->segment(3);
@@ -216,11 +196,13 @@ class auto extends controller {
                 }
             } else {
                 $this->session->set_flashdata('notifico', validation_errors());
-                $this->guardar();
+                $data['notifico'] = $this->session->flashdata('notifico');
+                $data['id_auto'] = $id_auto;
+                // $this->set_flash_campos_auto();
+                parent::index_page('/auto/view_editar_auto', $data);
+                //$this->guardar();
             }
         }
     }
-
     
-
 }

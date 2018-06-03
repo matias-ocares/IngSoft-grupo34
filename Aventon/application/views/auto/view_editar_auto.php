@@ -5,7 +5,7 @@
 
     <form id="formAuto" name="formAuto" method="post" action="<?php echo base_url();?>auto/guardar_post/<?php echo $id_auto;?>" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Editar datos de auto</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Datos de mi auto</h1>
 
         <table>
             <tr>
