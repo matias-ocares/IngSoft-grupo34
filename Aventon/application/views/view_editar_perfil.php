@@ -1,18 +1,21 @@
 <div class="col-sm-8 text-left"> 
 
-    <form method="post" action="../editar_perfil/update_user" onsubmit="return validar();" class="form-signin form_perfil" >
+    <form id="formulario1" method="post" action="../editar_perfil/update_user" onsubmit="return validar();" class=" div form-signin form_perfil" >
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Modificacion de datos personales</h1> 
+        <h1 class="h10 mb-3 font-weight-normal">Modificacion de datos personales</h1> 
 
-        <label for="nombre" class="sr-only">Marca</label>
+        <p>Nombre</p>
+        <label for="nombre" class="sr-only">Nombre</label>
         <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre"  required autofocus 
                value="<?php echo $this->session->flashdata('nombre'); ?>">
         <br>
-        <label for="apellido" class="sr-only">Marca</label>
+        <p>Apellido</p>
+        <label for="apellido" class="sr-only">Apellido</label>
         <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido"  required autofocus 
                value="<?php echo $this->session->flashdata('apellido'); ?>"> 
         <br>
-        <label for="email" class="sr-only"></label>
+        <p>Email</p>
+        <label for="email" class="sr-only">Email</label>
         <input type="email" id="email" name="email" class="form-control" placeholder="Email"  required autofocus 
                value="<?php echo $this->session->flashdata('email'); ?>">
 
@@ -27,7 +30,6 @@
 
 
 
-        <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
 </div>
 <script>

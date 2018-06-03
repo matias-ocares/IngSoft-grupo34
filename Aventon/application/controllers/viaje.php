@@ -87,11 +87,11 @@ class viaje extends controller {
         $tmpl = array('table_open' => '<table class="table table-hover">',
             'heading_row_start' => '<tr style="background-color: #f1f1f1; font-weight:bold; color:black; text-align:left;">',
             'heading_row_end' => '</tr>',
-            'heading_cell_start' => '<th style="text-align:left;" height=50 width=70>',
+            'heading_cell_start' => '<th style="text-align:center;" height=35 width=50>',
             'heading_cell_end' => '</th>',
-            'cell_start' => '<td style="text-align:left;" height=25>',
+            'cell_start' => '<td style="text-align:center;" height=25>',
             'cell_end' => '</td>',
-            'cell_alt_start' => '<td style="text-align:left;" height=25>',
+            'cell_alt_start' => '<td style="text-align:center;" height=25>',
             'cell_alt_end' => '</td>',
             'table_close' => '</table>');
         $this->table->set_template($tmpl);

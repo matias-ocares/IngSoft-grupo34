@@ -1,26 +1,41 @@
-<?php
-
-    echo 'datos del viaje: ';
-    echo "<br>";
-    echo 'ID: '. $viaje->id_viaje;
-    echo "<br>";
-    echo 'ORIGEN: '. $viaje->origen;
-    echo "<br>";
-    echo 'DESTINO: '. $viaje->destino;
-    echo "<br>";
-    echo 'FECHA: '. $viaje->fecha;
-    echo "<br>";
-    echo 'HORA_INICIO: '. $viaje->hora_inicio;
-    echo "<br>";
-    echo 'DURACION_HORAS: '. $viaje->duracion_horas;
-    echo "<br>";
-    echo 'COSTO: '. $viaje->costo;
-    echo "<br>";
-    echo 'PLAZAS_TOTAL: '. $viaje->plazas_total;
-    echo "<br>";
-    echo 'PLAZAS_LIBRE: '. $viaje->plazas_libre;
-    echo "<br>";
-    echo 'ID_CHOFER: '. $viaje->id_chofer;
+<div class="col-sm-8 text-left"> 
+          <h1>Listado de viajes</h1>
+          <hr>
+            <div class="container">    
+                <table class="table table-striped">
+                <thead>
+                <tr>
+                <th style="text-align:center;" height=45 width=100>Viaje N°</th>
+                <th style="text-align:center;" height=45 width=100>Origen</th>
+                <th style="text-align:center;" height=45 width=100>Destino</th>
+                <th style="text-align:center;" height=45 width=100>Fecha</th>
+                <th style="text-align:center;" height=45 width=100>Hora salida</th>
+                <th style="text-align:center;" height=45 width=100>Duracion</th>
+                <th style="text-align:center;" height=45 width=100>Costo</th>
+                <th style="text-align:center;" height=45 width=100>Plazas totales</th>
+                <th style="text-align:center;" height=45 width=100>Plazas libres</th>
+                <th style="text-align:center;" height=45 width=100>Chofer N°</th>                
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><?php echo $viaje->id_viaje; ?></td>
+                  <td><?php echo $viaje->origen; ?></td>
+                  <td><?php echo $viaje->destino; ?></td>
+                  <td><?php echo $viaje->fecha; ?></td>
+                  <td><?php echo $viaje->hora_inicio; ?></td>
+                  <td><?php echo $viaje->duracion_horas; ?></td>
+                  <td><?php echo $viaje->costo; ?></td>
+                  <td><?php echo $viaje->plazas_total; ?></td>
+                  <td><?php echo $viaje->plazas_libre; ?></td>
+                  <td><?php echo $viaje->id_chofer; ?></td>
+                  
+                  
+                </tr>
+                </tbody>
+                </table>
+            </div>    
+        </div> 
 
  
 

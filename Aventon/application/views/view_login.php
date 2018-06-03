@@ -23,7 +23,7 @@
         <p> <?php echo $this->session->flashdata('notifico') ?></p>
 
     <?php endif; ?>
-
+     
     <form method="post" action="login/login" onsubmit="return validateForm()" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Ingresar a Aventon</h1>
@@ -50,10 +50,9 @@
 
         <button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Iniciar sesión</button>
         <button class="btn btn-lg btn-primary btn-block" type="reset">Limpiar</button>
-        <button class="btn btn-lg btn-primary btn-block" onclick="location.href = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/register'" type="button">Registrate</button>
 
 
-        <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
+
     </form>
 
 

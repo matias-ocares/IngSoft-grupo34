@@ -37,6 +37,29 @@ class model_user extends CI_Model {
         $this->db->trans_complete();
         return ($this->db->trans_status() === TRUE);
     }
+    
+    public function checkOldPass($old_password)
+    {
+        $id = $this->input->post('id_user');
+                $this->db->where('id_user', $this->session->userdata('id_user'));
+                $this->db->where('id_user', $id);
+        $this->db->where('password', $old_password);
+        $query = $this->db->get('user');
+        if($query->num_rows() > 0)
+            return 1;
+        else
+            return 0;
+    }
+
+      public function saveNewPass($new_pass)
+    {
+        $data = array(
+               'password' => $new_pass
+            );
+        $this->db->where('id_user', $this->input->post('id_user'));
+        $this->db->update('user', $data);
+        return true;
+    } 
 
     public function user_by_id($id) {
         //retorno todos los datos de un user, por "id"   

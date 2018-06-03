@@ -6,7 +6,7 @@
 <?php endif; ?>
 
 <div class="col-sm-8 text-left"> 
-    <h1>Listado de viajes</h1>
+    <h1 class="h11">Listado de viajes</h1>
     <div class="container">    
         <div class="table-responsive">   
             <?php echo $this->table->generate(); ?>

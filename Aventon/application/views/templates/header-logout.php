@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Aventon</title>
+  <title>Compartir coche para llegar directamente a donde quieras ir | Aventon</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -47,7 +47,7 @@ left: 0;
         <li><a href="#">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Registrarme</a></li>
+        <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Registrarse </a></li>
       </ul>
     </div>
   </div>
