@@ -1,5 +1,5 @@
 <div class="col-sm-8 text-left"> 
-    <form id="formulario2" name="formAuto" method="post" action="viaje/crear_viaje" class="form-signin">
+    <form id="formulario2" name="formAuto" method="post" action="<?php echo base_url();?>crear_viaje/crear_viaje" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Crear viaje</h1>
 
@@ -46,7 +46,8 @@
         <br>
    
         <p> Mi auto</p>                 
-        <select class="form-control">
+        <select class="form-control" name="auto" id="auto">
+             <option value="">Elija un auto</option>';
             <?php foreach($groups as $each){ ?>
             <option value="<?php echo $each->num_patente ?>"><?php echo $each-> num_patente ?></option>';
             <?php } ?> 
@@ -69,7 +70,7 @@
             <p> <?php echo $notifico ?> </p>
 
         <?php endif; ?>
-        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="submit" onClick="return validacion();">Crear viaje</button>
+        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="submit" onClick="return validacionViaje();">Crear viaje</button>
         <button class="btn btn-lg btn-primary btn-block btn_perfil" type="reset">Limpiar</button>
 
     </form>

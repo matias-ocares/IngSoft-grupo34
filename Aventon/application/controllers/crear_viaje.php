@@ -145,14 +145,14 @@ class crear_viaje extends controller {
                    $id= $this->array_id();
                    $this->model_viaje->registrar_ids($id);
                    $this->session->set_flashdata('notifico', 'Se cargó el viaje exitosamente.');
-               redirect('login/logueado');}
+               redirect('viaje/');}
                else {
                    $this->session->set_flashdata('notifico', 'Por el momento no pudo cargarse el viaje.');
-               redirect('login/logueado');}
+               redirect('viaje/');}
         }
              else {
                 $this->session->set_flashdata('notifico', validation_errors());
-                redirect('crear_viaje');
+                redirect('crear_viaje/');
             }
         }
     }
