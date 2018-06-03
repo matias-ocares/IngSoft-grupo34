@@ -107,7 +107,7 @@ class viaje extends controller {
         }
         //Call view
         $data = array();
-        parent::index_page('viaje/view_viajes_ver', $data);
+        parent::index_page('viaje/view_listar_viajes', $data);
     }
 
 }
