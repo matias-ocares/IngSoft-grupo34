@@ -17,17 +17,22 @@ class crear_viaje extends controller {
     }
 
     public function index() {
-        if ($this->session->userdata('logueado')) { //aca tambien se pregunta si tiene un auto asociado,sino no le permite crear viaje
+        if ($this->session->userdata('logueado') && $this->model_viaje->getMisAutos()) { //aca tambien se pregunta si tiene un auto asociado,sino no le permite crear viaje
 
             $data = array();
             $data['title']= 'Auto';
             $data['groups'] = $this->model_viaje->getMisAutos();
             $data['notifico'] = $this->session->flashdata('notifico');
             parent::index_page('/viaje/view_crear_viaje', $data);
-        } else {
-            redirect('login');
+        } else if (!$this->session->userdata('logueado')){
+            
+            redirect('login');}
+            else{
+             $this->session->set_flashdata('notifico', 'No posee autos registrados para cargar un viaje.');
+               redirect('login/logueado');   
+            }
         }
-    }
+    
     
     private function set_flash_campos_viaje() {
         $campos_data = array(
@@ -43,6 +48,20 @@ class crear_viaje extends controller {
         $this->session->set_flashdata($campos_data);
     }
     
+    function existFecha() {
+        $viaje= array (
+               'fecha' => $this->input->post('fecha'),
+               'hora'=> $this->input->post('hora'),
+               'id_user'=>$this->session->userdata('id_user'),
+               'duracion'=> $this->input->post('duracion')
+                );
+        
+        return ($this->model_viaje->is_registered($viaje));
+    }    
+    function alpha_dash_space($str)
+{
+    return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+} 
      private function validation_rules() {
         //funcón provada que crea las reglas de validación
 
@@ -50,17 +69,17 @@ class crear_viaje extends controller {
             array(
                 'field' => 'origen',
                 'label' => 'Origen',
-                'rules' => 'required|alpha'
+                'rules' => 'required|callback_alpha_dash_space'
             ),
             array(
                 'field' => 'destino',
                 'label' => 'Destino',
-                'rules' => 'required|alpha'
+                'rules' => 'required|callback_alpha_dash_space'
             ),
             array(
                 'field' => 'fecha',
                 'label' => 'Fecha',
-                'rules' => 'required'
+                'rules' => 'required|callback_existFecha'
             ),
             array(
                 'field' => 'hora',
@@ -93,17 +112,27 @@ class crear_viaje extends controller {
     
     private function array_viaje() {
         $viaje = array();
-        $auto['origen'] = $this->input->post('origen');
-        $auto ['destino'] = $this->input->post('destino');
-        $auto ['fecha'] = $this->input->post('fecha');
-        $auto ['hora_inicio'] = $this->input->post('hora');
-        $auto['duracion_horas'] = $this->session->userdata('duracion'); 
-        $auto['costo'] = $this->session->userdata('costo');
-        $auto['plazas_total'] = $this->session->userdata('plazas');
-        $auto['plazas_libre'] = $this->session->userdata('plazas');
-        $auto['id_auto'] = $this->session->userdata('id_auto');//PENDIENTE tengo que ver de dónde obtengo ese id para asociarlo al viaje
-        $auto['id_user'] = $this->session->userdata('id_user');//con este guardo el id de usuario que obtuve al guardar la sesion iniciada.
+        
+        $viaje ['fecha'] = $this->input->post('fecha');
+        $viaje  ['hora_inicio'] = $this->input->post('hora');
+        $viaje ['duracion_horas'] = $this->input->post('duracion'); 
+        $viaje ['costo'] = $this->input->post('costo');
+        $viaje ['plazas_total'] =$this->input->post('plazas');
+        $viaje ['plazas_libre'] =$this->input->post('plazas');
+        $viaje ['id_chofer'] = $this->session->userdata('id_user');//con este guardo el id de usuario que obtuve al guardar la sesion iniciada.
+        $viaje ['origen'] = $this->input->post('origen');
+        $viaje  ['destino'] = $this->input->post('destino');
         return $viaje;
+    }
+    
+    private function array_id(){
+        $id=array();
+        $id['id_user']= $this->session->userdata('id_user');
+        $id_auto= $this->model_viaje->consulta_id_auto($this->input->post('auto'));
+        $id['id_auto']= $id_auto->id_auto;
+        $id_viaje= $this->model_viaje->consulta_id_viaje($this->array_viaje());
+        $id['id_viaje']=$id_viaje->id_viaje;
+        return $id;        
     }
     public function crear_viaje() {
         if ($this->input->post()) {
@@ -113,7 +142,9 @@ class crear_viaje extends controller {
             if ($this->form_validation->run() == TRUE) {
                 $viaje = $this->array_viaje();
                if( $this->model_viaje->register_viaje($viaje)== TRUE) {
-                $this->session->set_flashdata('notifico', 'Se cargó el viaje exitosamente.');
+                   $id= $this->array_id();
+                   $this->model_viaje->registrar_ids($id);
+                   $this->session->set_flashdata('notifico', 'Se cargó el viaje exitosamente.');
                redirect('login/logueado');}
                else {
                    $this->session->set_flashdata('notifico', 'Por el momento no pudo cargarse el viaje.');
