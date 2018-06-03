@@ -6,11 +6,11 @@
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Regístrate en Aventon</h1> 
         
-        <input type="text" id="name" name="name" class="form-control" placeholder="Nombre"  required autofocus 
+        <input type="text" id="name" name="nombre" class="form-control" placeholder="Nombre"  required autofocus 
                value="<?php echo $this->session->flashdata('name'); ?>">
         
-        <input type="text" id="surname" name="surname" class="form-control" placeholder="Apellido"  required autofocus 
-               value="<?php echo $this->session->flashdata('surname'); ?>"  
+        <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido"  required autofocus 
+               value="<?php echo $this->session->flashdata('apellido'); ?>"  
         
         <label for="inputEmail" class="sr-only"></label>
         <input type="email" id="email" name="email" class="form-control" placeholder="Correo electrónico"  required autofocus 
@@ -34,8 +34,8 @@
 </body>
 <script>
     function validar() {
-	name = document.getElementById("name").value; 
-	surname = document.getElementById("surname").value;
+	nombre = document.getElementById("nombre").value; 
+	apellido = document.getElementById("apellido").value;
 	email = document.getElementById("email").value;
 	password = document.getElementById("password").value;
 	passwordRepeat = document.getElementById("passwordRepeat").value;
@@ -44,7 +44,7 @@
 	var expresion_regular_onlyLetter = /^[A-Za-z\s]+$/;
 	var expresion_regular_password = /[A-Za-z0-9]/; 
 
-	if (name === "" || surname === "" || email === "" || password === "" || passwordRepeat === "") {
+	if (nombre === "" || apellido === "" || email === "" || password === "" || passwordRepeat === "") {
             alert("[!] Todos los campos con son obligatorios");
             return false;
 	}
@@ -53,11 +53,11 @@
             alert("[!] El correo ingresado no es valido");
             return false;
 	}
-	if (!expresion_regular_onlyLetter.test(name)) {
+	if (!expresion_regular_onlyLetter.test(nombre)) {
             alert("[!] El nombre contiene caracteres no permitidos");
             return false;
 	}
-	if (!expresion_regular_onlyLetter.test(surname)) {
+	if (!expresion_regular_onlyLetter.test(apellido)) {
             alert("[!] El apellido contiene caracteres no permitidos");
             return false;
 	}
