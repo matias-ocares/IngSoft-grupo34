@@ -51,8 +51,8 @@
           <li><a class="abc">Aventon</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="register"><span class="glyphicon glyphicon-log-in"></span> Registrarse </a></li>
-        <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Iniciar sesion </a></li>
+        <li><a href="<?php echo base_url() ?>register"><span class="glyphicon glyphicon-log-in"></span> Registrarse </a></li>
+        <li><a href="<?php echo base_url() ?>login"><span class="glyphicon glyphicon-log-in"></span> Iniciar sesion </a></li>
       </ul>
     </div>
   </div>
