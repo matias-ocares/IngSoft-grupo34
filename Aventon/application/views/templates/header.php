@@ -34,6 +34,10 @@
                 font-size: 25px;
                 margin-left:40px;
             }
+            .h13{
+                font-size: 25px;
+                margin-left:-25px;
+            }
             #formulario1{
                 margin-top: 60px;
                 margin-bottom: 100px;
@@ -48,6 +52,13 @@
                 margin-left: 350px;
 
             }
+            #formulario3{
+                margin-top: 30px;
+                margin-bottom: 100px;
+                margin-right: 100px;
+                margin-left: 600px;
+
+            }            
             .form-control{
                 width: 50%;
             }

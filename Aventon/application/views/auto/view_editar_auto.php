@@ -1,55 +1,45 @@
 <link href="../assets/css/signin.css" rel="stylesheet"> 
 </head>
 <body class="text-center">
-
-
-    <form id="formAuto" name="formAuto" method="post" action="<?php echo base_url();?>auto/guardar_post/<?php echo $id_auto;?>" class="form-signin">
+    <form id="formulario3" name="formAuto" method="post" action="<?php echo base_url();?>auto/guardar_post/<?php echo $id_auto;?>" class="form-signin">
+      <div class="col-sm-8 text-left">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Datos de mi auto</h1>
+        <h1 class="h13 mb-3 font-weight-normal">Configuracion del auto</h1>
 
-        <table>
-            <tr>
-                <td>
-                    <p> Marca  </p> </td>
+       
+            <p>Marca</p>
+            <label for="marca" class="sr-only">Marca</label>         
+            <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">        
+            <br>
+            
+            <p> Modelo  </p>
+            <label for="modelo" class="sr-only">Modelo</label>           
+            <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo"  required autofocus value="<?php echo $this->session->flashdata('modelo'); ?>">        
+            <br>
+            
+            <p> Patente  </p>
+            <label for="patente" class="sr-only">Patente</label>                       
+            <input type="text" id="patente" name="patente" class="form-control" placeholder="Patente"  required autofocus 
+                   value="<?php if($this->session->flashdata('patente')){echo $this->session->flashdata('num_patente');} else{ echo $this-> session->flashdata('num_patente') ; }?>">
+            <br>
+            
+            <p>Color</p>
+            <label for="color" class="sr-only">Color</label>                       
+            <input type="text" id="color" name="color" class="form-control" placeholder="Color"  required autofocus value="<?php echo $this->session->flashdata('color'); ?>">
 
-                <td> <label for="marca" class="sr-only">Marca</label>         
-                    <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"  required autofocus value="<?php echo $this->session->flashdata('marca'); ?>">        
-                </td>
-            </tr>
-            <tr>
-                <td> <p> Modelo  </p></td>
-                <td>
-                    <label for="modelo" class="sr-only">Modelo</label>           
-                    <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo"  required autofocus value="<?php echo $this->session->flashdata('modelo'); ?>">        
-                </td>
-            </tr>
-            <tr>
-                <td><p> Patente  </p></td>
-                <td> <label for="patente" class="sr-only">Patente</label>                       
-                    <input type="text" id="patente" name="patente" class="form-control" placeholder="Patente"  required autofocus 
-                           value="<?php if($this->session->flashdata('patente')){echo $this->session->flashdata('num_patente');} else{ echo $this-> session->flashdata('num_patente') ; }?>">
-                </td>
-            </tr>
-            <tr>
-                <td>  <p> Color  </p></td>
-                <td>  <label for="color" class="sr-only">Color</label>                       
-                    <input type="text" id="color" name="color" class="form-control" placeholder="Color"  required autofocus value="<?php echo $this->session->flashdata('color'); ?>">
-                </td>
-            </tr>
-        </table>
         </br>
         </br>
-
+   
        <?php if ($notifico): ?>
 
             <p> <?php echo $notifico ?> </p>
 
         <?php endif; ?>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" onClick="return validacion();">Cargar auto</button>
+        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="submit" onClick="return validacion();">Guardar</button>
 
-        <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
     </form>
 </body>
+   </div>
 <script>
     function validacion() {
         marca = document.getElementById("marca").value;
