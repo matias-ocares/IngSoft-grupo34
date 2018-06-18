@@ -140,5 +140,10 @@ class model_viaje extends CI_Model {
         $amount_results = $this->db->count_all_results('viaje');
         return ($amount_results == 1);
     }
+    
+    function eliminar_viaje($id){
+        $this->db->where('id_viaje',$id);
+        return $this->db->delete('viaje');
+    }
 
 }

@@ -42,8 +42,9 @@
 
 	var expresion_regular_mail =  /^(.+\@.+\..+)$/;
 	var expresion_regular_onlyLetter = /^[A-Za-z\s]+$/;
-	var expresion_regular_password = /[A-Za-z0-9]/; 
-
+	var expresion_regular_passwordLetter = /[A-Za-z]/; 
+        var expresion_regular_passwordNumber = /[0-9]/;
+        
 	if (nombre === "" || apellido === "" || email === "" || password === "" || passwordRepeat === "") {
             alert("[!] Todos los campos con son obligatorios");
             return false;
@@ -66,10 +67,10 @@
             alert("[!] Las contraseñas no coinciden");
             return false;
 	}
-	if ( (password.length < 8) || (expresion_regular_password.test(password)===false)) {
+	/*if ( (password.length < 8) || (expresion_regular_passwordLetter.test(password)===false) || (expresion_regular_passwordNumber.test(password)===false)) {
             alert("[!] La contraseña debe tener al menos 8 caracteres y ser alfanumerica. Pruebe con otra");
             return false;
-	}
+	}*/
 
 
 

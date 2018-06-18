@@ -84,4 +84,9 @@ class model_auto extends CI_Model {
         $amount_results = $this->db->count_all_results('auto');
         return ($amount_results == 1);
     }
+    
+    public function eliminarAuto($id) {
+        $this->db->delete('auto',array('id_auto'=>$id));
+        
+    }
 }

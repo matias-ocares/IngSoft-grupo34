@@ -7,7 +7,7 @@
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>editar_perfil/">Editar perfil</a></li>
-                    <li><a href="<?php echo base_url() ?>modificar_clave">Modificar clave</a></li>
+                    <li><a href="#">Modificar clave</a></li>
                 </ul>
             </li>
 

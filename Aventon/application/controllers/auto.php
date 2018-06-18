@@ -43,7 +43,7 @@ class auto extends controller {
         foreach ($lista_autos as $auto) {
             $pertenece = $this->model_auto->auto_pertenece_user($auto['id_auto'], $this->session->userdata('id_user'));
             if ($pertenece) {
-                $this->table->add_row($auto['id_auto'], $auto['marca'], $auto['modelo'], $auto['num_patente'], $auto['color'], anchor('auto/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('auto/guardar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-trash"></span>'));
+                $this->table->add_row($auto['id_auto'], $auto['marca'], $auto['modelo'], $auto['num_patente'], $auto['color'], anchor('auto/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('auto/guardar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('auto/eliminar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-trash"></span>'));
             } 
         }
         //Call view
@@ -117,6 +117,13 @@ class auto extends controller {
         //verifies patente exists in DB
         return (!$this->model_auto->is_registered($patente_post));
     }
+    /*public function alpha_numeric($str)
+    {
+        if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
+        return TRUE;
+    }
+        return FALSE;
+    } */
     private function validation_rules() {
         //funcón provada que crea las reglas de validación
         $config = array(
@@ -133,7 +140,7 @@ class auto extends controller {
             array(
                 'field' => 'patente',
                 'label' => 'Patente',
-                'rules' => 'required|min_length[6]|alpha_numeric|callback_existPatente'
+                'rules' => 'required|min_length[6]|alpha_numeric|callback_existPatente|trim'
             ),
             array(
                 'field' => 'color',
@@ -203,6 +210,13 @@ class auto extends controller {
                 //$this->guardar();
             }
         }
+    }
+    
+    public function eliminar($id) {
+        //Neccesary to pass "id" as a parameter
+        $auto_id = $this->uri->segment(3);
+        $this->model_auto->eliminarAuto($auto_id);
+        redirect('auto/');
     }
     
 }
