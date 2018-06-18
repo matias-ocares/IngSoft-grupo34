@@ -36,18 +36,30 @@ class register extends controller {
         $this->session->set_flashdata($campos_data);     
     }
     
+    function alpha_dash_space($str){
+    return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    } 
+    
+    /*public function alpha_numeric($str)
+    {
+        if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
+        return TRUE;
+    }
+        return FALSE;
+    } */
+    
     private function validation_rules(){
  
         $user=array(
             array(
                 'field' => 'nombre',
                 'label' => 'nombre',
-                'rules' => 'required|alpha|trim'
+                'rules' => 'required|callback_alpha_dash_space|trim'
             ),
             array(
                 'field' => 'apellido',
                 'label' => 'apellido',
-                'rules' => 'required|alpha|trim'
+                'rules' => 'required|callback_alpha_dash_space|trim'
             ),
             array(
                 'field' => 'email',
@@ -57,7 +69,7 @@ class register extends controller {
             array(
                 'field' => 'password',
                 'label' => 'contraseña',
-                'rules' => 'required',
+                'rules' => 'required|alpha_numeric|trim',
             ),
             array(
                 'field' => 'passwordRepeat',

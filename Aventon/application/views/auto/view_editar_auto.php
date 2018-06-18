@@ -48,7 +48,9 @@
         color = document.getElementById("color").value;
         
         var expresion_regular_texto = /^[A-Za-z\s]+$/;
-        var expresion_regular_patente = /[A-Za-z0-9]/;
+        var expresion_regular_patenteLetter = /[A-Za-z0-9]/;
+        var expresion_regular_patenteNumber = /[0-9]/;
+        
         if (marca === ""|| marca.length === 0 || /^\s+$/.test(marca)) {
             alert('[!] Todos los campos con son obligatorios.');
             return false;
@@ -76,7 +78,7 @@
             return false;
 	}
         
-        if ( (patente.length < 6) || (expresion_regular_patente.test(patente)===false)) {
+        if ( (patente.length < 6) || (expresion_regular_patenteLetter.test(patente)===false) || (expresion_regular_patenteNumber.test(patente)===false)) {
             alert("[!] La patente debe tener al menos 6 caracteres y ser alfanumerica. Vuelva a ingresarla");
             return false;
 	}

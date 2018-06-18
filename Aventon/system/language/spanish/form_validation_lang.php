@@ -46,7 +46,7 @@ $lang['form_validation_valid_ip']		= 'The {field} field must contain a valid IP.
 $lang['form_validation_min_length']		= 'El campo {field} debe contener al menos {param} caracteres.';
 $lang['form_validation_max_length']		= 'El campo {field} no puede contener más de {param} caracteres.';
 $lang['form_validation_exact_length']		= 'The {field} field must be exactly {param} characters in length.';
-$lang['form_validation_alpha_numeric']		= 'The {field} field may only contain alpha-numeric characters.';
+$lang['form_validation_alpha_numeric']		= 'La {field} solo admite caracteres alfanumericos.';
 $lang['form_validation_alpha_numeric_spaces']	= 'The {field} field may only contain alpha-numeric characters and spaces.';
 $lang['form_validation_alpha_dash']		= 'The {field} field may only contain alpha-numeric characters, underscores, and dashes.';
 $lang['form_validation_numeric']		= 'The {field} field must contain only numbers.';
@@ -71,5 +71,6 @@ $lang['form_validation_notExistEmail']		= 'El correo electronico ingresado ya se
 $lang['form_validation_matchesPassword']		= 'Las claves no coinciden.';
 $lang['form_validation_alpha']			= 'El {field} solo admite caracteres alfabeticos.';
 $lang['form_validation_matches']		= 'Las claves no coinciden.';
+
 
 
