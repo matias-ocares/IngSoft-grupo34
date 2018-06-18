@@ -1,0 +1,109 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH.'controllers/controller.php';
+
+class tarjeta_credito extends controller {
+
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper(array('form', 'url'));
+        //load model
+        $this->load->model('model_tarjeta');
+        //load code igniter library to validate form
+        $this->load->library('form_validation');
+        $this->load->helper('url');
+    }
+
+    public function index() {
+        $data=array();    
+        $data['error'] = $this->session->flashdata('error');
+        parent::index_page('view_registrar_tarjeta',$data);
+    }
+
+   private function set_flash_campos_tarjeta(){
+        $campos_data = array(
+                    'tipo' => $this->input->post('tipo'),
+                    'titular' => $this->input->post('titular'),
+                    'numero' => $this->input->post('numero'),
+                    'codigo' => $this->input->post('codigo'),
+                    'fecha' => $this->input->post('fecha'),
+               );
+        $this->session->set_flashdata($campos_data);     
+    }
+    
+    function alpha_dash_space($str){
+    return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    } 
+    
+    private function validation_rules(){
+ 
+        $tarjeta=array(
+            array(
+                'field' => 'tipo',
+                'label' => 'tipo',
+                'rules' => 'required|callback_alpha_dash_space|trim'
+            ),
+            array(
+                'field' => 'titular',
+                'label' => 'titular',
+                'rules' => 'required|callback_alpha_dash_space|trim'
+            ),
+            array(
+                'field' => 'numero',
+                'label' => 'numero',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'codigo',
+                'label' => 'codigo',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'fecha',
+                'label' => 'fecha',
+                'rules' => 'required'
+            ),
+                     
+        );
+        return $tarjeta;
+        
+    } 
+    
+    private function array_tarjeta() {
+        $tarjeta = array();
+        
+        $tarjeta ['tipo'] = $this->input->post('tipo');
+        $tarjeta  ['titular'] = $this->input->post('titular');
+        $tarjeta ['numero'] = $this->input->post('numero'); 
+        $tarjeta ['codigo'] = $this->input->post('codigo');
+        $tarjeta ['fecha'] =$this->input->post('fecha');
+        $tarjeta ['id_user'] = $this->session->userdata('id_user');
+        return $tarjeta;
+    }
+
+    public function crear_tarjeta() {
+        if ($this->input->post()) {
+            
+            $this->set_flash_campos_tarjeta();
+
+            $this->form_validation->set_rules($this->validation_rules());
+            
+            if ($this->form_validation->run() == TRUE) { 
+                
+                $tarjeta=$this->array_tarjeta();
+                $tarjeta = $this->model_tarjeta->registrar_tarjeta($tarjeta);
+                redirect('login');
+
+            }
+            else {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('tarjeta_credito/');
+            } 
+        } 
+        
+    }
+}
+    
+
+
