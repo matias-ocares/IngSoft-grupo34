@@ -18,7 +18,7 @@ class tarjeta_credito extends controller {
     public function index() {
         $data=array();    
         $data['error'] = $this->session->flashdata('error');
-        parent::index_page('view_registrar_tarjeta',$data);
+        parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data);
     }
 
    private function set_flash_campos_tarjeta(){
@@ -33,8 +33,19 @@ class tarjeta_credito extends controller {
     }
     
     function alpha_dash_space($str){
-    return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+        return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
     } 
+    
+    public function solo_letras($cadena)
+    {
+        $patron = '/[a-zA-Z,.\s]*$/';
+        if( !preg_match( $patron, $cadena ) ) {
+            return FALSE;
+        }
+        else {
+            return TRUE;
+        }
+    }
     
     private function validation_rules(){
  
@@ -42,12 +53,12 @@ class tarjeta_credito extends controller {
             array(
                 'field' => 'tipo',
                 'label' => 'tipo',
-                'rules' => 'required|callback_alpha_dash_space|trim'
+                'rules' => 'required|callback_solo_letras|trim'
             ),
             array(
                 'field' => 'titular',
                 'label' => 'titular',
-                'rules' => 'required|callback_alpha_dash_space|trim'
+                'rules' => 'required|callback_solo_letras|trim'
             ),
             array(
                 'field' => 'numero',
