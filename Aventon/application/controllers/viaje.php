@@ -78,8 +78,17 @@ class viaje extends controller {
         parent::index_page('viaje/view_postular_viaje', $data);
     }
     
-    public function postularse(){
+    public function exist_tarjeta(){
+        $this->load->model('model_tarjeta');
+        $id = $this->session->userdata('id_user');
+        //verifies tarjeta exists in DB
+        return (!($this->model_tarjeta->is_registered($id)));
         
+    }
+    public function postularse(){
+        if(exist_tarjeta()){
+            
+        }
         
     }
 
