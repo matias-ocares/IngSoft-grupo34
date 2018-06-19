@@ -110,52 +110,40 @@ class crear_viaje extends controller {
         return $config;
     }
     
-    private function array_viaje() {
+    private function registrar_viaje() {
         $viaje = array();
-        
+        $viaje['id_auto']= $this->input->post('auto');
         $viaje ['fecha'] = $this->input->post('fecha');
-        $viaje  ['hora_inicio'] = $this->input->post('hora');
-        $viaje ['duracion_horas'] = $this->input->post('duracion'); 
+        $viaje ['hora_inicio'] = $this->input->post('hora');
+        $viaje ['duracion_horas'] = $this->input->post('duracion');
         $viaje ['costo'] = $this->input->post('costo');
-        $viaje ['plazas_total'] =$this->input->post('plazas');
-        $viaje ['plazas_libre'] =$this->input->post('plazas');
-        $viaje ['id_chofer'] = $this->session->userdata('id_user');//con este guardo el id de usuario que obtuve al guardar la sesion iniciada.
+        $viaje ['plazas_total'] = $this->input->post('plazas');
+        $viaje ['plazas_libre'] = $this->input->post('plazas');
+        $viaje ['id_chofer'] = $this->session->userdata('id_user'); //con este guardo el id de usuario que obtuve al guardar la sesion iniciada.
         $viaje ['origen'] = $this->input->post('origen');
-        $viaje  ['destino'] = $this->input->post('destino');
-        return $viaje;
+        $viaje ['destino'] = $this->input->post('destino');
+        return $this->model_viaje->register_viaje($viaje);
     }
-    
-    private function array_id(){
-        $id=array();
-        $id['id_user']= $this->session->userdata('id_user');
-        $id_auto= $this->model_viaje->consulta_id_auto($this->input->post('auto'));
-        $id['id_auto']= $id_auto->id_auto;
-        $id_viaje= $this->model_viaje->consulta_id_viaje($this->array_viaje());
-        $id['id_viaje']=$id_viaje->id_viaje;
-        return $id;        
-    }
-    public function crear_viaje() {
-        if ($this->input->post()) {
-            $this->set_flash_campos_viaje();
 
-            $this->form_validation->set_rules($this->validation_rules());
-            if ($this->form_validation->run() == TRUE) {
-                $viaje = $this->array_viaje();
-               if( $this->model_viaje->register_viaje($viaje)== TRUE) {
-                   $id= $this->array_id();
-                   $this->model_viaje->registrar_ids($id);
-                   $this->session->set_flashdata('notifico', 'Se cargó el viaje exitosamente.');
-               redirect('viaje/');}
-               else {
-                   $this->session->set_flashdata('notifico', 'Por el momento no pudo cargarse el viaje.');
-               redirect('viaje/');}
-        }
-             else {
+    public function crear_viaje() {
+        //si hubo post
+        if ($this->input->post()) {
+            $this->set_flash_campos_viaje(); //guarado en mem flashdata, los datos del POST
+
+            $this->form_validation->set_rules($this->validation_rules()); //seteo reglas de validación
+            if ($this->form_validation->run() == TRUE) { //si paso validaciones
+                if ($this->registrar_viaje() == TRUE) {//guardo el viaje en la BD
+                    $this->session->set_flashdata('notifico', 'Se cargó el viaje exitosamente.');
+                    redirect('viaje/');
+                } else {
+                    $this->session->set_flashdata('notifico', 'Por el momento no pudo cargarse el viaje.');
+                    redirect('viaje/');
+                }
+            } else {
                 $this->session->set_flashdata('notifico', validation_errors());
                 redirect('crear_viaje/');
             }
         }
     }
-     
-    
+
 }

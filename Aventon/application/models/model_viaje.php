@@ -57,23 +57,15 @@ class model_viaje extends CI_Model {
         return TRUE;
     }
 
+    //registra viaje en BD, insert
     public function register_viaje($viaje) {
-         $this->db->set($viaje);
-        $this->db->insert('viaje');
-        $this->db->where('id_chofer', $viaje['id_chofer']); //PENDIENTE - Cómo consulto si ese viaje fue creado.
-        $this->db->where('fecha', $viaje['fecha']);
-        $amount_results = $this->db->count_all_results('viaje');
-        return ($amount_results == 1);
+        $this->db->insert('viaje', $viaje);
+
+        $this->db->trans_complete();
+        return ($this->db->trans_status() === TRUE);
     }
-    
-    public function consulta_id_auto($patente){
-        $this->db->select('id_auto');
-      $this->db->from('auto');
-      $this->db->where('num_patente', $patente);
-      $consulta = $this->db->get();
-      $resultado = $consulta->row();
-      return $resultado;
-    }
+
+
     public function consulta_id_viaje($viaje){
         $this->db->select('id_viaje');
       $this->db->from('viaje');
@@ -85,15 +77,7 @@ class model_viaje extends CI_Model {
       return $resultado;
         
     }
-    public function registrar_ids($id){
-        /*$id['id_user']='1';
-        $id['id_auto']='1';
-        $id['id_viaje']='1';*/
-        
-        $this->db->insert('id', $id);
-    }
-    
-
+   
     // cuando se implemente las búsquedas $search debería ser un array, 
     // ya que hay más de un criterio (orígen, destino, fecha, etc) 
     public function getViajes($rowno, $rowperpage, $search = "") {

@@ -49,7 +49,7 @@
         <select class="form-control" name="auto" id="auto">
              <option value="">Elija un auto</option>';
             <?php foreach($groups as $each){ ?>
-            <option value="<?php echo $each->num_patente ?>"><?php echo $each-> num_patente ?></option>';
+            <option value="<?php echo $each->id_auto?>"> <?php echo $each-> marca ?> <?php echo $each-> modelo ?> - <?php echo $each-> num_patente ?> </option>;
             <?php } ?> 
         </select>
         <br>
