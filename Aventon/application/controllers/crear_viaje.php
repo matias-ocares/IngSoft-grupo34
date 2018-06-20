@@ -13,27 +13,24 @@ class crear_viaje extends controller {
         //load code igniter library to validate form
         $this->load->library('form_validation');
         $this->load->helper('url');
-        
     }
 
     public function index() {
         if ($this->session->userdata('logueado') && $this->model_viaje->getMisAutos()) { //aca tambien se pregunta si tiene un auto asociado,sino no le permite crear viaje
-
             $data = array();
-            $data['title']= 'Auto';
+            $data['title'] = 'Auto';
             $data['groups'] = $this->model_viaje->getMisAutos();
             $data['notifico'] = $this->session->flashdata('notifico');
             parent::index_page('/viaje/view_crear_viaje', $data);
-        } else if (!$this->session->userdata('logueado')){
-            
-            redirect('login');}
-            else{
-             $this->session->set_flashdata('notifico', 'No posee autos registrados para cargar un viaje.');
-               redirect('login/logueado');   
-            }
+        } else if (!$this->session->userdata('logueado')) {
+
+            redirect('login');
+        } else {
+            $this->session->set_flashdata('notifico', 'No posee autos registrados para cargar un viaje.');
+            redirect('login/logueado');
         }
-    
-    
+    }
+
     private function set_flash_campos_viaje() {
         $campos_data = array(
             'origen' => $this->input->post('origen'),
@@ -47,22 +44,27 @@ class crear_viaje extends controller {
         );
         $this->session->set_flashdata($campos_data);
     }
-    
+
     function existFecha() {
-        $viaje= array (
-               'fecha' => $this->input->post('fecha'),
-               'hora'=> $this->input->post('hora'),
-               'id_user'=>$this->session->userdata('id_user'),
-               'duracion'=> $this->input->post('duracion')
-                );
-        
-        return ($this->model_viaje->is_registered($viaje));
-    }    
-    function alpha_dash_space($str)
-{
-    return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
-} 
-     private function validation_rules() {
+        // uso un array de array, porque cuando tenga los viajes con periodicidad, voy a tener que pasarle más de un viaje
+        $viaje = array(
+            'fecha' => $this->input->post('fecha'),
+            'hora' => $this->input->post('hora'),
+            'duracion' => $this->input->post('duracion'),
+            'id_chofer' => $this->session->userdata('id_user')
+        );
+        $resultado = $this->model_viaje->is_registered($viaje);
+        if (sizeof($resultado) >= 1) {
+            return false;
+        }
+        return true;
+    }
+
+    function alpha_dash_space($str) {
+        return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    }
+
+    private function validation_rules() {
         //funcón provada que crea las reglas de validación
 
         $config = array(
@@ -109,10 +111,10 @@ class crear_viaje extends controller {
         );
         return $config;
     }
-    
+
     private function registrar_viaje() {
         $viaje = array();
-        $viaje['id_auto']= $this->input->post('auto');
+        $viaje['id_auto'] = $this->input->post('auto');
         $viaje ['fecha'] = $this->input->post('fecha');
         $viaje ['hora_inicio'] = $this->input->post('hora');
         $viaje ['duracion_horas'] = $this->input->post('duracion');

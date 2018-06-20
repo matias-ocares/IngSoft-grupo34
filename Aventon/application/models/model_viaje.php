@@ -25,38 +25,21 @@ class model_viaje extends CI_Model {
     }
 
     public function is_registered($viaje){
-        $viaje['fecha']= 2018-06-27;
-        $viaje['id_user']= 2;
-        $mifecha = date("Y-m-d", strtotime($viaje['fecha']));
-        $this->db->select('hora_inicio, duracion_horas');
-        $this->db->from('viaje');
-        $this->db->where('fecha', $mifecha);
-        $id= $viaje['id_user'];
-        $this->db->where('id_chofer', $id); //habría que redefinir si id_chofer es id_user
-        $consulta = $this->db->get();
-       // $resultado = $consulta->row();
-       $resultado = $consulta->result();
-      //return $resultado;
-       $amount_results = $this->db->count_all_results('viaje');
-        
-        if ($amount_results == 1 ) {
-            $hora = $resultado->hora_inicio;
-            $arrayHora = explode(":", $hora);
+            // Obtengo los datos del viaje pasado por parámetro en variables
+            $fecha_inicio = $viaje['fecha'];
+            $hora_inicio = $viaje['hora'];
+            $duracion = $viaje['duracion'];
+            $id_chofer = $viaje['id_chofer'];
             
-            $duracion = $resultado->duracion_horas;
-            $inicio = ((int)$arrayHora[0] + (int)$arrayHora[1]) - ((int)$duracion);
-            $fin = ((int)$arrayHora[0] + (int)$arrayHora[1]) + ((int)$duracion);
-            $array = explode(":", $viaje['hora']);
-            $sumo=(int)$array[0] + (int)$array[1];
-            if (in_array($sumo, range($inicio, $fin))) {
-                return FALSE;
-            } else {
-                return FALSE;
-            }
-        }
-        return TRUE;
+            // Pregunto si se superpone al inicio
+            $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+            $resultado = $superpone_inicio->row_array();
+            
+            return $resultado;
     }
 
+     
+    
     //registra viaje en BD, insert
     public function register_viaje($viaje) {
         $this->db->insert('viaje', $viaje);
