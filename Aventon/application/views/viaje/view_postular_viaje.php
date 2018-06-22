@@ -36,7 +36,13 @@
                 
         
             </div>
-          <form method="post" action="viaje/postularse/" class="form-signin">
+          <?php if ($error): ?>
+
+            <p> <?php echo $error ?> </p>
+
+        <?php endif; ?>
+          
+          <form method="post" action="../viaje/postularse/" class="form-signin">
           <button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Postularse</button>
           </form>
         </div> 

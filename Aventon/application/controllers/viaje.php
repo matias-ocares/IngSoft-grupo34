@@ -74,6 +74,7 @@ class viaje extends controller {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
         $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+        $data['error'] = $this->session->flashdata('error');
         //parent::index_page('viaje/view_viaje_info', $data);
         parent::index_page('viaje/view_postular_viaje', $data);
     }
@@ -82,12 +83,17 @@ class viaje extends controller {
         $this->load->model('model_tarjeta');
         $id = $this->session->userdata('id_user');
         //verifies tarjeta exists in DB
-        return (!($this->model_tarjeta->is_registered($id)));
+        return (($this->model_tarjeta->is_registered($id)));
         
     }
     public function postularse(){
         if(exist_tarjeta()){
             
+        }
+        else{
+         
+            $this->session->set_flashdata('notifico', 'La modificacion se realizó satisfactoriamente. Vuelva a iniciar sesión');      
+            redirect('viaje');
         }
         
     }

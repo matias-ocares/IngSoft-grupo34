@@ -15,6 +15,12 @@ class model_tarjeta extends CI_Model {
         $this->db->where('id_user',$this->session->userdata('id_user'));
     }
     
+    public function is_registered($id) {
+        $this->db->where('id_user', $id);
+        $amount_results = $this->db->count_all_results('tarjeta');
+        return ($amount_results == 1);
+    }
+
     
     
 }
