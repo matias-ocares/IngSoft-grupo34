@@ -54,10 +54,17 @@ class crear_viaje extends controller {
             'id_chofer' => $this->session->userdata('id_user')
         );
         $resultado = $this->model_viaje->is_registered($viaje);
-        if (sizeof($resultado) >= 1) {
+        
+        if ($resultado > 0)
+            return false;
+        else
+            return true;
+        
+        /*if (sizeof($resultado) >= 1) {
             return false;
         }
         return true;
+       */
     }
 
     function alpha_dash_space($str) {
