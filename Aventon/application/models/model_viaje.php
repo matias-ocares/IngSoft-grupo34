@@ -24,56 +24,57 @@ class model_viaje extends CI_Model {
         return $resultado;
     }
 
-    public function is_registered($viaje){
-        $viaje['fecha']= 2018-06-27;
-        $viaje['id_user']= 2;
-        $mifecha = date("Y-m-d", strtotime($viaje['fecha']));
-        $this->db->select('hora_inicio, duracion_horas');
-        $this->db->from('viaje');
-        $this->db->where('fecha', $mifecha);
-        $id= $viaje['id_user'];
-        $this->db->where('id_chofer', $id); //habría que redefinir si id_chofer es id_user
-        $consulta = $this->db->get();
-       // $resultado = $consulta->row();
-       $resultado = $consulta->result();
-      //return $resultado;
-       $amount_results = $this->db->count_all_results('viaje');
-        
-        if ($amount_results == 1 ) {
-            $hora = $resultado->hora_inicio;
-            $arrayHora = explode(":", $hora);
-            
-            $duracion = $resultado->duracion_horas;
-            $inicio = ((int)$arrayHora[0] + (int)$arrayHora[1]) - ((int)$duracion);
-            $fin = ((int)$arrayHora[0] + (int)$arrayHora[1]) + ((int)$duracion);
-            $array = explode(":", $viaje['hora']);
-            $sumo=(int)$array[0] + (int)$array[1];
-            if (in_array($sumo, range($inicio, $fin))) {
-                return FALSE;
-            } else {
-                return FALSE;
-            }
-        }
-        return TRUE;
+    private function valida_antes($id_chofer, $fecha_inicio, $hora_inicio) {
+        //Viaje que quiero crear, inicio está contenido en otro viaje
+        $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        return $superpone_inicio -> num_rows();
+        /*
+        $resultado = $superpone_inicio->row_array();
+        return $resultado;
+         */
     }
 
+    private function valida_despues($id_chofer, $fecha_inicio, $hora_inicio, $duracion) {
+        //Viaje que quiero crear, inicio está contenido en otro viaje
+        $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        return $superpone_fin -> num_rows();
+        /*
+        $resultado = $superpone_fin->row_array();
+        return $resultado;
+        */
+    }
+
+    private function valida_entre($id_chofer, $fecha_inicio, $hora_inicio, $duracion) {
+        // Viaje que quiero crear contiene a otro viaje
+        $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        return $superpone_entre -> num_rows();
+        /*
+        $resultado = $superpone_entre->row_array();
+        return $resultado;
+        */
+    }
+
+    public function is_registered($viaje) {
+        // Obtengo los datos del viaje pasado por parámetro en variables
+        $fecha_inicio = $viaje['fecha'];
+        $hora_inicio = $viaje['hora'];
+        $duracion = $viaje['duracion'];
+        $id_chofer = $viaje['id_chofer'];
+        
+        $resultado = $this->valida_antes($id_chofer, $fecha_inicio, $hora_inicio) + $this->valida_despues($id_chofer, $fecha_inicio, $hora_inicio, $duracion) + $this->valida_entre($id_chofer, $fecha_inicio, $hora_inicio, $duracion);
+
+        return $resultado;
+    }
+
+//registra viaje en BD, insert
     public function register_viaje($viaje) {
-         $this->db->set($viaje);
-        $this->db->insert('viaje');
-        $this->db->where('id_chofer', $viaje['id_chofer']); //PENDIENTE - Cómo consulto si ese viaje fue creado.
-        $this->db->where('fecha', $viaje['fecha']);
-        $amount_results = $this->db->count_all_results('viaje');
-        return ($amount_results == 1);
+        $this->db->insert('viaje', $viaje);
+
+        $this->db->trans_complete();
+        return ($this->db->trans_status() === TRUE);
     }
-    
-    public function consulta_id_auto($patente){
-        $this->db->select('id_auto');
-      $this->db->from('auto');
-      $this->db->where('num_patente', $patente);
-      $consulta = $this->db->get();
-      $resultado = $consulta->row();
-      return $resultado;
-    }
+
+
     public function consulta_id_viaje($viaje){
         $this->db->select('id_viaje');
       $this->db->from('viaje');
@@ -85,15 +86,7 @@ class model_viaje extends CI_Model {
       return $resultado;
         
     }
-    public function registrar_ids($id){
-        /*$id['id_user']='1';
-        $id['id_auto']='1';
-        $id['id_viaje']='1';*/
-        
-        $this->db->insert('id', $id);
-    }
-    
-
+   
     // cuando se implemente las búsquedas $search debería ser un array, 
     // ya que hay más de un criterio (orígen, destino, fecha, etc) 
     public function getViajes($rowno, $rowperpage, $search = "") {
