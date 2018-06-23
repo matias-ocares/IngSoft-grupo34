@@ -66,8 +66,84 @@ class viaje extends controller {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
         $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+        $data['error'] = $this->session->flashdata('error');
         //parent::index_page('viaje/view_viaje_info', $data);
         parent::index_page('viaje/view_viaje_info', $data);
+    }
+    
+    public function ver_postularse($id) {
+        //Neccesary to pass "id" as a parameter
+        $viaje_id = $this->uri->segment(3);
+        $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+        $data['error'] = $this->session->flashdata('error');
+        //parent::index_page('viaje/view_viaje_info', $data);
+        $this->load->model('model_viaje');
+        $ids['id_viaje'] = $data['viaje']->id_viaje;
+        $ids['id_user'] = $this ->session-> userdata('id_user');
+        $resultado = $this->model_viaje->ya_postulado($ids);
+        if($resultado == true){
+        parent::index_page('viaje/view_postular_viaje', $data);}
+        else{
+           $this->session->set_flashdata('error', 'YA ESTÁ POSTULADO PARA ESTE VIAJE');
+           $data['error'] = $this->session->flashdata('error');
+           parent::index_page('viaje/view_viaje_info', $data);  
+        }
+    }
+    
+    public function exist_tarjeta(){
+        $this->load->model('model_tarjeta');
+        $id = $this->session->userdata('id_user');
+        //verifies tarjeta exists in DB
+        return (($this->model_tarjeta->is_registered($id)));
+        
+    }
+    public function hay_superposicion(){
+   $this->load->model('model_viaje');
+   
+    $miviaje = array(
+            'id_user'=>$this ->session-> userdata('id_user'),
+            'id_viaje'=>$this->input->post('id_viaje'),
+            'fecha' => $this->input->post('fecha'),
+            'hora' => $this->input->post('hora'),
+            'duracion' => $this->input->post('duracion'),
+            'id_chofer' => $this->input->post('id_chofer'),
+        );
+        $resultado = $this->model_viaje->superposicion_postulacion($miviaje);
+        if ($resultado == 0){
+        return false;}
+        else
+        { return true;}
+    }
+    
+    public function postularse(){
+        $bool = $this-> exist_tarjeta();
+        if($bool== TRUE){            
+            $postulacion['id_user']= $this->session -> userdata('id_user');
+            $postulacion['id_viaje']= $this->input->post('id_viaje');
+            $viaje_id = $this->input->post('id_viaje');
+            $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);        
+            $sup= $this->hay_superposicion();
+            if($sup == FALSE){ //NO HAY SUPERSPOSICION CON POSTULACIÓN APROBADA, ENTONCES SE GUARDA LA POSTULACION VISIBLE
+               $postulacion['id_estado']= 1; 
+               $this->model_viaje->postular($postulacion); 
+               $this->session->set_flashdata('error', 'SOLICITUD ENVIADA EXITOSAMENTE, ESPERANDO CONFIRMACIÓN.');
+               $data['error'] = $this->session->flashdata('error');
+               parent::index_page('viaje/view_viaje_info', $data); 
+               
+            }else{ //HAY SUPERPOSICION CON POSTULACION APROBADA, ENTONCES SE GUARDA LA POSTUALACION INVISIBLE
+               $postulacion['id_estado']= 4; 
+               $this->model_viaje->postular($postulacion); 
+               $this->session->set_flashdata('error', 'La postulación se superpone con un viaje ya aprobado, y por tal permanecerá invisible para el chofer mientras que la postulación aprobada siga vigente.');
+               $data['error'] = $this->session->flashdata('error');
+               parent::index_page('viaje/view_viaje_info', $data); 
+            }
+        }
+        else{
+         
+            $this->session->set_flashdata('notifico', 'NO POSEE UNA TARJETA DE CRÉDITO REGISTRADA.');      
+            redirect('viaje/');
+        }
+        
     }
 
     public function index($rowno = 0) {
@@ -100,9 +176,9 @@ class viaje extends controller {
         foreach ($lista_viajes as $viaje) {
             $pertenece = $this->model_viaje->viaje_pertenece_user($viaje['id_viaje'], $this->session->userdata('id_user'));
             if ($pertenece) {
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>'));
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' .'<span class="glyphicon glyphicon-briefcase"></span>' );
             } else {
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span class="glyphicon glyphicon-trash"></span>');
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $viaje['fecha'], $viaje['hora_inicio'], anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span class="glyphicon glyphicon-trash"></span>' . ' | ' . anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-briefcase"></span>'));
             }
         }
         //Call view
