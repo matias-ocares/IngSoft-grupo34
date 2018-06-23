@@ -23,8 +23,8 @@
                   <td><?php echo $viaje->id_viaje; ?></td>
                   <td><?php echo $viaje->origen; ?></td>
                   <td><?php echo $viaje->destino; ?></td>
-                  <td><?php echo $viaje->fecha; ?></td>
-                  <td><?php echo $viaje->hora_inicio; ?></td>
+                  <td><?php echo $newDate = date("d-m-Y", strtotime($viaje->fecha)); ?></td> 
+                  <td><?php echo substr("$viaje->hora_inicio", 0, -3); ?></td>
                   <td><?php echo $viaje->duracion_horas; ?></td>
                   <td><?php echo $viaje->costo; ?></td>
                   <td><?php echo $viaje->plazas_total; ?></td>
@@ -34,11 +34,17 @@
                   
                 </tr>
                 </tbody>
+                <?php if ($exito): ?>
+
+            <p style="color:green;"> <?php echo $exito ?> </p>
+
+        <?php endif; ?> 
                 <?php if ($error): ?>
 
             <p style="color:red;"> <?php echo $error ?> </p>
 
         <?php endif; ?>
+            
                 </table>
             </div>  
           
