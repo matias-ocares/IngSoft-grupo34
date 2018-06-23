@@ -1,5 +1,6 @@
 <div class="col-sm-8 text-left"> 
-          <h1>Listado de viajes</h1>
+          <h1>Detalles de viaje</h1>
+          
           <hr>
             <div class="container">    
                 <table class="table table-striped">
@@ -33,8 +34,14 @@
                   
                 </tr>
                 </tbody>
+                <?php if ($error): ?>
+
+            <p style="color:red;"> <?php echo $error ?> </p>
+
+        <?php endif; ?>
                 </table>
-            </div>    
+            </div>  
+          
         </div> 
 
  
