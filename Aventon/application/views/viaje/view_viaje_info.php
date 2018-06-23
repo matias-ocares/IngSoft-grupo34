@@ -36,12 +36,12 @@
                 </tbody>
                 <?php if ($exito): ?>
 
-            <p style="color:green;"> <?php echo $exito ?> </p>
+            <p style="color:green;"><b> <?php echo $exito ?></b> </p>
 
         <?php endif; ?> 
-                <?php if ($error): ?>
+          <?php if ($error): ?>
 
-            <p style="color:red;"> <?php echo $error ?> </p>
+            <p style="color:red;"> <b><?php echo $error ?> </b></p>
 
         <?php endif; ?>
             
