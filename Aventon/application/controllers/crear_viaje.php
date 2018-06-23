@@ -21,7 +21,8 @@ class crear_viaje extends controller {
             $data['title'] = 'Auto';
             $data['groups'] = $this->model_viaje->getMisAutos();
             $data['notifico'] = $this->session->flashdata('notifico');
-            parent::index_page('/viaje/view_crear_viaje', $data);
+            //parent::index_page('/viaje/view_crear_viaje', $data);
+            parent::index_page('/viaje/view_form_crear_viaje', $data);
         } else if (!$this->session->userdata('logueado')) {
 
             redirect('login');
