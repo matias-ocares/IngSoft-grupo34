@@ -19,11 +19,14 @@ class model_tarjeta extends CI_Model {
         $amount_results = $this->db->count_all_results('tarjeta');
         return ($amount_results == 1);
     }
+<<<<<<< Updated upstream
     public function tarjeta_cargada($id) {
         $this->db->where('id_user', $id);
         $amount_results = $this->db->count_all_results('tarjeta');
         return ($amount_results == 1);
     }
+=======
+>>>>>>> Stashed changes
     
     
 

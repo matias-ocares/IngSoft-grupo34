@@ -71,7 +71,10 @@ $lang['form_validation_notExistEmail']		= 'El correo electronico ingresado ya se
 $lang['form_validation_matchesPassword']		= 'Las claves no coinciden.';
 $lang['form_validation_alpha']			= 'El {field} solo admite caracteres alfabeticos.';
 $lang['form_validation_matches']		= 'Las claves no coinciden.';
+<<<<<<< Updated upstream
 $lang['form_validation_existFecha']             = 'Existe un viaje que se superpone con el que intenta crear';
+=======
+>>>>>>> Stashed changes
 $lang['form_validation_notExistCreditCard']		= 'El numero de tarjeta que está ingresando ya se encuentra registrada';
 
 
