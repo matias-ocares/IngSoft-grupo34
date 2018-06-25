@@ -18,7 +18,12 @@ class tarjeta_credito extends controller {
     public function index() {
         $data=array();    
         $data['error'] = $this->session->flashdata('error');
-        parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data);
+        if($this->model_tarjeta->tarjeta_cargada($this->session->userdata('id_user')) > 0){
+            parent::index_page('tarjeta_credito/view_tarjeta',$data);
+        }
+        else{
+           parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data); 
+        }
     }
 
    private function set_flash_campos_tarjeta(){
@@ -46,6 +51,11 @@ class tarjeta_credito extends controller {
             return TRUE;
         }
     }
+    function notExistCreditCard() {
+        $numero = $this->input->post('numero');
+        //verifies email exists in DB
+        return (!($this->model_tarjeta->is_registered($numero)));
+    }
     
     private function validation_rules(){
  
@@ -63,7 +73,7 @@ class tarjeta_credito extends controller {
             array(
                 'field' => 'numero',
                 'label' => 'numero',
-                'rules' => 'required'
+                'rules' => 'required|callback_notExistCreditCard'
             ),
             array(
                 'field' => 'codigo',
