@@ -139,6 +139,15 @@ class model_viaje extends CI_Model {
         return $this->db->delete('viaje');
     }
     
+    //Este método retorno "true" si el User tiene al menos un viaje creado (es al menos chofer en algún viaje)
+    function tiene_un_viaje (){
+        $id = $this->session->userdata('id_user');
+        $this->db->where('id_chofer', $id);
+        $amount_results = $this->db->count_all_results('viaje');
+        return ($amount_results >= 1);
+        
+    }
+    
 //ACÁ COMIENZAN FUNCIONES CORRESPONDIENTES A LA HU POSTULARSE COMO ACOMPAÑANTE    
   private function postulacion_valida_antes($id, $fecha_inicio, $hora_inicio) {
         //VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
