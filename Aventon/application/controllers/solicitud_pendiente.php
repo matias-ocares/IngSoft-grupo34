@@ -83,19 +83,113 @@ class solicitud_pendiente extends controller {
 
             //Configure columns to be displayed on table
             foreach ($lista_solicitudes as $solicitud) {
+                
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
-                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], 'Aceptar' . ' | ' . 'Rechazar');
+                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_pendiente/aceptar_solicitud/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'].'/'.$solicitud['hora_inicio'].'/'.$solicitud['fecha'].'/'.$solicitud['duracion_horas'], '<span class>Aceptar</span>') . ' | ' . anchor('solicitud_pendiente/rechazar_solicitud/' , '<span class>Rechazar</span>'));
             }
 
             //Call view
             $data = array();
+            //$this->session->set_flashdata('error',' '); 
+            //$this->session->set_flashdata('exito',' '); 
+            $data['error'] = $this->session->flashdata('error');
+            $data['exito'] = $this->session->flashdata('exito');
             parent::index_page('solicitud/view_solicitud_pendiente', $data);
         } else {//no tiene creado ningún viaje, redirijo al listado de viajes
             $this->session->set_flashdata('notifico', 'No tiene ninguna solicitud ya que no ha creado ningún viaje');
             $data['notifico'] = $this->session->flashdata('notifico');
             redirect('viaje/');
         }
+    }
+    
+    
+    public function valida_fecha($id_postulante){ //VALIDA QUE LA TARJETA NO VENCIÓ
+        $this->load->model('model_tarjeta');
+        $resultado= (($this->model_tarjeta->consulta_fecha($id_postulante)));
+        $fecha = $resultado->fecha;
+        //$fecha = date_format($date, 'm-y');
+               
+        $dia = "01";
+        $mes = substr($fecha,0,2);
+        $anio = substr($fecha,2,4);
+
+        $fecha_cc = date_create("20".$anio."/".$mes."/".$dia);  //crear un objeto DateTime 
+        $fechax = $fecha_cc->format('Y-m-d');
+        if ($fechax > date("Y/m/d")){
+            return TRUE;
+        }
+        else 
+        {return FALSE;}
+    }
+    
+    public function valida_saldo($id_viaje, $id_postulante){ //VALIDA QUE LA TARJETA POSEE SALDO SUFICIENTE
+      $datos_viaje= (($this->model_solicitud->costo_viaje($id_viaje)));
+      $costo = ($datos_viaje->costo)/($datos_viaje->plazas_total);
+      $this->load->model('model_tarjeta');
+      $dato= $this->model_tarjeta->monto_disponible($id_postulante);
+      if(($dato->monto) >= ($costo)){
+          return TRUE;
+      }else{
+          return FALSE;
+      }
+    }
+    
+    public function inactiva_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion){
+      $this->model_solicitud->get_postulaciones($id_postulante, $fecha,$hora_inicio, $duracion );
+       
+    }
+    
+    
+    public function aceptar_solicitud(){
+        
+        $id_viaje=  $this->uri->segment(3);
+        $id_postulante=$this->uri->segment(4);
+        $hora_inicio=  $this->uri->segment(5);
+        $fecha=$this->uri->segment(6);
+        $duracion=$this->uri->segment(7);
+        
+        $bool = $this-> valida_fecha($id_postulante);
+      if($bool== TRUE){ //LA TARJETA NO VENCIÓ
+        $bool = $this-> valida_saldo($id_viaje, $id_postulante);
+        if($bool == TRUE){//HAY SALDO DISPONIBLE EN LA TARJETA
+          $valor=2;
+          $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);     
+            
+          $this->inactiva_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion);
+          
+          $data = array();
+          $this->session->set_flashdata('exito','PASAJERO ACEPTADO EXITOSAMENTE.'); 
+          $data['error'] = $this->session->flashdata('error');
+          $data['exito'] = $this->session->flashdata('exito');
+          //parent::index_page('solicitud/view_solicitud_pendiente', $data);   
+          redirect('solicitud_pendiente/');
+            
+        }
+        else{ //NO HAY SALDO SUFICIENTE EN LA TARJETA
+          $valor=3;
+          $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);            
+          $data = array();
+          $this->session->set_flashdata('error','EL POSTULANTE NO POSEE SALDO SUFICIENTE.'); 
+          $data['error'] = $this->session->flashdata('error');
+          $data['exito'] = $this->session->flashdata('exito');
+          //parent::index_page('solicitud/view_solicitud_pendiente', $data);   
+          redirect('solicitud_pendiente/');
+          
+        }           
+          
+      }
+      else{ //LA TARJETA YA VENCIÓ
+          $valor=3;
+          $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);            
+          $data = array();
+          $this->session->set_flashdata('error','LA TARJETA DE CRÉDITO DEL POSTULANTE ERA INVÁLIDA.'); 
+          $data['error'] = $this->session->flashdata('error');
+          $data['exito'] = $this->session->flashdata('exito');
+          //parent::index_page('solicitud/view_solicitud_pendiente', $data);   
+          redirect('solicitud_pendiente/');
+      }
+        
     }
 
 }
