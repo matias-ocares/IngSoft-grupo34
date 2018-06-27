@@ -201,4 +201,6 @@ class model_viaje extends CI_Model {
         return ($amount_results == 0);
     }
 //ACÁ FINALIZAN LAS FUNCIONES CORRESPONDIENTES A LA HU POSTULARME COMO ACOMPAÑANTE
+    
+   
 }
