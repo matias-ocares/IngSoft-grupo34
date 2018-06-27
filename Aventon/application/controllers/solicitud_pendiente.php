@@ -86,7 +86,7 @@ class solicitud_pendiente extends controller {
                 
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
-                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_pendiente/aceptar_solicitud/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'].'/'.$solicitud['hora_inicio'].'/'.$solicitud['fecha'].'/'.$solicitud['duracion_horas'], '<span class>Aceptar</span>') . ' | ' . anchor('solicitud_pendiente/rechazar_solicitud/' , '<span class>Rechazar</span>'));
+                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_pendiente/aceptar_solicitud/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'].'/'.$solicitud['hora_inicio'].'/'.$solicitud['fecha'].'/'.$solicitud['duracion_horas'], '<span class>Aceptar</span>') . ' | ' . anchor('solicitud_pendiente/rechazar_solicitud/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'].'/'.$solicitud['hora_inicio'].'/'.$solicitud['fecha'].'/'.$solicitud['duracion_horas'] , '<span class>Rechazar</span>'));
             }
 
             //Call view
@@ -116,7 +116,7 @@ class solicitud_pendiente extends controller {
 
         $fecha_cc = date_create("20".$anio."/".$mes."/".$dia);  //crear un objeto DateTime 
         $fechax = $fecha_cc->format('Y-m-d');
-        if ($fechax > date("Y/m/d")){
+        if ($fechax > date("Y-m-d")){
             return TRUE;
         }
         else 
@@ -136,7 +136,9 @@ class solicitud_pendiente extends controller {
     }
     
     public function inactiva_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion){
-      $this->model_solicitud->get_postulaciones($id_postulante, $fecha,$hora_inicio, $duracion );
+      $valor= 4;  
+      $valorActual= 1;
+      $this->model_solicitud->get_postulaciones($id_postulante, $fecha,$hora_inicio, $duracion, $valor, $valorActual );
        
     }
     
@@ -155,7 +157,7 @@ class solicitud_pendiente extends controller {
         if($bool == TRUE){//HAY SALDO DISPONIBLE EN LA TARJETA
           $valor=2;
           $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);     
-            
+          //$this->model_solicitud->restar_plaza($id_viaje);  
           $this->inactiva_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion);
           
           $data = array();
@@ -190,6 +192,39 @@ class solicitud_pendiente extends controller {
           redirect('solicitud_pendiente/');
       }
         
+    }
+    
+     public function activa_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion){
+      $valor=1;
+      $valorActual= 4;
+      $this->model_solicitud->get_postulaciones($id_postulante, $fecha,$hora_inicio, $duracion, $valor,$valorActual );
+       
+    }
+    
+    public function rechazar_solicitud(){
+        $id_viaje=  $this->uri->segment(3);
+        $id_postulante=$this->uri->segment(4);
+        $hora_inicio=  $this->uri->segment(5);
+        $fecha=$this->uri->segment(6);
+        $duracion=$this->uri->segment(7);
+        
+        $resultado= $this->model_solicitud->consulta_estado($id_viaje, $id_postulante);
+        
+        if($resultado->id_estado == 1){ //LA SOLICITUD ESTA PENDIENTE DE ACEPTACION
+         $valor=3;
+         $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);     
+         $this->activa_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion);      
+        
+         $data = array();
+         $this->session->set_flashdata('exito','SOLICITUD RECHAZADA.'); 
+         $data['error'] = $this->session->flashdata('error');
+         $data['exito'] = $this->session->flashdata('exito');
+          //parent::index_page('solicitud/view_solicitud_pendiente', $data);   
+         redirect('solicitud_pendiente/');
+        }
+        else{ //LA SOLICITUD FUE PREVIAMENTE ACEPTADA
+            
+        }
     }
 
 }
