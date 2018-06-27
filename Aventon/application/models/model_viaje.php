@@ -66,14 +66,15 @@ class model_viaje extends CI_Model {
         return $resultado;
     }
 
-//registra viaje en BD, insert
-    public function register_viaje($viaje) {
-        $this->db->insert('viaje', $viaje);
-
+    //registra uno o más viajes, de acuerdo al array de viajes pasado por parámetro
+    public function registrar_viaje($array_viajes) {
+        foreach ($array_viajes as $viaje) {
+            $this->db->insert('viaje', $viaje);
+        }
         $this->db->trans_complete();
         return ($this->db->trans_status() === TRUE);
     }
-
+    
 
     public function consulta_id_viaje($viaje){
         $this->db->select('id_viaje');
