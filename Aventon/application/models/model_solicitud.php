@@ -67,12 +67,12 @@ class model_solicitud extends CI_Model {
       
     }
     
-    public function get_postulaciones($id_postulante,$fecha,$hora, $dura ){
+    public function get_postulaciones($id_postulante,$fecha,$hora, $dura, $valor, $valorActual ){
      $this->db->select('fecha,hora_inicio,viaje.id_viaje, user.id_user');
         $this->db->join('viaje', 'viaje.id_viaje = postulacion_viaje.id_viaje', 'inner');
         $this->db->join('user', 'user.id_user = postulacion_viaje.id_user', 'inner');
         $this->db->where('postulacion_viaje.id_user', $id_postulante);
-        $this->db->where('id_estado', 1);
+        $this->db->where('id_estado', $valorActual);
         $this->db->where('fecha', $fecha);
         
         //$this->db->order_by('fecha', 'asc');
@@ -85,11 +85,9 @@ class model_solicitud extends CI_Model {
   
       foreach ($resultado as $id){
       if($this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) or $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) or $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion)){
-         $valor= 4;
+         //$valor= 4;
           $this-> setear_postulacion($id['id_viaje'], $id_postulante, $valor);
-      }  
-
-        
+      }          
       }  
     }
     
@@ -123,5 +121,42 @@ class model_solicitud extends CI_Model {
         else {
             return FALSE;
         }
-    }  
+    }
+    
+    public function restar_plaza($id_viaje){
+     $this->db->where('id_viaje', $id_viaje);
+     $this->db->select('id_viaje,id_auto, fecha, hora_inicio, duracion_horas, costo, id_chofer, origen, destino, plazas_libre, plazas_total');
+     $this->db->from('viaje'); 
+     $consulta = $this->db->get();
+     $resultado = $consulta->result_array();
+     //$resultado['plazas_libre']= $resultado['plazas_libre']-1;
+     $this->db->where('id_viaje', $id_viaje);
+     $this->db->update('viaje', $resultado);
+     
+     if($resultado['plazas_libre']==0){
+       $this->db->where('id_viaje', $id_viaje);
+       $this->db->select('id_viaje,id_postulante');
+       $this->db->from('postulacion_viaje'); 
+       $query = $this->db->get();
+
+       $resultado= $query->result_array();
+       foreach ($resultado as $id){
+         $this->db->where('id_viaje', $id['id_viaje']); 
+         $valor= 4;
+         $this-> setear_postulacion($id['id_viaje'], $id['id_postulante'], $valor);
+       }
+       
+     }
+    } 
+    
+    public function consulta_estado($id_viaje, $id_postulante){
+      $this->db->where('id_viaje', $id_viaje);
+      $this->db->where('id_user', $id_postulante);
+      $this->db->select('id_estado');
+      $this->db->from('postulacion_viaje');
+      $consulta = $this->db->get();
+      $resultado = $consulta->row();
+      return $resultado;  
+    }
+    
 }
