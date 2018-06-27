@@ -96,7 +96,7 @@ class viaje extends controller {
         $this->load->model('model_tarjeta');
         $id = $this->session->userdata('id_user');
         //verifies tarjeta exists in DB
-        return (($this->model_tarjeta->is_registered($id)));
+        return (($this->model_tarjeta->is_registered_por_id($id)));
         
     }
     public function hay_superposicion(){
