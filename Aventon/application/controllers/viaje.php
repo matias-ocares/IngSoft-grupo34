@@ -72,6 +72,24 @@ class viaje extends controller {
         parent::index_page('viaje/view_viaje_info', $data);
     }
     
+    public function ver_eliminar($id) {
+        //Neccesary to pass "id" as a parameter
+        $viaje_id = $this->uri->segment(3);
+        $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+        $data['error'] = $this->session->flashdata('error');
+        $data['exito'] = $this->session->flashdata('exito');
+        //parent::index_page('viaje/view_viaje_info', $data);
+        parent::index_page('viaje/view_eliminar_viaje', $data);
+    }
+    function eliminar($id){
+        $id = $this->input->post('id_viaje');
+        $this->model_viaje->consulta_estado_postulacion($id);
+        $this->model_viaje->eliminar_viaje($id);
+        
+        
+        redirect('viaje/');
+    }
+    
     public function ver_postularse($id) {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
@@ -188,7 +206,7 @@ class viaje extends controller {
             $hora_inicio= substr($viaje['hora_inicio'], 0, -3);
             $newDate = date("d-m-Y", strtotime($viaje['fecha']));
             if ($pertenece) {
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' .'<span class>Postularme</span>' );
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' .'<span class>Postularme</span>' );
             } else {
                 $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span class="glyphicon glyphicon-trash"></span>' . ' | ' . anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class>Postularme</span>'));
             }
