@@ -35,7 +35,7 @@
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>solicitud_pendiente/"> Pendientes</a></li>
-                    <li><a href=""> Aprobadas</a></li>
+                    <li><a href="<?php echo base_url() ?>solicitud_aprobada/"> Aprobadas</a></li>
                 </ul>
             </li> 
             
