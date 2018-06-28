@@ -34,8 +34,17 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitudes Recibidas
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo base_url() ?>solicitud_pendiente/">Solicitudes Pendientes</a></li>
-                    <li><a href="">Solicitudes Aprobadas</a></li>
+                    <li><a href="<?php echo base_url() ?>solicitud_pendiente/"> Pendientes</a></li>
+                    <li><a href=""> Aprobadas</a></li>
+                </ul>
+            </li> 
+            
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Solicitudes Enviadas
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo base_url() ?>solicitud_pendiente_enviada/"> Pendientes</a></li>
+                    <li><a href=<?php echo base_url() ?>solicitud_aprobada_enviada/"> Aprobadas </a></li>
                 </ul>
             </li> 
             

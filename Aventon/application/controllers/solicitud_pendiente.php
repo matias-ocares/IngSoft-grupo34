@@ -95,7 +95,8 @@ class solicitud_pendiente extends controller {
             //$this->session->set_flashdata('exito',' '); 
             $data['error'] = $this->session->flashdata('error');
             $data['exito'] = $this->session->flashdata('exito');
-            parent::index_page('solicitud/view_solicitud_pendiente', $data);
+            $this->session->set_flashdata('listado','Pendientes Recibidas');
+            parent::index_page('solicitud/view_solicitud', $data);
         } else {//no tiene creado ningún viaje, redirijo al listado de viajes
             $this->session->set_flashdata('notifico', 'No tiene ninguna solicitud ya que no ha creado ningún viaje');
             $data['notifico'] = $this->session->flashdata('notifico');

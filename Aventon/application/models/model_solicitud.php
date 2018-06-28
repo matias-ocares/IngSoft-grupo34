@@ -34,8 +34,8 @@ class model_solicitud extends CI_Model {
 
         return $query->result_array();
     }
-
-    // Select total records
+    
+          // Select total records
     public function getrecordCount($search = "") {
 
         $this->db->select('origen,destino,fecha,hora_inicio,nombre,apellido');
@@ -46,6 +46,33 @@ class model_solicitud extends CI_Model {
         $this->db->where('id_estado', 1);
         return $this->db->count_all_results();
     }
+    
+    
+        public function getSolicitudesEnviadas($rowno, $rowperpage,$array_estados, $search = "") {   
+        $this->db->select('id_estado,postulacion_viaje.id_user,postulacion_viaje.id_viaje');
+        //$this->db->select('origen,destino,fecha,hora_inicio,duracion_horas,nombre,apellido, viaje.id_viaje, user.id_user');
+        $this->db->join('viaje', 'viaje.id_viaje = postulacion_viaje.id_viaje', 'inner');
+        $this->db->join('user', 'user.id_user = postulacion_viaje.id_user', 'inner');
+        $this->db->where('postulacion_viaje.id_user', $this->session->userdata('id_user') );
+        $this->db->where_in('id_estado',$array_estados); 
+        $this->db->order_by('fecha', 'asc');
+        $query = $this->db->get('postulacion_viaje', $rowperpage, $rowno);
+
+        return $query->result_array();
+    }
+  
+   // Select total records
+    public function getrecordCountEnviadas($array_estados, $search = "") {
+        $this->db->from('postulacion_viaje');
+        $this->db->join('viaje', 'viaje.id_viaje = postulacion_viaje.id_viaje', 'inner');
+        $this->db->join('user', 'user.id_user = postulacion_viaje.id_user', 'inner');
+        $this->db->where('postulacion_viaje.id_user', $this->session->userdata('id_user') );
+        $this->db->where_in('id_estado',$array_estados); 
+        return $this->db->count_all_results();
+    }
+    
+    
+
     
      public function costo_viaje($id_viaje){
       $this->db->where('id_viaje', $id_viaje);
@@ -158,5 +185,13 @@ class model_solicitud extends CI_Model {
       $resultado = $consulta->row();
       return $resultado;  
     }
+    
+    function tiene_una_solicitud() {
+        $id = $this->session->userdata('id_user');
+        $this->db->where('id_user', $id);
+        $amount_results = $this->db->count_all_results('postulacion_viaje');
+        return ($amount_results >= 1);
+    }
+    
     
 }
