@@ -135,14 +135,6 @@ class model_viaje extends CI_Model {
         $amount_results = $this->db->count_all_results('viaje');
         return ($amount_results == 1);
     }
-<<<<<<< Updated upstream
-
-    function eliminar_viaje($id) {
-        $this->db->where('id_viaje', $id);
-        return $this->db->delete('viaje');
-    }
-
-=======
     
     function eliminar_viaje($id){
         $this->db->where('id_viaje', $id);
@@ -176,8 +168,6 @@ class model_viaje extends CI_Model {
         
     }
 
-    
->>>>>>> Stashed changes
     //Este método retorno "true" si el User tiene al menos un viaje creado (es al menos chofer en algún viaje)
     function tiene_un_viaje() {
         $id = $this->session->userdata('id_user');
