@@ -23,6 +23,7 @@ class model_viaje extends CI_Model {
         return $resultado;
     }
 
+
     private function valida_antes($id_chofer, $fecha_inicio, $hora_inicio) {
         //Viaje que quiero crear, inicio está contenido en otro viaje
         $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
@@ -134,12 +135,49 @@ class model_viaje extends CI_Model {
         $amount_results = $this->db->count_all_results('viaje');
         return ($amount_results == 1);
     }
+<<<<<<< Updated upstream
 
     function eliminar_viaje($id) {
         $this->db->where('id_viaje', $id);
         return $this->db->delete('viaje');
     }
 
+=======
+    
+    function eliminar_viaje($id){
+        $this->db->where('id_viaje', $id);
+        $this->db->set('estado',1);
+        $this->db->update('viaje');
+    }
+
+    function restar_reputacion($id_user,$id_pasajero,$id_viaje){
+        $data = array(
+            'id_chofer' => $id_user,
+            'id_viaje' => $id_viaje,
+            'id_pasajero' => $id_pasajero,
+            'positivo' => 0,
+            'negativo' => 1,
+            'neutro' => 0,            
+        );
+        $this->db->insert('calificacion_chofer',$data);      
+        
+    }
+    
+    function consulta_estado_postulacion($id){           
+        $this->db->where('id_viaje', $id);
+        $this->db->where('id_estado', 2);  
+        $this->db->select('id_user');        
+        $consulta = $this->db->get('postulacion_viaje');
+        $resultado = $consulta->result_array(); 
+        foreach ($resultado as $user){
+            $resultado = $this->restar_reputacion($this->session->userdata('id_user'),$user['id_user'],$id);
+        }
+ 
+        
+    }
+
+    
+>>>>>>> Stashed changes
     //Este método retorno "true" si el User tiene al menos un viaje creado (es al menos chofer en algún viaje)
     function tiene_un_viaje() {
         $id = $this->session->userdata('id_user');
