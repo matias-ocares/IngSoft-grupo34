@@ -233,5 +233,30 @@ public function getrecordCountAprobada($search = "") {
         $amount_results = $this->db->count_all_results('postulacion_viaje');
         return ($amount_results >= 1);
     }
+    
+    public function eliminar_mi_postulacion($id_viaje, $id_user){
+      $this->db->where('id_viaje', $id_viaje);
+       $this->db->where('id_user', $id_user);
+      $this->db->delete('postulacion_viaje');   
+    }
+    
+    function restar_reputacion_pasajero($id_pasajero,$id_viaje){
+        $this->db->where('id_viaje', $id_viaje);
+        $this->db->select('id_chofer');
+        $this->db->from('viaje');
+        $consulta = $this->db->get();
+        $resultado = $consulta->row();
+        
+        $data = array(
+            'id_chofer' => $resultado->id_chofer,
+            'id_viaje' => $id_viaje,
+            'id_pasajero' => $id_pasajero,
+            'positivo' => 0,
+            'negativo' => 1,
+            'neutro' => 0,            
+        );
+        $this->db->insert('calificacion_pasajero',$data);      
+        
+    }
 
 }

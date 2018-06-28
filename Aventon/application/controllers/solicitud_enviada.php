@@ -96,7 +96,7 @@ class solicitud_enviada extends controller {
             foreach ($lista_solicitudes as $solicitud) {
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
-                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('', 'Cancelar'));
+                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
                 //$this->table->add_row($solicitud['id_estado'], $solicitud['id_user'], $solicitud['id_viaje'], anchor('', 'Cancelar'));
             }
 
@@ -113,6 +113,44 @@ class solicitud_enviada extends controller {
             $data['notifico'] = $this->session->flashdata('notifico');
             redirect('viaje/');
         }
+    }
+    
+    public function cancelar(){
+        
+     $id_viaje = $this->uri->segment(3);
+     $id_user =  $this->session->userdata('id_user');
+     $id_estado = $this->uri->segment(4);
+     
+     if ($id_estado == 'pendiente') {
+       //$array_estados = array(1, 4);          
+       $this->model_solicitud->eliminar_mi_postulacion($id_viaje, $id_user); 
+       $data = array();
+       $this->session->set_flashdata('exito','SOLICITUD ELIMINADA.');
+       $this->session->set_flashdata('error','');
+         
+       $data['error'] = $this->session->flashdata('error');
+       $data['exito'] = $this->session->flashdata('exito');
+       redirect('solicitud_enviada/'.$id_estado);
+       //redirect('viaje/');
+       
+            } 
+     elseif ($id_estado == 'aprobada') {
+       //$array_estados = array(2);
+       $this->model_solicitud->eliminar_mi_postulacion($id_viaje, $id_user);
+       $this->model_solicitud->restar_reputacion_pasajero($id_user,$id_viaje);
+       $data = array();
+       $this->session->set_flashdata('exito','SOLICITUD ELIMINADA.');
+       $this->session->set_flashdata('error','SE TE OTORGARÁ UNA CALIFICACIÓN NEGATIVA POR ELIMINAR UNA SOLICITUD YA APROBADA.');
+         
+       $data['error'] = $this->session->flashdata('error');
+       $data['exito'] = $this->session->flashdata('exito');
+       redirect('solicitud_enviada/'.$id_estado);
+       //redirect('viaje/');     
+       
+     }
+     
+     
+        
     }
 
 }
