@@ -1,6 +1,6 @@
 <div class="col-sm-8 text-left">
 
-    <h1 class="h11">Listado de solicitudes pendientes</h1>
+    <h1 class="h11">Listado de solicitudes <?php echo $this->session->flashdata('listado') ?> </h1>
     <div class="container">  
         <?php if ($exito): ?>
 
