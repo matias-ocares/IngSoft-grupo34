@@ -158,7 +158,7 @@ class solicitud_pendiente extends controller {
         if($bool == TRUE){//HAY SALDO DISPONIBLE EN LA TARJETA
           $valor=2;
           $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);     
-          //$this->model_solicitud->restar_plaza($id_viaje);  
+          $this->model_solicitud->restar_plaza($id_viaje);  
           $this->inactiva_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion);
           
           $data = array();
@@ -224,7 +224,18 @@ class solicitud_pendiente extends controller {
          redirect('solicitud_pendiente/');
         }
         else{ //LA SOLICITUD FUE PREVIAMENTE ACEPTADA
-            
+         $valor=3;
+         $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);
+         $this->activa_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion);
+         $this->model_viaje->restar_reputacion($this->session->userdata('id_user'),$id_postulante,$id_viaje);
+         $this->model_solicitud->sumar_plaza($id_viaje);
+         $data = array();
+         $this->session->set_flashdata('exito','SOLICITUD RECHAZADA.');
+         $this->session->set_flashdata('error','SE TE OTORGARÁ UNA CALIFICACIÓN NEGATIVA POR RECHAZAR A UN PASAJERO YA ACEPTADO.');
+         
+         $data['error'] = $this->session->flashdata('error');
+         $data['exito'] = $this->session->flashdata('exito');
+         redirect('solicitud_aprobada/');
         }
     }
 
