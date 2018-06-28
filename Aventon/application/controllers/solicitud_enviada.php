@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . 'controllers/controller.php';
 
-class solicitud_pendiente_enviada extends controller {
+class solicitud_enviada extends controller {
 
     public function __construct() {
         parent::__construct();
@@ -24,11 +24,9 @@ class solicitud_pendiente_enviada extends controller {
         }
     }
 
-    private function set_config() { //seteo la configuración 
-        //estados por los que filtro (pendiente(1) y pendiente inactivo(4))
-        $array_estados = array(1,4); 
+    private function set_config($array_estados, $estado) { //seteo la configuración 
         //Base properties
-        $config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/solicitud_pendiente_enviada/';
+        $config['base_url'] = "http://localhost:1234/IngSoft-grupo34/Aventon/index.php/solicitud_enviada/$estado/";
         $config['total_rows'] = $this->model_solicitud->getrecordCountEnviadas($array_estados);
         $config['per_page'] = '5';
         //Additional properties
@@ -57,19 +55,28 @@ class solicitud_pendiente_enviada extends controller {
 
     public function index($rowno = 0) {
         //Si el user tiene al menos una solicitud creada (independiente del estado), muestro el listado de solicitudes
-        if ($this->model_solicitud-> tiene_una_solicitud()) {
-            $this->pagination->initialize($this->set_config());
+        if ($this->model_solicitud->tiene_una_solicitud()) {
+
+            $estado = $this->uri->segment(2);
+            $array_estados = null;
+
+            if ($estado == 'pendiente') {
+                $array_estados = array(1, 4);
+            } elseif ($estado == 'aprobada') {
+                $array_estados = array(2);
+            }
+            $this->pagination->initialize($this->set_config($array_estados, $estado));
 
             // Get Results from Data Base 
             $search_text = "";
             $rowperpage = 5;
-            $array_estados = array(1,4); //estados por los que filtro (pendiente(1) y pendiente inactivo(4))
+
             //Get all "viajes" with all columns
-            $lista_solicitudes = $this->model_solicitud->getSolicitudesEnviadas($rowno, $rowperpage, $array_estados, $search_text);
+            $lista_solicitudes = $this->model_solicitud->getSolicitudesEnviadas($this->uri->segment(3), $rowperpage, $array_estados, $search_text);
 
             //Set header for the table
-            //$header = array('Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Nombre y Apellido Chofer', 'Acciones');
-            $header = array('id_estado','id_user','id_viaje');
+            $header = array('Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Nombre y Apellido Chofer', 'Acciones');
+            //$header = array('id_estado', 'id_user', 'id_viaje');
             $this->table->set_heading($header);
 
             $tmpl = array('table_open' => '<table class="table table-hover">',
@@ -87,20 +94,19 @@ class solicitud_pendiente_enviada extends controller {
 
             //Configure columns to be displayed on table
             foreach ($lista_solicitudes as $solicitud) {
-                
-                //$hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
-                //$newDate = date("d-m-Y", strtotime($solicitud['fecha']));
-                //$this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('', 'Cancelar'));
-                $this->table->add_row($solicitud['id_estado'], $solicitud['id_user'], $solicitud['id_viaje'], anchor('', 'Cancelar'));
+                $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
+                $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
+                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('', 'Cancelar'));
+                //$this->table->add_row($solicitud['id_estado'], $solicitud['id_user'], $solicitud['id_viaje'], anchor('', 'Cancelar'));
             }
 
             //Call view
             $data = array();
-            
+
             $data['error'] = $this->session->flashdata('error');
             $data['exito'] = $this->session->flashdata('exito');
-            
-            $this->session->set_flashdata('listado','Pendientes Enviadas');
+
+            $this->session->set_flashdata('listado', "enviadas " . $estado . "s");
             parent::index_page('solicitud/view_solicitud', $data);
         } else {//no tiene creado ningún viaje, redirijo al listado de viajes
             $this->session->set_flashdata('notifico', 'No tiene ninguna solicitud ya que no se ha postulado a ningún viaje');
@@ -108,5 +114,5 @@ class solicitud_pendiente_enviada extends controller {
             redirect('viaje/');
         }
     }
-    
+
 }
