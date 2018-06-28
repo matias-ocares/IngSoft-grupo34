@@ -48,7 +48,7 @@ class crear_viaje extends controller {
     function existFecha() {
         // uso un array de array, porque cuando tenga los viajes con periodicidad, voy a tener que pasarle más de un viaje
         $viaje = array(
-            'fecha' => $this->input->post('fecha'),
+            'array_fechas' => $this->crear_array_fechas(),
             'hora' => $this->input->post('hora'),
             'duracion' => $this->input->post('duracion'),
             'id_chofer' => $this->session->userdata('id_user')
@@ -124,19 +124,31 @@ class crear_viaje extends controller {
         $fecha_desde = date_create($this->input->post('fecha'));
         $array_fechas = array($fecha_desde->format('Y-m-d'));
 
-        if ($this->input->post('frequencia') == "semanal") {
 
+        if ($this->input->post('frequencia') != "unico") {
             $fecha_hasta = date_create($this->input->post('fecha_hasta'));
             $cantDias = date_diff($fecha_desde, $fecha_hasta)->format("%a");
-            $cantSemanas = intdiv($cantDias, 7);
 
-            for ($i = 1; $i <= $cantSemanas; $i++) {
-                $fecha_desde = date_create($this->input->post('fecha'));
-                $fecha_desde->add(new DateInterval('P' . ($i * 7) . 'D'));
-                array_push($array_fechas, $fecha_desde->format('Y-m-d'));
+            // Si tiene frequencia semanal
+            if ($this->input->post('frequencia') == "semanal") {
+                $cantSemanas = intdiv($cantDias, 7);
+
+                for ($i = 1; $i <= $cantSemanas; $i++) {
+                    $fecha_desde->add(new DateInterval('P7D'));
+                    array_push($array_fechas, $fecha_desde->format('Y-m-d'));
+                }
+            } else { //Si tiene frequencia diaria  
+                //obtengo los días seleccionados (checkeados en el formulario) en un array
+                $dias_checked = $this->input->post('days');
+                for ($i = 1; $i <= $cantDias; $i++) {
+                    $fecha_desde->add(new DateInterval('P1D'));
+                    $day = $fecha_desde->format('l'); //obtengo el día convertido en día de la semana, y verifico si fue uno de los marcados
+                    if (in_array($day, $dias_checked)) {
+                        array_push($array_fechas, $fecha_desde->format('Y-m-d'));
+                    }
+                }
             }
         }
-
         return $array_fechas;
     }
 

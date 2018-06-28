@@ -73,10 +73,14 @@ echo $hoy;
                min="<?php $hoy = date("Y-m-d");echo $hoy;?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
         <br>
 
-        </br>
-        </br>
-
-
+        <input type="checkbox" name="days[]" value="Sunday"> Dom 
+        <input type="checkbox" name="days[]" value="Monday"> Lun 
+        <input type="checkbox" name="days[]" value="Tuesday"> Mar
+        <input type="checkbox" name="days[]" value="Wednesday"> Mie
+        <input type="checkbox" name="days[]" value="Thursday"> Jue
+        <input type="checkbox" name="days[]" value="Friday"> Vie
+        <input type="checkbox" name="days[]" value="Saturday"> Sab
+        <br>
         <?php if ($notifico): ?>
 
             <p> <?php echo $notifico ?> </p>

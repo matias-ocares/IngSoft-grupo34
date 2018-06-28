@@ -12,7 +12,6 @@ class model_viaje extends CI_Model {
     }
 
     function getMisAutos() { //para listar mis autos en el formulario de Crear Viaje
-
         $id = $this->session->userdata('id_user');
 
         $this->db->from('auto');
@@ -27,42 +26,45 @@ class model_viaje extends CI_Model {
     private function valida_antes($id_chofer, $fecha_inicio, $hora_inicio) {
         //Viaje que quiero crear, inicio está contenido en otro viaje
         $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
-        return $superpone_inicio -> num_rows();
+        return $superpone_inicio->num_rows();
         /*
-        $resultado = $superpone_inicio->row_array();
-        return $resultado;
+          $resultado = $superpone_inicio->row_array();
+          return $resultado;
          */
     }
 
     private function valida_despues($id_chofer, $fecha_inicio, $hora_inicio, $duracion) {
         //Viaje que quiero crear, inicio está contenido en otro viaje
         $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
-        return $superpone_fin -> num_rows();
+        return $superpone_fin->num_rows();
         /*
-        $resultado = $superpone_fin->row_array();
-        return $resultado;
-        */
+          $resultado = $superpone_fin->row_array();
+          return $resultado;
+         */
     }
 
     private function valida_entre($id_chofer, $fecha_inicio, $hora_inicio, $duracion) {
         // Viaje que quiero crear contiene a otro viaje
         $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
-        return $superpone_entre -> num_rows();
+        return $superpone_entre->num_rows();
         /*
-        $resultado = $superpone_entre->row_array();
-        return $resultado;
-        */
+          $resultado = $superpone_entre->row_array();
+          return $resultado;
+         */
     }
 
     public function is_registered($viaje) {
         // Obtengo los datos del viaje pasado por parámetro en variables
-        $fecha_inicio = $viaje['fecha'];
         $hora_inicio = $viaje['hora'];
         $duracion = $viaje['duracion'];
         $id_chofer = $viaje['id_chofer'];
-        
-        $resultado = $this->valida_antes($id_chofer, $fecha_inicio, $hora_inicio) + $this->valida_despues($id_chofer, $fecha_inicio, $hora_inicio, $duracion) + $this->valida_entre($id_chofer, $fecha_inicio, $hora_inicio, $duracion);
-
+        $todas_fechas = $viaje['array_fechas'];
+        $resultado = 0;
+        foreach ($todas_fechas as $fecha_inicio) {
+            $resultado = $this->valida_antes($id_chofer, $fecha_inicio, $hora_inicio) + $this->valida_despues($id_chofer, $fecha_inicio, $hora_inicio, $duracion) + $this->valida_entre($id_chofer, $fecha_inicio, $hora_inicio, $duracion);
+            if ($resultado >= 1)
+                return $resultado;
+        }
         return $resultado;
     }
 
@@ -74,20 +76,18 @@ class model_viaje extends CI_Model {
         $this->db->trans_complete();
         return ($this->db->trans_status() === TRUE);
     }
-    
 
-    public function consulta_id_viaje($viaje){
+    public function consulta_id_viaje($viaje) {
         $this->db->select('id_viaje');
-      $this->db->from('viaje');
-      $this->db->where('fecha', $viaje['fecha']);
-      $this->db->where('hora_inicio', $viaje['hora_inicio']);
-      $this->db->where('id_chofer', $viaje['id_chofer']);
-      $consulta = $this->db->get();
-      $resultado = $consulta->row();
-      return $resultado;
-        
+        $this->db->from('viaje');
+        $this->db->where('fecha', $viaje['fecha']);
+        $this->db->where('hora_inicio', $viaje['hora_inicio']);
+        $this->db->where('id_chofer', $viaje['id_chofer']);
+        $consulta = $this->db->get();
+        $resultado = $consulta->row();
+        return $resultado;
     }
-   
+
     // cuando se implemente las búsquedas $search debería ser un array, 
     // ya que hay más de un criterio (orígen, destino, fecha, etc) 
     public function getViajes($rowno, $rowperpage, $search = "") {
@@ -134,72 +134,69 @@ class model_viaje extends CI_Model {
         $amount_results = $this->db->count_all_results('viaje');
         return ($amount_results == 1);
     }
-    
-    function eliminar_viaje($id){
-        $this->db->where('id_viaje',$id);
+
+    function eliminar_viaje($id) {
+        $this->db->where('id_viaje', $id);
         return $this->db->delete('viaje');
     }
-    
+
     //Este método retorno "true" si el User tiene al menos un viaje creado (es al menos chofer en algún viaje)
-    function tiene_un_viaje (){
+    function tiene_un_viaje() {
         $id = $this->session->userdata('id_user');
         $this->db->where('id_chofer', $id);
         $amount_results = $this->db->count_all_results('viaje');
         return ($amount_results >= 1);
-        
     }
-    
+
 //ACÁ COMIENZAN FUNCIONES CORRESPONDIENTES A LA HU POSTULARSE COMO ACOMPAÑANTE    
-  private function postulacion_valida_antes($id, $fecha_inicio, $hora_inicio) {
+    private function postulacion_valida_antes($id, $fecha_inicio, $hora_inicio) {
         //VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
         $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
-        return $superpone_inicio-> num_rows();
-        
+        return $superpone_inicio->num_rows();
     }
 
     private function postulacion_valida_despues($id, $fecha_inicio, $hora_inicio, $duracion) {
         //VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
         $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
-        return $superpone_fin -> num_rows();
-       
+        return $superpone_fin->num_rows();
     }
 
     private function postulacion_valida_entre($id, $fecha_inicio, $hora_inicio, $duracion) {
         ///VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
         $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
-        return $superpone_entre -> num_rows();
-        
-    }  
-    public function superposicion_postulacion($miviaje){
-     
-      $this->db->where('id_user', $miviaje['id_user']);
-      $this->db->where('id_estado', 2);
-       $this->db->select('id_viaje');
-      $this->db->from('postulacion_viaje');
-      $consulta = $this->db->get();
-      $resultado = $consulta->result_array();
-      $fecha_inicio = $miviaje['fecha'];
-      $hora_inicio = $miviaje['hora'];
-      $duracion = $miviaje['duracion'];
-      $cant=0;
-      foreach ($resultado as $id){
-        $resultado = $this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) + $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) + $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion);  
-        $cant= $cant+$resultado;
-        
-      }
+        return $superpone_entre->num_rows();
+    }
+
+    public function superposicion_postulacion($miviaje) {
+
+        $this->db->where('id_user', $miviaje['id_user']);
+        $this->db->where('id_estado', 2);
+        $this->db->select('id_viaje');
+        $this->db->from('postulacion_viaje');
+        $consulta = $this->db->get();
+        $resultado = $consulta->result_array();
+        $fecha_inicio = $miviaje['fecha'];
+        $hora_inicio = $miviaje['hora'];
+        $duracion = $miviaje['duracion'];
+        $cant = 0;
+        foreach ($resultado as $id) {
+            $resultado = $this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) + $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) + $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion);
+            $cant = $cant + $resultado;
+        }
         return $cant;
     }
-    
-    public function postular ($postulacion){
-       $this->db->insert('postulacion_viaje', $postulacion); 
+
+    public function postular($postulacion) {
+        $this->db->insert('postulacion_viaje', $postulacion);
     }
-    
-    public function ya_postulado($ids){
-         $this->db->where('id_viaje', $ids['id_viaje']);
-         $this->db->where('id_user', $ids['id_user']);
+
+    public function ya_postulado($ids) {
+        $this->db->where('id_viaje', $ids['id_viaje']);
+        $this->db->where('id_user', $ids['id_user']);
         $amount_results = $this->db->count_all_results('postulacion_viaje');
         return ($amount_results == 0);
     }
+
 //ACÁ FINALIZAN LAS FUNCIONES CORRESPONDIENTES A LA HU POSTULARME COMO ACOMPAÑANTE
     
    
