@@ -19,7 +19,7 @@ class tarjeta_credito extends controller {
         $data=array();    
         $data['error'] = $this->session->flashdata('error');
         if($this->model_tarjeta->tarjeta_cargada($this->session->userdata('id_user')) > 0){
-            parent::index_page('tarjeta_credito/view_tarjeta',$data);
+            parent::index_page('tarjeta_credito/view_eliminar_tarjeta',$data);
         }
         else{
            parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data); 
@@ -124,6 +124,20 @@ class tarjeta_credito extends controller {
         } 
         
     }
+    
+     function eliminar($id_tarjeta){
+        $id_tarjeta = $this->input->post('id_tarjeta');
+        $data = array();
+        $this->model_tarjeta->eliminar_tarjeta($id_tarjeta);     
+        
+        redirect('viaje/');
+    }  
+    
+    
+    
+    
+    
+    
 }
     
 

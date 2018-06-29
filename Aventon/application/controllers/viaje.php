@@ -86,9 +86,6 @@ class viaje extends controller {
         $data = array();
         $this->model_viaje->consulta_estado_postulacion($id);
         $this->model_viaje->eliminar_viaje($id);
-
-        
-        
         
         
         redirect('viaje/');

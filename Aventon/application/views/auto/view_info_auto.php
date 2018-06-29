@@ -1,4 +1,3 @@
-
 <div class="col-sm-8 text-left"> 
     <h1 class="h11">Datos del auto</h1>
        

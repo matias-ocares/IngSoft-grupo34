@@ -52,5 +52,10 @@ class model_tarjeta extends CI_Model {
         $resultado = $consulta->row();
         return $resultado;
     }
+    
+    public function eliminar_tarjeta($id_tarjeta){
+        $this->db->where('id_tarjeta',$id_tarjeta);
+        $this->db->delete('tarjeta');
+    }
 
 }
