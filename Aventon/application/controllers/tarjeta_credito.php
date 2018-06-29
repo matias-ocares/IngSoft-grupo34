@@ -83,7 +83,7 @@ class tarjeta_credito extends controller {
             array(
                 'field' => 'fecha',
                 'label' => 'fecha',
-                'rules' => 'required'
+                'rules' => 'required|callback_valida_fecha'
             ),
                      
         );
@@ -132,6 +132,22 @@ class tarjeta_credito extends controller {
         
         redirect('viaje/');
     }  
+
+    public function valida_fecha($id){ //VALIDA QUE LA TARJETA NO VENCIO
+        $fecha = $this->input->post('fecha');
+        //$fecha = date_format($date, 'm-y');
+               
+        $dia = "01";
+        $mes = substr($fecha,0,2);
+        $anio = substr($fecha,2,4);
+        $fecha_cc = date_create("20".$anio."/".$mes."/".$dia);  //crear un objeto DateTime 
+        $fechax = $fecha_cc->format('Y-m-d');
+        if ($fechax > date("Y-m-d")){
+            return TRUE;
+        }
+        else 
+        {return FALSE;}
+    }
     
     
     
