@@ -14,6 +14,7 @@ class model_auto extends CI_Model {
 
 
     public function is_registered($patente) {
+        $this->db->where('estado',0);
         $this->db->where('num_patente', $patente);
         $amount_results = $this->db->count_all_results('auto');
         return ($amount_results == 1);
@@ -49,7 +50,7 @@ class model_auto extends CI_Model {
     }
 
     public function getAutos($rowno, $rowperpage) {
-        
+        $this->db->where('estado',0);
         //ordered desc to display the new element at the top
         $this->db->order_by('id_auto', 'desc');
         $query = $this->db->get('auto', $rowperpage, $rowno);
@@ -75,6 +76,7 @@ class model_auto extends CI_Model {
     // Select total records
     public function getrecordCount($id_user) {
         $this->db->where('id_user',$id_user);
+        $this->db->where('estado',0);
         $this->db->from('auto');
         return $this->db->count_all_results();
     }
