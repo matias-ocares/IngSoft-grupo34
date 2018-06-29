@@ -136,12 +136,14 @@ class model_viaje extends CI_Model {
         return ($amount_results == 1);
     }
     
+    //Elimina el viaje, seteando el estado del viaje de 0 a 1
     function eliminar_viaje($id){
         $this->db->where('id_viaje', $id);
         $this->db->set('estado',1);
         $this->db->update('viaje');
     }
-
+    
+    //Se crea un array con los datos del viaje y se inserta dicha estructura en la BD
     function restar_reputacion($id_user,$id_pasajero,$id_viaje){
         $data = array(
             'id_chofer' => $id_user,
@@ -154,28 +156,20 @@ class model_viaje extends CI_Model {
         $this->db->insert('calificacion_chofer',$data);      
         
     }
-    
+
    function reanudar_solicitudes_inactivas($id_pasajero,$id_viaje){
-        /*$this->db->where('id_user',$id_pasajero);
-        $this->db->where('id_estado',4);
-        $this->db->select('id_viaje');
-        $consulta = $this->db->get('postulacion_viaje');
-        $resultado = $consulta->result_array();
-        $viajeEliminado = $this->buscar_viaje_eliminado($id_viaje);
-        foreach ($resultado as $viaje){*/
         $this->db->select('fecha,hora_inicio,duracion_horas');
         $this->db->where('id_viaje',$id_viaje);
         $viaje = $this->db->get('viaje');
         $resultado=$viaje->result_array(); 
         foreach ($resultado as $viaje){
-        $this->get_postulaciones($id_pasajero,$viaje['fecha'], $viaje['duracion_horas'], $viaje['hora_inicio'],1,4);
-        //}
-    }
-        //$this->db->set('id_estado', 1);
-        //$this->db->update('postulacion_viaje');
+            $this->get_postulaciones($id_pasajero,$viaje['fecha'], $viaje['duracion_horas'], $viaje['hora_inicio'],1,4);
+        }
+        
+
     }
     public function get_postulaciones($id_postulante,$fecha,$hora, $dura, $valor, $valorActual ){
-     $this->db->select('fecha,hora_inicio,viaje.id_viaje, user.id_user');
+        $this->db->select('fecha,hora_inicio,viaje.id_viaje, user.id_user');
         $this->db->join('viaje', 'viaje.id_viaje = postulacion_viaje.id_viaje', 'inner');
         $this->db->join('user', 'user.id_user = postulacion_viaje.id_user', 'inner');
         $this->db->where('postulacion_viaje.id_user', $id_postulante);
@@ -186,16 +180,16 @@ class model_viaje extends CI_Model {
         $query = $this->db->get('postulacion_viaje');
 
         $resultado=$query->result_array(); 
-      $fecha_inicio = $fecha;
-      $hora_inicio = $hora;
-      $duracion = $dura;
+        $fecha_inicio = $fecha;
+        $hora_inicio = $hora;
+        $duracion = $dura;
   
-      foreach ($resultado as $id){
-      if($this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) or $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) or $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion)){
-         //$valor= 4;
-          $this-> setear_postulacion($id['id_viaje'], $id_postulante, $valor);
-      }          
-      }  
+        foreach ($resultado as $id){
+             if($this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) or $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) or $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion)){
+            //$valor= 4;
+            $this-> setear_postulacion($id['id_viaje'], $id_postulante, $valor);
+            }          
+        }  
     }
     
     public function setear_postulacion($id_viaje, $id_postulante, $valor){
@@ -206,11 +200,7 @@ class model_viaje extends CI_Model {
        $data['id_estado']= $valor;
         $this->db->update('postulacion_viaje', $data);
       
-    }
-    
-
-
-    
+    }    
     function consulta_estado_postulacion($id){           
         $this->db->where('id_viaje', $id);
         $this->db->where('id_estado', 2);  
@@ -220,9 +210,18 @@ class model_viaje extends CI_Model {
         foreach ($resultado as $user){
             $resultado = $this->restar_reputacion($this->session->userdata('id_user'),$user['id_user'],$id);
             $this->reanudar_solicitudes_inactivas($user['id_user'],$id);
+            $this->eliminar_postulacion($id,$user['id_user']);
             
         }        
     }
+    function eliminar_postulacion($id_viaje,$id_user){
+        $this->db->where('id_viaje',$id_viaje);
+        $this->db->where('id_user',$id_user);
+        $this->db->where('id_estado',2);
+        $this->db->delete('postulacion_viaje');
+    }
+    
+    
 
     //Este método retorno "true" si el User tiene al menos un viaje creado (es al menos chofer en algún viaje)
     function tiene_un_viaje() {

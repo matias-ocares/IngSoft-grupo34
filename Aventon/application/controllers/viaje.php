@@ -83,8 +83,12 @@ class viaje extends controller {
     }
     function eliminar($id){
         $id = $this->input->post('id_viaje');
+        $data = array();
         $this->model_viaje->consulta_estado_postulacion($id);
         $this->model_viaje->eliminar_viaje($id);
+
+        
+        
         
         
         redirect('viaje/');
