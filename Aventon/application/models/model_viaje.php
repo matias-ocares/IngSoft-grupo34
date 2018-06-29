@@ -216,8 +216,6 @@ class model_viaje extends CI_Model {
     }
     function eliminar_postulacion($id_viaje,$id_user){
         $this->db->where('id_viaje',$id_viaje);
-        $this->db->where('id_user',$id_user);
-        $this->db->where('id_estado',2);
         $this->db->delete('postulacion_viaje');
     }
     
