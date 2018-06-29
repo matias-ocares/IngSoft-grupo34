@@ -14,6 +14,10 @@
             .dropdown-1{
                 margin-left: 15px;
             }
+            .bttm{
+                margin-left:300px;
+                margin-top:100px;
+            }
 
             .logo{
                 display: block;

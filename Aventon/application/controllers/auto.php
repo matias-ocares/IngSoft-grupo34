@@ -43,13 +43,23 @@ class auto extends controller {
         foreach ($lista_autos as $auto) {
             $pertenece = $this->model_auto->auto_pertenece_user($auto['id_auto'], $this->session->userdata('id_user'));
             if ($pertenece) {
-                $this->table->add_row($auto['id_auto'], $auto['marca'], $auto['modelo'], $auto['num_patente'], $auto['color'], anchor('auto/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('auto/guardar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('auto/eliminar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-trash"></span>'));
+                $this->table->add_row($auto['id_auto'], $auto['marca'], $auto['modelo'], $auto['num_patente'], $auto['color'], anchor('auto/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('auto/guardar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('auto/ver_eliminar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-trash"></span>'));
             } 
         }
         //Call view
         $data = array();
         parent::index_page('auto/view_listar_autos', $data);
     }
+    
+    public function ver_eliminar($id) {
+        $auto_id = $this->uri->segment(3);
+        $data['auto'] = $this->model_auto->auto_por_id($auto_id);
+        $data['error'] = $this->session->flashdata('error');
+        $data['exito'] = $this->session->flashdata('exito');
+        parent::index_page('auto/view_eliminar_auto', $data);
+    }
+    
+    
     private function set_config() { //seteo la configuración 
         //Base properties
         $config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/auto/';
@@ -212,11 +222,17 @@ class auto extends controller {
         }
     }
     
-    public function eliminar($id) {
-        //Neccesary to pass "id" as a parameter
-        $auto_id = $this->uri->segment(3);
-        $this->model_auto->eliminarAuto($auto_id);
+     function eliminar($id_auto){
+        $id_auto = $this->input->post('id_auto');
+        $data = array();
+        $this->model_auto->eliminar_auto($id_auto);
+        
+        
         redirect('auto/');
     }
+    
+
+    
+
     
 }
