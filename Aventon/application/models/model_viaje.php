@@ -99,7 +99,10 @@ class model_viaje extends CI_Model {
           }
          */
         //ordered desc to display the new element at the top
+        $current_date = date("Y-m-d");
         $this->db->order_by('fecha', 'asc');
+        $this->db->where('fecha >= ', $current_date);
+        $this->db->where('estado',0);
         $query = $this->db->get('viaje', $rowperpage, $rowno);
 
         return $query->result_array();
@@ -117,8 +120,12 @@ class model_viaje extends CI_Model {
 
     // Select total records
     public function getrecordCount($search = "") {
-
+        
+        $current_date = date("Y-m-d");
+        
         $this->db->from('viaje');
+	$this->db->where('fecha >= ', $current_date);
+        $this->db->where('estado',0);
 
         /*
           if ($search != '') {
