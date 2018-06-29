@@ -73,6 +73,8 @@ $lang['form_validation_alpha']			= 'El {field} solo admite caracteres alfabetico
 $lang['form_validation_matches']		= 'Las claves no coinciden.';
 $lang['form_validation_notExistCreditCard']		= 'El numero de tarjeta que está ingresando ya se encuentra registrada';
 $lang['form_validation_existFecha']             = 'Existe un viaje que se superpone con el que intenta crear';
+$lang['form_validation_valida_fecha']             = 'La tarjeta de credito se encuentra vencida. Por favor ingrese una tarjeta valida';
+
 
 
 
