@@ -26,7 +26,7 @@ class auto extends controller {
         //Get all "viajes" with all columns
         $lista_autos = $this->model_auto->getAutos($rowno, $rowperpage, $search_text);
         //Set header for the table
-        $header = array('Auto N°','Marca','Modelo','Pantente','Color', 'Acciones');
+        $header = array('Marca','Modelo','Pantente','Color', 'Acciones');
         $this->table->set_heading($header);
         $tmpl = array('table_open' => '<table class="table table-hover">',
             'heading_row_start' => '<tr style="background-color: #f1f1f1; font-weight:bold; color:black; text-align:left;">',
@@ -43,7 +43,7 @@ class auto extends controller {
         foreach ($lista_autos as $auto) {
             $pertenece = $this->model_auto->auto_pertenece_user($auto['id_auto'], $this->session->userdata('id_user'));
             if ($pertenece) {
-                $this->table->add_row($auto['id_auto'], $auto['marca'], $auto['modelo'], $auto['num_patente'], $auto['color'], anchor('auto/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('auto/guardar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('auto/ver_eliminar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-trash"></span>'));
+                $this->table->add_row($auto['marca'], $auto['modelo'], $auto['num_patente'], $auto['color'], anchor('auto/ver/' . $auto['id_auto'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('auto/guardar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('auto/ver_eliminar/' . $auto['id_auto'], '<span class="glyphicon glyphicon-trash"></span>'));
             } 
         }
         //Call view
