@@ -63,26 +63,27 @@ echo $hoy;
                min="1" max="10" value="<?php echo $this->session->flashdata('plazas'); ?>">
 
         <p><u> Repetir Viaje</u>: </p>
-        <input type="radio" name="frequencia" value="unico"> Solo una vez<br>
-        <input type="radio" name="frequencia" value="diario"> Diario<br>
-        <input type="radio" name="frequencia" value="semanal"> Semanal
+        <input type="radio" name="frequencia" id="unico" value="unico" checked="true" onClick="yesnoCheck();"> Solo una vez<br>
+        <input type="radio" name="frequencia" id="diario" value="diario" onClick="yesnoCheck();"> Diario<br>
+        <input type="radio" name="frequencia" id="semanal" value="semanal" onClick="yesnoCheck();"> Semanal
 
-         <p> Repetir Hasta </p>
+         <p id="p_fecha_hasta" style='display:none'>  <u> Repetir Hasta </u> </p>
         <label for="fecha" class="sr-only">Fecha</label>  
-        <input type="date" id= "fecha_hasta" name="fecha_hasta" class="form-control" placeholder="Fecha: dd/mm/aaaa" required autofocus 
+        <input type="date" style='display:none' id= "fecha_hasta" name="fecha_hasta" class="form-control" placeholder="Fecha: dd/mm/aaaa" autofocus 
                min="<?php $hoy = date("Y-m-d");echo $hoy;?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
         <br>
 
-        <input type="checkbox" name="days[]" value="Sunday"> Dom 
-        <input type="checkbox" name="days[]" value="Monday"> Lun 
-        <input type="checkbox" name="days[]" value="Tuesday"> Mar
-        <input type="checkbox" name="days[]" value="Wednesday"> Mie
-        <input type="checkbox" name="days[]" value="Thursday"> Jue
-        <input type="checkbox" name="days[]" value="Friday"> Vie
-        <input type="checkbox" name="days[]" value="Saturday"> Sab
+        <div id='checkdays' style='display:none'>
+            <input type="checkbox"  name="days[]" value="Sunday"> Dom 
+            <input type="checkbox"  name="days[]" value="Monday"> Lun 
+            <input type="checkbox"  name="days[]" value="Tuesday"> Mar
+            <input type="checkbox"  name="days[]" value="Wednesday"> Mie
+            <input type="checkbox"  name="days[]" value="Thursday"> Jue
+            <input type="checkbox"  name="days[]" value="Friday"> Vie
+            <input type="checkbox"  name="days[]" value="Saturday"> Sab
+        </div>
         <br>
         <?php if ($notifico): ?>
-
             <p> <?php echo $notifico ?> </p>
 
 <?php endif; ?>
@@ -96,7 +97,27 @@ echo $hoy;
 
 
 <script>
-
+    
+    function yesnoCheck() {
+    
+    	if (document.getElementById('unico').checked) {
+            document.getElementById('p_fecha_hasta').style.display = 'none';
+            document.getElementById('fecha_hasta').style.display = 'none';
+            document.getElementById('checkdays').style.display = 'none';
+        }
+            else if (document.getElementById('semanal').checked) {
+                document.getElementById('p_fecha_hasta').style.display = 'block';
+                document.getElementById('fecha_hasta').style.display = 'block';
+                document.getElementById('checkdays').style.display = 'none';
+            }
+                else if (document.getElementById('diario').checked){
+                        document.getElementById('p_fecha_hasta').style.display = 'block';
+                        document.getElementById('fecha_hasta').style.display = 'block';
+                        document.getElementById('checkdays').style.display = 'block';
+	
+                    }
+    }
+    
     function validacionViaje() {
         origen = document.getElementById("origen").value;
         destino = document.getElementById("destino").value;
