@@ -26,7 +26,7 @@ class model_viaje extends CI_Model {
 
     private function valida_antes($id_chofer, $fecha_inicio, $hora_inicio) {
         //Viaje que quiero crear, inicio está contenido en otro viaje
-        $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND estado=0 AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
         return $superpone_inicio->num_rows();
         /*
           $resultado = $superpone_inicio->row_array();
@@ -36,7 +36,7 @@ class model_viaje extends CI_Model {
 
     private function valida_despues($id_chofer, $fecha_inicio, $hora_inicio, $duracion) {
         //Viaje que quiero crear, inicio está contenido en otro viaje
-        $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND estado=0 AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
         return $superpone_fin->num_rows();
         /*
           $resultado = $superpone_fin->row_array();
@@ -46,7 +46,7 @@ class model_viaje extends CI_Model {
 
     private function valida_entre($id_chofer, $fecha_inicio, $hora_inicio, $duracion) {
         // Viaje que quiero crear contiene a otro viaje
-        $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_chofer=$id_chofer AND estado=0 AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
         return $superpone_entre->num_rows();
         /*
           $resultado = $superpone_entre->row_array();
@@ -239,19 +239,19 @@ class model_viaje extends CI_Model {
 //ACÁ COMIENZAN FUNCIONES CORRESPONDIENTES A LA HU POSTULARSE COMO ACOMPAÑANTE    
     private function postulacion_valida_antes($id, $fecha_inicio, $hora_inicio) {
         //VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
-        $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        $superpone_inicio = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND estado=0 AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
         return $superpone_inicio->num_rows();
     }
 
     private function postulacion_valida_despues($id, $fecha_inicio, $hora_inicio, $duracion) {
         //VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
-        $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        $superpone_fin = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND estado=0 AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) BETWEEN cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
         return $superpone_fin->num_rows();
     }
 
     private function postulacion_valida_entre($id, $fecha_inicio, $hora_inicio, $duracion) {
         ///VALIDO SI EL VIAJE QUE QUIERO POSTULARME SE SUPERPONE CON OTRO VIAJE AL CUAL ME POSTULÉ Y FUE APROBADO.
-        $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
+        $superpone_entre = $this->db->query("SELECT id_viaje FROM viaje WHERE id_viaje=$id AND estado=0 AND cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime) <= cast(concat(fecha,' ',hora_inicio) as datetime) AND DATE_ADD(cast(concat('$fecha_inicio',' ','$hora_inicio') as datetime),INTERVAL cast('$duracion' as int) hour) >= DATE_ADD(cast(concat(fecha,' ',hora_inicio) as datetime), INTERVAL duracion_horas hour)");
         return $superpone_entre->num_rows();
     }
 
