@@ -109,10 +109,9 @@ class model_auto extends CI_Model {
         $resultado = $consulta->result_array(); 
         foreach ($resultado as $user){
             $resultado = $this->restar_reputacion($this->session->userdata('id_user'),$user['id_user'],$id);
-            $this->reanudar_solicitudes_inactivas($user['id_user'],$id);
-            $this->eliminar_postulacion($id,$user['id_user']);
-            
-        }        
+            $this->reanudar_solicitudes_inactivas($user['id_user'],$id);            
+        }     
+        $this->eliminar_postulacion($id);
     }
    function reanudar_solicitudes_inactivas($id_pasajero,$id_viaje){
         $this->db->select('fecha,hora_inicio,duracion_horas');
@@ -125,7 +124,7 @@ class model_auto extends CI_Model {
         
 
     }
-    function eliminar_postulacion($id_viaje,$id_user){
+    function eliminar_postulacion($id_viaje){
         $this->db->where('id_viaje',$id_viaje);
         $this->db->delete('postulacion_viaje');
     }
