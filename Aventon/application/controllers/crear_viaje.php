@@ -21,13 +21,22 @@ class crear_viaje extends controller {
             $data['title'] = 'Auto';
             $data['groups'] = $this->model_viaje->getMisAutos();
             $data['notifico'] = $this->session->flashdata('notifico');
+            $data['error'] = $this->session->flashdata('error');
+            $data['exito'] = $this->session->flashdata('exito');
             parent::index_page('/viaje/view_crear_viaje', $data);
         } else if (!$this->session->userdata('logueado')) {
 
             redirect('login');
         } else {
-            $this->session->set_flashdata('notifico', 'No posee autos registrados para cargar un viaje.');
-            redirect('login/logueado');
+            $this->session->set_flashdata('notifico', '');
+           // redirect('login/logueado');
+   
+       $this->session->set_flashdata('exito','');
+       $this->session->set_flashdata('error','NO POSEE AUTO REGISTRADO PARA CREAR UN VIAJE');
+         
+       $data['error'] = $this->session->flashdata('error');
+       $data['exito'] = $this->session->flashdata('exito');
+            redirect('viaje/');
         }
     }
 

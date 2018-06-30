@@ -16,6 +16,8 @@ class model_viaje extends CI_Model {
 
         $this->db->from('auto');
         $this->db->where('id_user', $id);
+        $this->db->where('estado', 0);
+        
         $this->db->select('marca, modelo, num_patente, id_auto');
 
         $consulta = $this->db->get();
@@ -217,9 +219,9 @@ class model_viaje extends CI_Model {
         foreach ($resultado as $user){
             $resultado = $this->restar_reputacion($this->session->userdata('id_user'),$user['id_user'],$id);
             $this->reanudar_solicitudes_inactivas($user['id_user'],$id);      
-            
-        }  
-        $this->eliminar_postulacion($id);
+                      
+        } 
+        $this->eliminar_postulacion($id,$user['id_user']);
     }
     function eliminar_postulacion($id_viaje){
         $this->db->where('id_viaje',$id_viaje);
@@ -261,6 +263,25 @@ class model_viaje extends CI_Model {
         $this->db->where('id_estado', 2);
         $this->db->select('id_viaje');
         $this->db->from('postulacion_viaje');
+        $consulta = $this->db->get();
+        $resultado = $consulta->result_array();
+        $fecha_inicio = $miviaje['fecha'];
+        $hora_inicio = $miviaje['hora'];
+        $duracion = $miviaje['duracion'];
+        $cant = 0;
+        foreach ($resultado as $id) {
+            $resultado = $this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) + $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) + $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion);
+            $cant = $cant + $resultado;
+        }
+        return $cant;
+    }
+    
+    public function superposicion_postulacion_con_mi_viaje($miviaje) {
+
+        $this->db->where('id_chofer', $miviaje['id_user']);
+        //$this->db->where('id_estado', 2);
+        $this->db->select('id_viaje');
+        $this->db->from('viaje');
         $consulta = $this->db->get();
         $resultado = $consulta->result_array();
         $fecha_inicio = $miviaje['fecha'];

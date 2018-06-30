@@ -7,9 +7,19 @@
     <div class="container">  
         <?php if ($this->session->flashdata('notifico')): ?>
 
-    <p style="color:red;"> <?php echo $this->session->flashdata('notifico') ?></p>
+    <p style="color:green;"><b>  <?php echo $this->session->flashdata('notifico') ?></b></p>
 
 <?php endif; ?>
+    <?php if ($exito): ?>
+
+            <p style="color:green;"><b> <?php echo $exito ?></b> </p>
+
+        <?php endif; ?> 
+          <?php if ($error): ?>
+
+            <p style="color:red;"> <b><?php echo $error ?> </b></p>
+
+        <?php endif; ?>
         <div class="table-responsive">   
             <?php echo $this->table->generate(); ?>
         </div>

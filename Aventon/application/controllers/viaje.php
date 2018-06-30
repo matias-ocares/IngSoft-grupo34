@@ -87,6 +87,9 @@ class viaje extends controller {
         $this->model_viaje->consulta_estado_postulacion($id);
         $this->model_viaje->eliminar_viaje($id);
         
+        $this->session->set_flashdata('exito', 'SE ELIMINÓ EL VIAJE EXITOSAMENTE.');
+        $data['exito'] = $this->session->flashdata('exito');
+        $data['error'] = $this->session->flashdata('error');
         
         redirect('viaje/');
     }
@@ -135,6 +138,23 @@ class viaje extends controller {
         else
         { return true;}
     }
+    public function hay_superposicion_mi_viaje(){
+   $this->load->model('model_viaje');
+   
+    $miviaje = array(
+            'id_user'=>$this ->session-> userdata('id_user'),
+            'id_viaje'=>$this->input->post('id_viaje'),
+            'fecha' => $this->input->post('fecha'),
+            'hora' => $this->input->post('hora'),
+            'duracion' => $this->input->post('duracion'),
+            'id_chofer' => $this->input->post('id_chofer'),
+        );
+        $resultado = $this->model_viaje->superposicion_postulacion_con_mi_viaje($miviaje);
+        if ($resultado == 0){
+        return false;}
+        else
+        { return true;}
+    }
     
     public function postularse(){
         $bool = $this-> exist_tarjeta();
@@ -144,6 +164,8 @@ class viaje extends controller {
             $viaje_id = $this->input->post('id_viaje');
             $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);        
             $sup= $this->hay_superposicion();
+            $otrasup=$this->hay_superposicion_mi_viaje();
+            if($otrasup== False){
             if($sup == FALSE){ //NO HAY SUPERSPOSICION CON POSTULACIÓN APROBADA, ENTONCES SE GUARDA LA POSTULACION VISIBLE
                $postulacion['id_estado']= 1; 
                $this->model_viaje->postular($postulacion); 
@@ -162,7 +184,16 @@ class viaje extends controller {
 
                parent::index_page('viaje/view_viaje_info', $data); 
             }
+        }else
+        {
+        $this->session->set_flashdata('error', 'La postulación se superpone con un viaje creado por usted.');
+               $data['error'] = $this->session->flashdata('error');
+               $this->session->set_flashdata('exito', '');
+               $data['exito'] = $this->session->flashdata('exito');
+
+               parent::index_page('viaje/view_viaje_info', $data);     
         }
+            }
         else{ //NO HAY TARJETA REGISTRADA PARA ESTE USUARIO
              $viaje_id = $this->input->post('id_viaje');
              $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);     
@@ -214,6 +245,8 @@ class viaje extends controller {
         }
         //Call view
         $data = array();
+        $data['error'] = $this->session->flashdata('error');
+        $data['exito'] = $this->session->flashdata('exito');
         parent::index_page('viaje/view_listar_viajes', $data);
     }
 

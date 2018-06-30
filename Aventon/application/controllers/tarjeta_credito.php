@@ -114,7 +114,14 @@ class tarjeta_credito extends controller {
                 
                 $tarjeta=$this->array_tarjeta();
                 $tarjeta = $this->model_tarjeta->registrar_tarjeta($tarjeta);
-                redirect('login');
+                
+                 $data = array();
+                 $this->session->set_flashdata('exito','SE CARGÓ LA TARJETA EXITOSAMENTE.');
+                 $this->session->set_flashdata('error','');
+         
+                $data['error'] = $this->session->flashdata('error');
+                $data['exito'] = $this->session->flashdata('exito');
+                redirect('viaje/');
 
             }
             else {
