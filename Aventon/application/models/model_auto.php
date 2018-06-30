@@ -110,10 +110,23 @@ class model_auto extends CI_Model {
         $consulta = $this->db->get('postulacion_viaje');
         $resultado = $consulta->result_array(); 
         foreach ($resultado as $user){
+           
             $resultado = $this->restar_reputacion($this->session->userdata('id_user'),$user['id_user'],$id);
             $this->reanudar_solicitudes_inactivas($user['id_user'],$id);            
         }     
         $this->eliminar_postulacion($id);
+    }
+    function restar_reputacion($id_user,$id_pasajero,$id_viaje){
+        $data = array(
+            'id_chofer' => $id_user,
+            'id_viaje' => $id_viaje,
+            'id_pasajero' => $id_pasajero,
+            'positivo' => 0,
+            'negativo' => 1,
+            'neutro' => 0,            
+        );
+        $this->db->insert('calificacion_chofer',$data);      
+        
     }
    function reanudar_solicitudes_inactivas($id_pasajero,$id_viaje){
         $this->db->select('fecha,hora_inicio,duracion_horas');
