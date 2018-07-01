@@ -65,6 +65,10 @@ class solicitud_enviada extends controller {
             } elseif ($estado == 'aprobada') {
                 $array_estados = array(2);
             }
+            elseif ($estado == 'rechazada') {
+                $array_estados = array(3);
+            }
+            
             $this->pagination->initialize($this->set_config($array_estados, $estado));
 
             // Get Results from Data Base 
@@ -75,9 +79,14 @@ class solicitud_enviada extends controller {
             $lista_solicitudes = $this->model_solicitud->getSolicitudesEnviadas($this->uri->segment(3), $rowperpage, $array_estados, $search_text);
 
             //Set header for the table
+            if($estado=='rechazada'){
+             $header = array('Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Nombre y Apellido Chofer');
+            //$header = array('id_estado', 'id_user', 'id_viaje');
+            $this->table->set_heading($header);   
+            }else{
             $header = array('Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Nombre y Apellido Chofer', 'Acciones');
             //$header = array('id_estado', 'id_user', 'id_viaje');
-            $this->table->set_heading($header);
+            $this->table->set_heading($header);}
 
             $tmpl = array('table_open' => '<table class="table table-hover">',
                 'heading_row_start' => '<tr style="background-color: #f1f1f1; font-weight:bold; color:black; text-align:left;">',
@@ -96,8 +105,13 @@ class solicitud_enviada extends controller {
             foreach ($lista_solicitudes as $solicitud) {
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
-                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
+                if($estado == 'rechazada'){
+                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido']);
+                }
+                else{$this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
+                
                 //$this->table->add_row($solicitud['id_estado'], $solicitud['id_user'], $solicitud['id_viaje'], anchor('', 'Cancelar'));
+               }
             }
 
             //Call view
