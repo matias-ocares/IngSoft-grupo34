@@ -258,5 +258,20 @@ public function getrecordCountAprobada($search = "") {
         $this->db->insert('calificacion_pasajero',$data);      
         
     }
+    
+    public function plaza_disponible($id_viaje){
+        $this->db->where('id_viaje', $id_viaje);
+        $this->db->select('plazas_libre');
+        $this->db->from('viaje');
+        $consulta = $this->db->get();
+        $resultado = $consulta->row();
+
+        if ($resultado->plazas_libre > 0) {
+            return true;
+        }
+        else{
+            return FALSE;
+        }
+    }
 
 }

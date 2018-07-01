@@ -151,8 +151,10 @@ class solicitud_pendiente extends controller {
         $hora_inicio=  $this->uri->segment(5);
         $fecha=$this->uri->segment(6);
         $duracion=$this->uri->segment(7);
+        $hayplaza=$this->model_solicitud->plaza_disponible($id_viaje);
         
-        $bool = $this-> valida_fecha($id_postulante);
+        if($hayplaza == true){ //HAY PLAZAS DISPONIBLES
+        $bool = $this-> valida_fecha($id_postulante);        
       if($bool== TRUE){ //LA TARJETA NO VENCIÓ
         $bool = $this-> valida_saldo($id_viaje, $id_postulante);
         if($bool == TRUE){//HAY SALDO DISPONIBLE EN LA TARJETA
@@ -194,7 +196,17 @@ class solicitud_pendiente extends controller {
       }
         
     }
-    
+    else{ // NO HAY PLAZAS DISPONIBLES
+          $valor=4;
+          $this->model_solicitud->setear_postulacion($id_viaje, $id_postulante, $valor);       
+          $data = array();
+          $this->session->set_flashdata('error','NO QUEDAN PLAZAS DISPONIBLES EN EL VIAJE'); 
+          $data['error'] = $this->session->flashdata('error');
+          $data['exito'] = $this->session->flashdata('exito');
+          //parent::index_page('solicitud/view_solicitud_pendiente', $data);   
+          redirect('solicitud_pendiente/');
+    }
+    }
      public function activa_solicitudes($id_postulante, $hora_inicio, $fecha, $duracion){
       $valor=1;
       $valorActual= 4;

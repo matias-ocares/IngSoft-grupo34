@@ -45,6 +45,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>solicitud_enviada/pendiente/"> Pendientes</a></li>
                     <li><a href="<?php echo base_url() ?>solicitud_enviada/aprobada/"> Aprobadas </a></li>
+                    <li><a href="<?php echo base_url() ?>solicitud_enviada/rechazada/"> Rechazadas </a></li>
                 </ul>
             </li> 
             
