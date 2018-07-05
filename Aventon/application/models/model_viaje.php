@@ -17,14 +17,13 @@ class model_viaje extends CI_Model {
         $this->db->from('auto');
         $this->db->where('id_user', $id);
         $this->db->where('estado', 0);
-        
+
         $this->db->select('marca, modelo, num_patente, id_auto');
 
         $consulta = $this->db->get();
         $resultado = $consulta->result();
         return $resultado;
     }
-
 
     private function valida_antes($id_chofer, $fecha_inicio, $hora_inicio) {
         //Viaje que quiero crear, inicio está contenido en otro viaje
@@ -93,18 +92,21 @@ class model_viaje extends CI_Model {
 
     // cuando se implemente las búsquedas $search debería ser un array, 
     // ya que hay más de un criterio (orígen, destino, fecha, etc) 
-    public function getViajes($rowno, $rowperpage, $search = "") {
-        /*
-          if ($search != '') {
-          $this->db->like('title', $search);
-          $this->db->or_like('content', $search);
-          }
-         */
+    public function getViajes($rowno, $rowperpage, $search) {
+
+        if (!empty($search)) {
+
+            $this->db->like('origen', $search['origen']);
+            $this->db->like('destino', $search['destino']);
+            if ($search['fecha']) { //búsqueda por fecha es opcional
+                $this->db->where('fecha', $search['fecha']);
+            }
+        }
         //ordered desc to display the new element at the top
         $current_date = date("Y-m-d");
         $this->db->order_by('fecha', 'asc');
         $this->db->where('fecha >= ', $current_date);
-        $this->db->where('estado',0);
+        $this->db->where('estado', 0);
         $query = $this->db->get('viaje', $rowperpage, $rowno);
 
         return $query->result_array();
@@ -120,115 +122,130 @@ class model_viaje extends CI_Model {
         return $resultado;
     }
 
-    // Select total records
-    public function getrecordCount($search = "") {
-        
-        $current_date = date("Y-m-d");
-        
-        $this->db->from('viaje');
-	$this->db->where('fecha >= ', $current_date);
-        $this->db->where('estado',0);
+    // Select total records according with search parameters
+        public function getrecordCount($search) {
+        if (!empty($search)) {
 
-        /*
-          if ($search != '') {
-          $this->db->like('origen', $search);
-          $this->db->and_like('content', $search);
-          }
-         */
+            $this->db->like('origen', $search['origen']);
+            $this->db->like('destino', $search['destino']);
+            if ($search['fecha']) { //búsqueda por fecha es opcional
+                $this->db->where('fecha', $search['fecha']);
+            }
+        }
+        $current_date = date("Y-m-d");
+
+        $this->db->from('viaje');
+        $this->db->where('fecha >= ', $current_date);
+        $this->db->where('estado', 0);
+
         return $this->db->count_all_results();
     }
+/*
+    public function getrecordCount($search) {
+        if (!empty($search)) {
 
+            $this->db->like('origen', $search['origen']);
+            $this->db->like('destino', $search['destino']);
+            if ($search['fecha']) { //búsqueda por fecha es opcional
+                $this->db->where('fecha', $search['fecha']);
+            }
+        }
+        $current_date = date("Y-m-d");
+
+        $this->db->from('viaje');
+        $this->db->where('fecha >= ', $current_date);
+        $this->db->where('estado', 0);
+
+        return $this->db->count_all_results();
+    }
+*/
     public function viaje_pertenece_user($id_viaje, $id_user) {
         $this->db->where('id_viaje', $id_viaje);
         $this->db->where('id_chofer', $id_user);
         $amount_results = $this->db->count_all_results('viaje');
         return ($amount_results == 1);
     }
-    
+
     //Elimina el viaje, seteando el estado del viaje de 0 a 1
-    function eliminar_viaje($id){
+    function eliminar_viaje($id) {
         $this->db->where('id_viaje', $id);
-        $this->db->set('estado',1);
+        $this->db->set('estado', 1);
         $this->db->update('viaje');
     }
-    
+
     //Se crea un array con los datos del viaje y se inserta dicha estructura en la BD
-    function restar_reputacion($id_user,$id_pasajero,$id_viaje){
+    function restar_reputacion($id_user, $id_pasajero, $id_viaje) {
         $data = array(
             'id_chofer' => $id_user,
             'id_viaje' => $id_viaje,
             'id_pasajero' => $id_pasajero,
             'positivo' => 0,
             'negativo' => 1,
-            'neutro' => 0,            
+            'neutro' => 0,
         );
-        $this->db->insert('calificacion_chofer',$data);      
-        
+        $this->db->insert('calificacion_chofer', $data);
     }
 
-   function reanudar_solicitudes_inactivas($id_pasajero,$id_viaje){
+    function reanudar_solicitudes_inactivas($id_pasajero, $id_viaje) {
         $this->db->select('fecha,hora_inicio,duracion_horas');
-        $this->db->where('id_viaje',$id_viaje);
+        $this->db->where('id_viaje', $id_viaje);
         $viaje = $this->db->get('viaje');
-        $resultado=$viaje->result_array(); 
-        foreach ($resultado as $viaje){
-            $this->get_postulaciones($id_pasajero,$viaje['fecha'], $viaje['duracion_horas'], $viaje['hora_inicio'],1,4);
+        $resultado = $viaje->result_array();
+        foreach ($resultado as $viaje) {
+            $this->get_postulaciones($id_pasajero, $viaje['fecha'], $viaje['duracion_horas'], $viaje['hora_inicio'], 1, 4);
         }
-        
-
     }
-    public function get_postulaciones($id_postulante,$fecha,$hora, $dura, $valor, $valorActual ){
+
+    public function get_postulaciones($id_postulante, $fecha, $hora, $dura, $valor, $valorActual) {
         $this->db->select('fecha,hora_inicio,viaje.id_viaje, user.id_user');
         $this->db->join('viaje', 'viaje.id_viaje = postulacion_viaje.id_viaje', 'inner');
         $this->db->join('user', 'user.id_user = postulacion_viaje.id_user', 'inner');
         $this->db->where('postulacion_viaje.id_user', $id_postulante);
         $this->db->where('id_estado', $valorActual);
         $this->db->where('fecha', $fecha);
-        
+
         //$this->db->order_by('fecha', 'asc');
         $query = $this->db->get('postulacion_viaje');
 
-        $resultado=$query->result_array(); 
+        $resultado = $query->result_array();
         $fecha_inicio = $fecha;
         $hora_inicio = $hora;
         $duracion = $dura;
-  
-        foreach ($resultado as $id){
-             if($this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) or $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) or $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion)){
-            //$valor= 4;
-            $this-> setear_postulacion($id['id_viaje'], $id_postulante, $valor);
-            }          
-        }  
+
+        foreach ($resultado as $id) {
+            if ($this->postulacion_valida_antes($id['id_viaje'], $fecha_inicio, $hora_inicio) or $this->postulacion_valida_despues($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion) or $this->postulacion_valida_entre($id['id_viaje'], $fecha_inicio, $hora_inicio, $duracion)) {
+                //$valor= 4;
+                $this->setear_postulacion($id['id_viaje'], $id_postulante, $valor);
+            }
+        }
     }
-    
-    public function setear_postulacion($id_viaje, $id_postulante, $valor){
-       $this->db->where('id_viaje', $id_viaje);
-       $this->db->where('id_user', $id_postulante);
-       $data['id_viaje']= $id_viaje;
-       $data['id_user']= $id_postulante;
-       $data['id_estado']= $valor;
+
+    public function setear_postulacion($id_viaje, $id_postulante, $valor) {
+        $this->db->where('id_viaje', $id_viaje);
+        $this->db->where('id_user', $id_postulante);
+        $data['id_viaje'] = $id_viaje;
+        $data['id_user'] = $id_postulante;
+        $data['id_estado'] = $valor;
         $this->db->update('postulacion_viaje', $data);
-      
-    }    
-    function consulta_estado_postulacion($id){           
-        $this->db->where('id_viaje', $id);
-        $this->db->where('id_estado', 2);  
-        $this->db->select('id_user');        
-        $consulta = $this->db->get('postulacion_viaje');
-        $resultado = $consulta->result_array(); 
-        foreach ($resultado as $user){
-            $resultado = $this->restar_reputacion($this->session->userdata('id_user'),$user['id_user'],$id);
-            $this->reanudar_solicitudes_inactivas($user['id_user'],$id);      
-                      
-        } 
-        $this->eliminar_postulacion($id,$user['id_user']);
     }
-    function eliminar_postulacion($id_viaje){
-        $this->db->where('id_viaje',$id_viaje);
+
+    function consulta_estado_postulacion($id) {
+        $this->db->where('id_viaje', $id);
+        $this->db->where('id_estado', 2);
+        $this->db->select('id_user');
+        $consulta = $this->db->get('postulacion_viaje');
+        $resultado = $consulta->result_array();
+        foreach ($resultado as $user) {
+            $resultado = $this->restar_reputacion($this->session->userdata('id_user'), $user['id_user'], $id);
+            $this->reanudar_solicitudes_inactivas($user['id_user'], $id);
+        }
+        $this->eliminar_postulacion($id, $user['id_user']);
+    }
+
+    function eliminar_postulacion($id_viaje) {
+        $this->db->where('id_viaje', $id_viaje);
         $this->db->delete('postulacion_viaje');
     }
-    
-    
 
     //Este método retorno "true" si el User tiene al menos un viaje creado (es al menos chofer en algún viaje)
     function tiene_un_viaje() {
@@ -275,7 +292,7 @@ class model_viaje extends CI_Model {
         }
         return $cant;
     }
-    
+
     public function superposicion_postulacion_con_mi_viaje($miviaje) {
 
         $this->db->where('id_chofer', $miviaje['id_user']);
@@ -307,6 +324,4 @@ class model_viaje extends CI_Model {
     }
 
 //ACÁ FINALIZAN LAS FUNCIONES CORRESPONDIENTES A LA HU POSTULARME COMO ACOMPAÑANTE
-    
-   
 }

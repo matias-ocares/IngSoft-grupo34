@@ -24,9 +24,12 @@ class viaje extends controller {
     }
 
     private function set_config() { //seteo la configuración 
-        //Base properties
+        //Filtros de búsqueda a aplicar en el listado
+        $search_array = $this->array_search_viaje();
+
+//Base properties
         $config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/viaje/';
-        $config['total_rows'] = $this->model_viaje->getrecordCount();
+        $config['total_rows'] = $this->model_viaje->getrecordCount($search_array);
         $config['per_page'] = '5';
         //Additional properties
         $config['num_links'] = 2;
@@ -71,7 +74,7 @@ class viaje extends controller {
         //parent::index_page('viaje/view_viaje_info', $data);
         parent::index_page('viaje/view_viaje_info', $data);
     }
-    
+
     public function ver_eliminar($id) {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
@@ -81,19 +84,20 @@ class viaje extends controller {
         //parent::index_page('viaje/view_viaje_info', $data);
         parent::index_page('viaje/view_eliminar_viaje', $data);
     }
-    function eliminar($id){
+
+    function eliminar($id) {
         $id = $this->input->post('id_viaje');
         $data = array();
         $this->model_viaje->consulta_estado_postulacion($id);
         $this->model_viaje->eliminar_viaje($id);
-        
+
         $this->session->set_flashdata('exito', 'SE ELIMINÓ EL VIAJE EXITOSAMENTE.');
         $data['exito'] = $this->session->flashdata('exito');
         $data['error'] = $this->session->flashdata('error');
-        
+
         redirect('viaje/');
     }
-    
+
     public function ver_postularse($id) {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
@@ -103,118 +107,173 @@ class viaje extends controller {
         //parent::index_page('viaje/view_viaje_info', $data);
         $this->load->model('model_viaje');
         $ids['id_viaje'] = $data['viaje']->id_viaje;
-        $ids['id_user'] = $this ->session-> userdata('id_user');
+        $ids['id_user'] = $this->session->userdata('id_user');
         $resultado = $this->model_viaje->ya_postulado($ids);
-        if($resultado == true){
-        parent::index_page('viaje/view_postular_viaje', $data);}
-        else{
-           $this->session->set_flashdata('error', 'YA ESTÁ POSTULADO PARA ESTE VIAJE');
-           $data['error'] = $this->session->flashdata('error');
-           parent::index_page('viaje/view_viaje_info', $data);  
+        if ($resultado == true) {
+            parent::index_page('viaje/view_postular_viaje', $data);
+        } else {
+            $this->session->set_flashdata('error', 'YA ESTÁ POSTULADO PARA ESTE VIAJE');
+            $data['error'] = $this->session->flashdata('error');
+            parent::index_page('viaje/view_viaje_info', $data);
         }
     }
-    
-    public function exist_tarjeta(){
+
+    public function exist_tarjeta() {
         $this->load->model('model_tarjeta');
         $id = $this->session->userdata('id_user');
         //verifies tarjeta exists in DB
         return (($this->model_tarjeta->is_registered_por_id($id)));
-        
     }
-    public function hay_superposicion(){
-   $this->load->model('model_viaje');
-   
-    $miviaje = array(
-            'id_user'=>$this ->session-> userdata('id_user'),
-            'id_viaje'=>$this->input->post('id_viaje'),
+
+    public function hay_superposicion() {
+        $this->load->model('model_viaje');
+
+        $miviaje = array(
+            'id_user' => $this->session->userdata('id_user'),
+            'id_viaje' => $this->input->post('id_viaje'),
             'fecha' => $this->input->post('fecha'),
             'hora' => $this->input->post('hora'),
             'duracion' => $this->input->post('duracion'),
             'id_chofer' => $this->input->post('id_chofer'),
         );
         $resultado = $this->model_viaje->superposicion_postulacion($miviaje);
-        if ($resultado == 0){
-        return false;}
-        else
-        { return true;}
+        if ($resultado == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
-    public function hay_superposicion_mi_viaje(){
-   $this->load->model('model_viaje');
-   
-    $miviaje = array(
-            'id_user'=>$this ->session-> userdata('id_user'),
-            'id_viaje'=>$this->input->post('id_viaje'),
+
+    public function hay_superposicion_mi_viaje() {
+        $this->load->model('model_viaje');
+
+        $miviaje = array(
+            'id_user' => $this->session->userdata('id_user'),
+            'id_viaje' => $this->input->post('id_viaje'),
             'fecha' => $this->input->post('fecha'),
             'hora' => $this->input->post('hora'),
             'duracion' => $this->input->post('duracion'),
             'id_chofer' => $this->input->post('id_chofer'),
         );
         $resultado = $this->model_viaje->superposicion_postulacion_con_mi_viaje($miviaje);
-        if ($resultado == 0){
-        return false;}
-        else
-        { return true;}
+        if ($resultado == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function postularse() {
+        $bool = $this->exist_tarjeta();
+        if ($bool == TRUE) {
+            $postulacion['id_user'] = $this->session->userdata('id_user');
+            $postulacion['id_viaje'] = $this->input->post('id_viaje');
+            $viaje_id = $this->input->post('id_viaje');
+            $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+            $sup = $this->hay_superposicion();
+            $otrasup = $this->hay_superposicion_mi_viaje();
+            if ($otrasup == False) {
+                if ($sup == FALSE) { //NO HAY SUPERSPOSICION CON POSTULACIÓN APROBADA, ENTONCES SE GUARDA LA POSTULACION VISIBLE
+                    $postulacion['id_estado'] = 1;
+                    $this->model_viaje->postular($postulacion);
+                    $this->session->set_flashdata('exito', 'SOLICITUD ENVIADA EXITOSAMENTE, ESPERANDO CONFIRMACIÓN.');
+                    $data['exito'] = $this->session->flashdata('exito');
+                    $data['error'] = $this->session->flashdata('error');
+                    parent::index_page('viaje/view_viaje_info', $data);
+                } else { //HAY SUPERPOSICION CON POSTULACION APROBADA, ENTONCES SE GUARDA LA POSTUALACION INVISIBLE
+                    $postulacion['id_estado'] = 4;
+                    $this->model_viaje->postular($postulacion);
+                    $this->session->set_flashdata('error', 'La postulación se superpone con un viaje ya aprobado, y por tal permanecerá invisible para el chofer mientras que la postulación aprobada siga vigente.');
+                    $data['error'] = $this->session->flashdata('error');
+                    $this->session->set_flashdata('exito', 'SOLICITUD ENVIADA EXITOSAMENTE.');
+                    $data['exito'] = $this->session->flashdata('exito');
+
+                    parent::index_page('viaje/view_viaje_info', $data);
+                }
+            } else {
+                $this->session->set_flashdata('error', 'La postulación se superpone con un viaje creado por usted.');
+                $data['error'] = $this->session->flashdata('error');
+                $this->session->set_flashdata('exito', '');
+                $data['exito'] = $this->session->flashdata('exito');
+
+                parent::index_page('viaje/view_viaje_info', $data);
+            }
+        } else { //NO HAY TARJETA REGISTRADA PARA ESTE USUARIO
+            $viaje_id = $this->input->post('id_viaje');
+            $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+            $this->session->set_flashdata('error', 'NO POSEE UNA TARJETA DE CRÉDITO REGISTRADA.');
+            $data['error'] = $this->session->flashdata('error');
+            $data['exito'] = $this->session->flashdata('exito');
+
+            parent::index_page('viaje/view_viaje_info', $data);
+        }
+    }
+
+    // ------------------COMIENZAN METODOS DE BUSQUEDA --------------------------------
+    //valida campos del search
+    public function verificar_search() {
+        if ($this->input->post()) {
+            //incluir alguna validacio, si validacion OK, entonces:
+            $this->session_search_viaje();
+        }
+        redirect('viaje/', 'refresh');
+    }
+
+    // Para limpiar la búsqueda
+    public function mostrar_todos(){
+        
+        if ($this->session->userdata('busqueda')) {
+            //limpio sesión
+            $array_items = array('origen', 'destino', 'busqueda','fecha');
+            $this->session->unset_userdata($array_items);     
+        }
+         redirect('viaje/', 'refresh');
     }
     
-    public function postularse(){
-        $bool = $this-> exist_tarjeta();
-        if($bool== TRUE){            
-            $postulacion['id_user']= $this->session -> userdata('id_user');
-            $postulacion['id_viaje']= $this->input->post('id_viaje');
-            $viaje_id = $this->input->post('id_viaje');
-            $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);        
-            $sup= $this->hay_superposicion();
-            $otrasup=$this->hay_superposicion_mi_viaje();
-            if($otrasup== False){
-            if($sup == FALSE){ //NO HAY SUPERSPOSICION CON POSTULACIÓN APROBADA, ENTONCES SE GUARDA LA POSTULACION VISIBLE
-               $postulacion['id_estado']= 1; 
-               $this->model_viaje->postular($postulacion); 
-               $this->session->set_flashdata('exito', 'SOLICITUD ENVIADA EXITOSAMENTE, ESPERANDO CONFIRMACIÓN.');
-               $data['exito'] = $this->session->flashdata('exito');
-               $data['error'] = $this->session->flashdata('error');
-               parent::index_page('viaje/view_viaje_info', $data); 
-               
-            }else{ //HAY SUPERPOSICION CON POSTULACION APROBADA, ENTONCES SE GUARDA LA POSTUALACION INVISIBLE
-               $postulacion['id_estado']= 4; 
-               $this->model_viaje->postular($postulacion); 
-               $this->session->set_flashdata('error', 'La postulación se superpone con un viaje ya aprobado, y por tal permanecerá invisible para el chofer mientras que la postulación aprobada siga vigente.');
-               $data['error'] = $this->session->flashdata('error');
-               $this->session->set_flashdata('exito', 'SOLICITUD ENVIADA EXITOSAMENTE.');
-               $data['exito'] = $this->session->flashdata('exito');
-
-               parent::index_page('viaje/view_viaje_info', $data); 
-            }
-        }else
-        {
-        $this->session->set_flashdata('error', 'La postulación se superpone con un viaje creado por usted.');
-               $data['error'] = $this->session->flashdata('error');
-               $this->session->set_flashdata('exito', '');
-               $data['exito'] = $this->session->flashdata('exito');
-
-               parent::index_page('viaje/view_viaje_info', $data);     
-        }
-            }
-        else{ //NO HAY TARJETA REGISTRADA PARA ESTE USUARIO
-             $viaje_id = $this->input->post('id_viaje');
-             $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);     
-             $this->session->set_flashdata('error','NO POSEE UNA TARJETA DE CRÉDITO REGISTRADA.'); 
-             $data['error'] = $this->session->flashdata('error');
-             $data['exito'] = $this->session->flashdata('exito');
-
-               parent::index_page('viaje/view_viaje_info', $data);
-        }
-        
+    // Guardo criterios de búsqueda en la sesión, para usar en el paginado
+    private function session_search_viaje() {
+        $search_array = $this->array_search_viaje();
+        $search = array(
+            'origen' => $this->input->post('search_origen'),
+            'destino' => $this->input->post('search_destino'),
+            'fecha' => $this->input->post('search_fecha'),
+            'busqueda' => true,
+        );
+        //Guardo en la sesión de usuario, porque si uso flashdata solo permanece en el próximo server request y luego se borra,
+        //y al tener paginación necesito que persista a lo largo de las páginas
+        $this->session->set_userdata($search);
     }
+    
+    // Armo un arreglo con los criterios de búsqueda, a partir de lo guardado en la sesión
+    private function array_search_viaje() {
 
+        //Si hubo búsqueda    
+        if ($this->session->userdata('busqueda')) {
+            $search = array(
+                'origen' => $this->session->userdata('origen'),
+                'destino' => $this->session->userdata('destino'),
+                'fecha' => $this->session->userdata('fecha'),
+            );
+        } else { // No hubo búsqueda
+            $search = NULL;
+        }
+        return $search;
+    }
+    
+  
+    // ------------------TERMINAN METODOS DE BUSQUEDA --------------------------------
     public function index($rowno = 0) {
 
         $this->pagination->initialize($this->set_config());
 
-        // Get Results from Data Base 
-        $search_text = "";
+        // Get Results from Data Base ;
         $rowperpage = 5;
+        
+       //Filtros de búsqueda a aplicar en el listado
+        $search_array = $this->array_search_viaje();
+        
         //Get all "viajes" with all columns
-        $lista_viajes = $this->model_viaje->getViajes($rowno, $rowperpage, $search_text);
+        $lista_viajes = $this->model_viaje->getViajes($rowno, $rowperpage, $search_array);
 
         //Set header for the table
         $header = array('Origen', 'Destino', 'Fecha Viaje', 'Hora Inicio', 'Acciones');
@@ -235,10 +294,10 @@ class viaje extends controller {
         //Configure columns to be displayed on table
         foreach ($lista_viajes as $viaje) {
             $pertenece = $this->model_viaje->viaje_pertenece_user($viaje['id_viaje'], $this->session->userdata('id_user'));
-            $hora_inicio= substr($viaje['hora_inicio'], 0, -3);
+            $hora_inicio = substr($viaje['hora_inicio'], 0, -3);
             $newDate = date("d-m-Y", strtotime($viaje['fecha']));
             if ($pertenece) {
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' .'<span class>Postularme</span>' );
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' . '<span class>Postularme</span>');
             } else {
                 $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span class="glyphicon glyphicon-trash"></span>' . ' | ' . anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class>Postularme</span>'));
             }
@@ -246,7 +305,7 @@ class viaje extends controller {
         //Call view
         $data = array();
         $data['error'] = $this->session->flashdata('error');
-        $data['exito'] = $this->session->flashdata('exito');
+        $data['exito'] = $this->session->flashdata('exito');   
         parent::index_page('viaje/view_listar_viajes', $data);
     }
 
