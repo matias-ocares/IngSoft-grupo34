@@ -251,9 +251,7 @@ public function getrecordCountAprobada($search = "") {
             'id_chofer' => $resultado->id_chofer,
             'id_viaje' => $id_viaje,
             'id_pasajero' => $id_pasajero,
-            'positivo' => 0,
-            'negativo' => 1,
-            'neutro' => 0,            
+            'calificacion' => -1,          
         );
         $this->db->insert('calificacion_pasajero',$data);      
         
