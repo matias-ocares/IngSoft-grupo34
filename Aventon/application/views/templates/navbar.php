@@ -9,7 +9,6 @@
                     <li><a href="<?php echo base_url() ?>ver_perfil/">Ver perfil</a></li>
                     <li><a href="<?php echo base_url() ?>editar_perfil/">Editar perfil</a></li>
                     <li><a href="<?php echo base_url() ?>tarjeta_credito/">Tarjeta de credito</a></li>
-                    <li><a href="#">Modificar clave</a></li>
                 </ul>
             </li>
 

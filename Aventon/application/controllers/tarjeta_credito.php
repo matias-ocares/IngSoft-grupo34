@@ -19,7 +19,7 @@ class tarjeta_credito extends controller {
         $data=array();    
         $data['error'] = $this->session->flashdata('error');
         if($this->model_tarjeta->tarjeta_cargada($this->session->userdata('id_user')) > 0){
-            parent::index_page('tarjeta_credito/view_eliminar_tarjeta',$data);
+            parent::index_page('tarjeta_credito/view_editar_tarjeta',$data);
         }
         else{
            parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data); 
@@ -36,6 +36,8 @@ class tarjeta_credito extends controller {
                );
         $this->session->set_flashdata($campos_data);     
     }
+
+
     
     function alpha_dash_space($str){
         return ( ! preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
@@ -156,6 +158,36 @@ class tarjeta_credito extends controller {
         {return FALSE;}
     }
     
+    public function actualizar($id_tarjeta = null) {
+        if ($this->input->post()) {
+            
+            $this->set_flash_campos_tarjeta();
+
+            $this->form_validation->set_rules($this->validation_rules());
+            
+            if ($this->form_validation->run() == TRUE) { 
+                
+                $tarjeta=$this->array_tarjeta();
+                $tarjeta = $this->model_tarjeta->actualizar_tarjeta($tarjeta,$this->session->userdata('id_user'));
+                
+                 $data = array();
+                 $this->session->set_flashdata('exito','SE CARGÓ LA TARJETA EXITOSAMENTE.');
+                 $this->session->set_flashdata('error','');
+         
+                $data['error'] = $this->session->flashdata('error');
+                $data['exito'] = $this->session->flashdata('exito');
+                redirect('viaje/');
+
+            }
+            else {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('tarjeta_credito/');
+            } 
+        } 
+        
+    }
+    
+
     
     
     
