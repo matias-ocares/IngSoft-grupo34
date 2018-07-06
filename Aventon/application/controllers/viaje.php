@@ -26,10 +26,13 @@ class viaje extends controller {
     private function set_config() { //seteo la configuración 
         //Filtros de búsqueda a aplicar en el listado
         $search_array = $this->array_search_viaje();
-
+        //Obtengo el total de registros para guardar en sesión y en la variable $config['total_rows'] que permite la paginación
+        $total_records = $this->model_viaje->getrecordCount($search_array);
+        // Almaceno el total de resultados en la sesión
+        $this->session->set_userdata('total', $total_records);
 //Base properties
         $config['base_url'] = 'http://localhost:1234/IngSoft-grupo34/Aventon/index.php/viaje/';
-        $config['total_rows'] = $this->model_viaje->getrecordCount($search_array);
+        $config['total_rows'] = $total_records;
         $config['per_page'] = '5';
         //Additional properties
         $config['num_links'] = 2;
@@ -257,12 +260,12 @@ class viaje extends controller {
     
     // Guardo criterios de búsqueda en la sesión, para usar en el paginado
     private function session_search_viaje() {
-        $search_array = $this->array_search_viaje();
         $search = array(
             'origen' => trim($this->input->post('search_origen')),  //trim elimina espacios al principio y al final
             'destino' => trim($this->input->post('search_destino')),
             'fecha' => $this->input->post('search_fecha'),
             'busqueda' => true,
+            'total' => 0,
         );
         //Guardo en la sesión de usuario, porque si uso flashdata solo permanece en el próximo server request y luego se borra,
         //y al tener paginación necesito que persista a lo largo de las páginas
