@@ -106,9 +106,9 @@ class solicitud_enviada extends controller {
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
                 if($estado == 'rechazada'){
-                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido']);
+                $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']));
                 }
-                else{$this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, $solicitud['nombre'] . ", " . $solicitud['apellido'], anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
+                else{$this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']), anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
                 
                 //$this->table->add_row($solicitud['id_estado'], $solicitud['id_user'], $solicitud['id_viaje'], anchor('', 'Cancelar'));
                }
@@ -166,5 +166,19 @@ class solicitud_enviada extends controller {
      
         
     }
+    
+    public function ver_perfil(){
+         $id_postulante=$this->uri->segment(3);
+         /*$this->load->model('model_user');
+         $perfil_db = $this->model_user->user_by_id($id_postulante);
+         $this->session->set_flashdata($perfil_db);
+         $data = array();
+         parent::index_page('view_ver_perfil', $data);
+        */
+        redirect('ver_perfil/ver_un_perfil/'.$id_postulante) ;
+        
+    }
+    
+    
 
 }
