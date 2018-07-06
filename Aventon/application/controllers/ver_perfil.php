@@ -42,4 +42,14 @@ class ver_perfil extends controller {
     }
     
     
+    public function mostrar_calificacion($id_user){
+        
+    $perfil_db = $this->model_user->user_by_id($id_postulante);
+        
+        
+        
+    }
+        
+    
+    
 }

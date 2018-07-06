@@ -9,6 +9,7 @@ class solicitud_enviada extends controller {
         parent::__construct();
         $this->load->model('model_solicitud');
         $this->load->model('model_viaje');
+        $this->load->model('model_calificacion');
         $this->load->library(array('pagination', 'table'));
         $this->load->helper('url');
         $this->load->library('session');
