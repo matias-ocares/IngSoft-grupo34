@@ -271,5 +271,7 @@ public function getrecordCountAprobada($search = "") {
             return FALSE;
         }
     }
+    
+    
 
 }
