@@ -74,7 +74,8 @@ $lang['form_validation_matches']		= 'Las claves no coinciden.';
 $lang['form_validation_notExistCreditCard']		= 'El numero de tarjeta que está ingresando ya se encuentra registrada';
 $lang['form_validation_existFecha']             = 'Existe un viaje que se superpone con el que intenta crear';
 $lang['form_validation_valida_fecha']             = 'La tarjeta de credito se encuentra vencida. Por favor ingrese una tarjeta valida';
-
+$lang['form_validation_destino_valido']             = 'El destino debe ser diferente del orígen de su viaje';
+$lang['form_validation_alpha_spaces']             = 'El {field} solo puede contener letras y espacios';
 
 
 

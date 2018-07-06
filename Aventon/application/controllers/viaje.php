@@ -8,8 +8,8 @@ class viaje extends controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('model_viaje');
-        $this->load->library(array('pagination', 'table'));
-        $this->load->helper('url');
+        $this->load->library(array('pagination', 'table','form_validation'));
+        $this->load->helper(array('form','url'));
         $this->load->library('session');
     }
 
@@ -33,16 +33,6 @@ class viaje extends controller {
         $config['per_page'] = '5';
         //Additional properties
         $config['num_links'] = 2;
-
-        /* Properties that allow to applied css to pagination elements
-          $config['first_link'] = 'Primero';
-          $config['last_link'] = 'Ultimo';
-          $config['cur_tag_open'] = '<b class = "actual">';
-          $config['cur_tag_close'] = '</b>';
-          $config['full_tag_open'] = '<div class="pagination">';
-          $config['full_tag_close'] = '</div>';
-         */
-        // --- PROBANDO ALGO NUEVO
         $config["full_tag_open"] = '<ul class="pagination">';
         $config["full_tag_close"] = '</ul>';
         $config["first_link"] = "&laquo;";
@@ -71,7 +61,6 @@ class viaje extends controller {
         $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
         $data['error'] = $this->session->flashdata('error');
         $data['exito'] = $this->session->flashdata('exito');
-        //parent::index_page('viaje/view_viaje_info', $data);
         parent::index_page('viaje/view_viaje_info', $data);
     }
 
@@ -210,11 +199,47 @@ class viaje extends controller {
     }
 
     // ------------------COMIENZAN METODOS DE BUSQUEDA --------------------------------
+    
+    function alpha_spaces($str) {
+        return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    }
+    
+    //Un destino es válido si es diferente al orígen
+    function destino_valido() {
+        $origen = strtoupper($this->input->post('search_origen'));
+        $destino = strtoupper($this->input->post('search_destino'));
+        return ( $origen != $destino );
+    }
+    
+    private function validation_rules() {
+        $origen = $this->input->post('search_origen');
+        $destino = $this->input->post('search_destino');
+        //funcón provada que crea las reglas de validación
+        $config = array(
+            array(
+                'field' => 'search_origen',
+                'label' => 'Origen',
+                'rules' => 'required|callback_alpha_spaces['.$origen.']'
+            ),
+            array(
+                'field' => 'search_destino',
+                'label' => 'Destino',
+                'rules' => 'required|callback_alpha_spaces['.$destino.']|callback_destino_valido'
+            )
+        );
+        return $config;
+    }
+    
     //valida campos del search
     public function verificar_search() {
         if ($this->input->post()) {
-            //incluir alguna validacio, si validacion OK, entonces:
+            //guardo en la sesión los datos del post
             $this->session_search_viaje();
+            //valido los datos del formulario
+            $this->form_validation->set_rules($this->validation_rules());
+            if ($this->form_validation->run() == FALSE) {
+               $this->session->set_flashdata('notifico', validation_errors());
+            }
         }
         redirect('viaje/', 'refresh');
     }
@@ -234,8 +259,8 @@ class viaje extends controller {
     private function session_search_viaje() {
         $search_array = $this->array_search_viaje();
         $search = array(
-            'origen' => $this->input->post('search_origen'),
-            'destino' => $this->input->post('search_destino'),
+            'origen' => trim($this->input->post('search_origen')),  //trim elimina espacios al principio y al final
+            'destino' => trim($this->input->post('search_destino')),
             'fecha' => $this->input->post('search_fecha'),
             'busqueda' => true,
         );
