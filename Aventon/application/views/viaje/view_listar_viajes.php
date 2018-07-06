@@ -21,7 +21,8 @@
             <a id="mostrar_todos" href="../viaje/mostrar_todos"> Mostrar todos </a>
         </div>
     </form>  
-
+    
+    
     <?php if ($this->session->flashdata('notifico')): ?>
 
         <p style="color:red;"> <b> <?php echo $this->session->flashdata('notifico') ?> </b> </p>
@@ -39,6 +40,20 @@
 
 
     <h1 class="h11">Listado de viajes</h1>    
+    
+      <?php
+            $cant_resultados = $this->session->userdata('total');
+            if ($this->session->userdata('busqueda'))
+            { 
+                $si_hubo = "Hay ".$cant_resultados." coincidencias con tu búsqueda"; 
+                $no_hubo = "No hubo ninguna coincidencias con tu búsqueda";       
+                echo ($cant_resultados > 0) ? $si_hubo : $no_hubo;
+            }
+            else{
+                echo "Total de Viajes: ".$cant_resultados;
+            } 
+                
+        ?>
 
 
     <div class="container">  
@@ -47,7 +62,6 @@
             <?php echo $this->table->generate(); ?>
         </div>
         <?php echo $this->pagination->create_links(); ?>
-
     </div>  
 
 
