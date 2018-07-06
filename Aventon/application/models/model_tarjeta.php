@@ -57,5 +57,17 @@ class model_tarjeta extends CI_Model {
         $this->db->where('id_tarjeta',$id_tarjeta);
         $this->db->delete('tarjeta');
     }
+    
+     public function consultar_tarjeta($id_user) { 
+        $this->db->where('id_user', $id_user);
+        $consulta = $this->db->get('tarjeta');
+        $resultado = $consulta->row_array();
+        return $resultado;
+    }
+    
+    public function actualizar_tarjeta($tarjeta,$id_user){
+        $this->db->where('id_user', $id_user);
+        $this->db->update('tarjeta',$tarjeta);
+    }
 
 }
