@@ -5,11 +5,11 @@
         <h1 class="h10 mb-3 font-weight-normal">Perfil</h1> 
 
         <p>Nombre</p>
-        <?php echo $this->session->flashdata('nombre'); ?>
+        <?php echo $this->session->flashdata('nom'); ?>
         <br>
         <p>Apellido</p>
         <label for="apellido" class="sr-only">Apellido</label>
-        <?php echo $this->session->flashdata('apellido'); ?>
+        <?php echo $this->session->flashdata('ap'); ?>
         <br>
       
 

@@ -9,21 +9,37 @@ class ver_perfil extends controller {
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->model('model_user');
+        $this->load->model('model_solicitud');
         $this->load->library('form_validation');
         $this->load->helper('url');
         $this->load->library('session');
-        $this->load->library('upload');
+       // $this->load->library('upload');
     }
 
     public function index() {
-        if ($this->session->userdata('logueado')) { //si está logueado
-            $id = $this->session->userdata('id_user');
-            $perfil_db = $this->model_user->user_by_id($id);
-            $this->session->set_flashdata($perfil_db);
-            $data = array();
+       
+           $data = array(); 
             parent::index_page('view_ver_perfil', $data);
-        } else {
-            redirect('login');
-        }
+        
     }
+    
+    
+     public function mi_perfil(){
+        $id = $this->session->userdata('id_user');
+            $usuario = $this->model_user->user_by_id($id);
+            $this->session->set_flashdata('nom',$usuario['nombre']);
+            $this->session->set_flashdata('ap',$usuario['apellido']);
+            redirect('ver_perfil/');
+     }
+    public function ver_un_perfil() {
+         $id_postulante=$this->uri->segment(3);
+        
+        $perfil_db = $this->model_user->user_by_id($id_postulante);
+            $this->session->set_flashdata('nom',$perfil_db['nombre']);
+            $this->session->set_flashdata('ap',$perfil_db['apellido']);
+            
+           redirect('ver_perfil/'); 
+    }
+    
+    
 }
