@@ -148,6 +148,12 @@
             .container{
                 width:1100px;
             }
+            
+            #formBuscarViaje {margin-top:50px;}
+            .search_viaje_label {margin-left: 10px; margin-bottom: 5px;}
+            #search_origen,#search_destino, #search_fecha {width: 200px;}
+            .btn_search_viaje {width: 100px; margin-left: 10px;}
+            #mostrar_todos {margin-top:10px;};
         </style>
     </head>
     <body>
