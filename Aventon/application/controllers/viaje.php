@@ -206,8 +206,8 @@ class viaje extends controller {
     
     //Un destino es válido si es diferente al orígen
     function destino_valido() {
-        $origen = strtoupper($this->input->post('search_origen'));
-        $destino = strtoupper($this->input->post('search_destino'));
+        $origen = strtoupper(trim($this->input->post('search_origen')));
+        $destino = strtoupper(trim($this->input->post('search_destino')));
         return ( $origen != $destino );
     }
     
@@ -272,8 +272,10 @@ class viaje extends controller {
     // Armo un arreglo con los criterios de búsqueda, a partir de lo guardado en la sesión
     private function array_search_viaje() {
 
-        //Si hubo búsqueda    
-        if ($this->session->userdata('busqueda')) {
+        $hubo_busqueda =$this->session->userdata('busqueda');
+        $hubo_error = $this->session->flashdata('notifico');
+        //Si hubo búsqueda y no hubo error
+        if ( $hubo_busqueda AND !$hubo_error) {
             $search = array(
                 'origen' => $this->session->userdata('origen'),
                 'destino' => $this->session->userdata('destino'),

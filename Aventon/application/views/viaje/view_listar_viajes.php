@@ -15,7 +15,7 @@
                min="<?php $hoy = date("Y-m-d");
 echo $hoy; ?>" 
                max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
-        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="submit"> Buscar </button>
+        <button class="btn btn-lg btn-primary btn-block btn_perfil" type="submit" onClick="return validacionBusqueda();"> Buscar </button>
 
     </form>  
     <a href="../viaje/mostrar_todos"> Mostrar todos </a>
@@ -45,6 +45,45 @@ echo $hoy; ?>"
     </div>  
 
 </div> 
+
+<script>
+    function validacionBusqueda() {
+        origen = document.getElementById("search_origen").value;
+        destino = document.getElementById("search_destino").value;
+        fecha = document.getElementById("search_fecha").value;
+
+        var expresion_regular_texto = /^[A-Za-z\s]+$/;
+
+        if (origen === "" || origen.length === 0 || /^\s+$/.test(origen)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        }
+
+        if (destino === "" || destino.length === 0 || /^\s+$/.test(destino)) {
+            alert('[!] Todos los campos con son obligatorios.');
+            return false;
+        }
+
+        if (!expresion_regular_texto.test(origen)) {
+            alert("[!] El campo origen contiene caracteres no permitidos");
+            return false;
+        }
+        if (!expresion_regular_texto.test(destino)) {
+            alert("[!] El campo destino contiene caracteres no permitidos");
+            return false;
+        }
+        
+        if ( (origen.trim()).toUpperCase() == (destino.trim()).toUpperCase() ){
+            //remuevo los espacios delante y detrás
+            document.getElementById("search_origen").value =origen.trim();
+            document.getElementById("search_destino").value = destino.trim();
+            alert("[!] Origen y Destino deben ser diferentes");
+            return false;
+        }
+    }
+
+</script> 
+
 
 
 
