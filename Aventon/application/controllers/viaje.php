@@ -61,6 +61,9 @@ class viaje extends controller {
     public function ver($id) {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
+        $chofer= $this->model_viaje->chofer_por_id($viaje_id);
+         $data['nombre']=$chofer->nombre;
+         $data['apellido']=$chofer->apellido;
         $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
         $data['error'] = $this->session->flashdata('error');
         $data['exito'] = $this->session->flashdata('exito');
@@ -93,7 +96,11 @@ class viaje extends controller {
     public function ver_postularse($id) {
         //Neccesary to pass "id" as a parameter
         $viaje_id = $this->uri->segment(3);
+        $chofer= $this->model_viaje->chofer_por_id($viaje_id);
         $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+         $data['nombre']=$chofer->nombre;
+         $data['apellido']=$chofer->apellido;
+         
         $data['error'] = $this->session->flashdata('error');
         $data['exito'] = $this->session->flashdata('exito');
         //parent::index_page('viaje/view_viaje_info', $data);
@@ -162,6 +169,8 @@ class viaje extends controller {
             $postulacion['id_viaje'] = $this->input->post('id_viaje');
             $viaje_id = $this->input->post('id_viaje');
             $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
+            $data['nombre']=$this->input->post('nombre');
+            $data['apellido']= $this->input->post('apellido');       
             $sup = $this->hay_superposicion();
             $otrasup = $this->hay_superposicion_mi_viaje();
             if ($otrasup == False) {

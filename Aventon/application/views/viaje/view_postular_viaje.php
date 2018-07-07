@@ -14,7 +14,7 @@
                 <th style="text-align:center;" height=45 width=100>Costo</th>
                 <th style="text-align:center;" height=45 width=100>Plazas totales</th>
                 <th style="text-align:center;" height=45 width=100>Plazas libres</th>
-                <th style="text-align:center;" height=45 width=100>Chofer N°</th>                
+                <th style="text-align:center;" height=45 width=100>Chofer</th>                
                 </tr>
                 </thead>
                 <tbody>
@@ -28,7 +28,7 @@
                   <td><?php echo $viaje->costo; ?></td>
                   <td><?php echo $viaje->plazas_total; ?></td>
                   <td><?php echo $viaje->plazas_libre; ?></td>
-                  <td><?php echo $viaje->id_chofer; ?></td>
+                  <td><?php echo $nombre.", ".$apellido;?></td>
                   
                   
                 </tr>
@@ -56,7 +56,10 @@
               <input type="hidden" id="fecha" name="fecha" value="<?php echo $viaje->fecha; ?>">
               <input type="hidden" id="hora" name="hora" value="<?php echo $viaje->hora_inicio; ?>">
               <input type="hidden" id="duracion" name="duracion" value="<?php echo $viaje->duracion_horas; ?>">
-              <input type="hidden" id="id_chofer" name="id_chofer" value="<?php echo $viaje->id_chofer; ?>">     
+              <input type="hidden" id="id_chofer" name="id_chofer" value="<?php echo $viaje->id_chofer; ?>"> 
+              <input type="hidden" id="nombre" name="nombre" value="<?php echo $nombre; ?>"> 
+              <input type="hidden" id="apellido" name="apellido" value="<?php echo $apellido; ?>"> 
+              
               
               <button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Postularse</button>
             

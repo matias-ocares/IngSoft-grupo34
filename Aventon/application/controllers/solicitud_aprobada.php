@@ -86,8 +86,18 @@ class solicitud_aprobada extends controller {
                 
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
+                $fecha_actual = date("d-m-Y");
+                
+	
+                if(strtotime($fecha_actual) > strtotime($newDate))
+	{
+	$this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']), anchor('calificacion/ver_calificar/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'] , '<span class>Calificar</span>'));
+           
+	}else{
+	
+                
                 $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']), anchor('solicitud_pendiente/rechazar_solicitud/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'].'/'.$solicitud['hora_inicio'].'/'.$solicitud['fecha'].'/'.$solicitud['duracion_horas'] , '<span class>Rechazar</span>'));
-            }
+            }}
 
             //Call view
             $data = array();
