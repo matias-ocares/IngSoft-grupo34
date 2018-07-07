@@ -41,6 +41,16 @@ class model_calificacion extends CI_Model {
         
     }
     
+   public function ya_califico_como_chofer($viaje_id, $id_pasajero, $id_chofer){
+    $this->db->where('id_viaje', $viaje_id);
+    $this->db->where('id_pasajero', $id_pasajero);
+    $this->db->where('id_chofer', $id_chofer);
+    
+        $amount_results = $this->db->count_all_results('calificacion_pasajero');
+        return ($amount_results == 1);   
+       
+   } 
+    
    public function calificar_como_chofer($calificacion){
         $this->db->insert('calificacion_pasajero', $calificacion);
    } 
