@@ -39,39 +39,43 @@ class calificacion extends controller {
          $data['miapellido']=$calificador->apellido;
          $data['sunombre']=$calificado['nombre'];
          $data['suapellido']=$calificado['apellido'];
-         
+         $data['id_postulante']=$id_postulante;
         $data['error'] = $this->session->flashdata('error');
         $data['exito'] = $this->session->flashdata('exito');
         //parent::index_page('viaje/view_viaje_info', $data);
         
-        parent::index_page('view_calificar', $data);
+        parent::index_page('view_calificar_como_chofer', $data);
         
             
-        }  
+        }
+        
+        public function calificar_como_chofer(){
+        $calificacion['id_viaje'] = $this->input->post('id_viaje');
+        $calificacion['id_pasajero'] = $this->input->post('id_postulante');
+        $calificacion['id_chofer'] = $this->input->post('id_chofer');
+        $calificacion['comentario'] = $this->input->post('comentario');
+        $valor=$this->input->post('califica');
+        if($valor == 'positivo'){
+        $calificacion['calificacion'] = 1;
+        }
+        else
+        if($valor == 'negativo'){
+               $calificacion['calificacion'] = -1; 
+        }else
+        if($valor == 'neutro'){
+        $calificacion['calificacion'] = 0;      
+                }
+        $this->model_calificacion->calificar_como_chofer($calificacion);        
+        
+      
+            
+            
+            
+        }
          
      
      
-     
-     
-    public function ver_un_perfil() {
-         $id_viaje=$this->uri->segment(3);
-         $id_postulante=$this->uri->segment(3);
-        
-        $perfil_db = $this->model_user->user_by_id($id_postulante);
-            $this->session->set_flashdata('nom',$perfil_db['nombre']);
-            $this->session->set_flashdata('ap',$perfil_db['apellido']);
-            $calif_chofer = $this->model_calificacion->mostrar_calificacion_as_chofer($id_postulante);
-            $calif_pasajero = $this->model_calificacion->mostrar_calificacion_as_pasajero($id_postulante);
-            $this->session->set_flashdata('calif_chofer',$calif_chofer);
-            $this->session->set_flashdata('calif_pasajero',$calif_pasajero);
-            
-            
-           redirect('ver_perfil/'); 
-    }
-    
-    
-  
-        
+   
     
     
 }
