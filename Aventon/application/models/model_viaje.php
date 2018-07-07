@@ -323,4 +323,19 @@ class model_viaje extends CI_Model {
     }
 
 //ACÁ FINALIZAN LAS FUNCIONES CORRESPONDIENTES A LA HU POSTULARME COMO ACOMPAÑANTE
+    
+    public function chofer_por_id($viaje_id){
+        $this->db->from('viaje');
+    $this->db->where('id_viaje', $viaje_id);
+    $this->db->select('id_chofer');
+    $consulta = $this->db->get();
+    $resultado = $consulta->row();
+    $this->db->from('user');
+    $this->db->where('id_user', $resultado->id_chofer);
+    $this->db->select('nombre, apellido');
+    $consulta2 = $this->db->get();
+    $resultado2 = $consulta2->row();
+    return $resultado2;
+    
+    }
 }
