@@ -28,7 +28,7 @@
 
     <?php if ($this->session->flashdata('notifico')): ?>
 
-        <p> <?php echo $this->session->flashdata('notifico') ?></p>
+    <p style="color:green;"><b><?php echo $this->session->flashdata('notifico') ?> </b></p>
 
     <?php endif; ?>
 

@@ -31,6 +31,7 @@ class calificacion extends controller {
         $id_postulante=$this->uri->segment(4);
         $id_user= $this->session->userdata('id_user');
         
+        if($this->model_calificacion->ya_califico_como_chofer($viaje_id, $id_postulante, $id_user)== false){ 
         
         $calificado= $this->model_user->user_by_id($id_postulante); 
         $calificador= $this->model_viaje->chofer_por_id($viaje_id);
@@ -44,7 +45,14 @@ class calificacion extends controller {
         $data['exito'] = $this->session->flashdata('exito');
         //parent::index_page('viaje/view_viaje_info', $data);
         
-        parent::index_page('view_calificar_como_chofer', $data);
+        parent::index_page('view_calificar_como_chofer', $data);}
+        else{
+            $this->session->set_flashdata('notifico','Este pasajero ya fue calificado.');
+            
+        
+            redirect('ver_perfil/ver_un_perfil/'.$id_postulante);
+           
+        }
         
             
         }
@@ -67,7 +75,10 @@ class calificacion extends controller {
                 }
         $this->model_calificacion->calificar_como_chofer($calificacion);        
         
-      
+        $this->session->set_flashdata('notifico','Pasajero calificado exitosamente.');
+            
+        
+            redirect('ver_perfil/ver_un_perfil/'.$calificacion['id_pasajero']);
             
             
             

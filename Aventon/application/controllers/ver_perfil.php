@@ -39,7 +39,10 @@ class ver_perfil extends controller {
      }
     public function ver_un_perfil() {
          $id_postulante=$this->uri->segment(3);
-        
+        if ($this->session->flashdata('notifico')){
+           $notifico= $this->session->flashdata('notifico');
+           $this->session->set_flashdata('notifico',$notifico) ;
+        }
         $perfil_db = $this->model_user->user_by_id($id_postulante);
             $this->session->set_flashdata('nom',$perfil_db['nombre']);
             $this->session->set_flashdata('ap',$perfil_db['apellido']);
