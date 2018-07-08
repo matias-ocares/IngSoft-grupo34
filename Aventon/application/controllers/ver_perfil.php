@@ -34,7 +34,10 @@ class ver_perfil extends controller {
             $calif_pasajero = $this->model_calificacion->mostrar_calificacion_as_pasajero($id);
             $this->session->set_flashdata('calif_chofer',$calif_chofer);
             $this->session->set_flashdata('calif_pasajero',$calif_pasajero);
-            
+            if ($this->session->flashdata('error')){
+         $noti= $this->session->flashdata('error') ;
+         $this->session->set_flashdata('error', $noti);
+        }
             redirect('ver_perfil/');
      }
     public function ver_un_perfil() {

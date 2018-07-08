@@ -1,21 +1,7 @@
 <div class="col-sm-8 text-center"> 
-
-
-    <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h1 class="h10 mb-3 font-weight-normal">Datos de perfil</h1> 
-    
-     <?php if ($this->session->flashdata('notifico')): ?>
-
-    <p style="color:green;"><b><?php echo $this->session->flashdata('notifico') ?> </b></p>
-
-    <?php endif; ?>
-    
-     <?php if ($this->session->flashdata('error')): ?>
-
-    <p style="color:red;"><b><?php echo $this->session->flashdata('error') ?> </b></p>
-
-    <?php endif; ?>
-    <hr>
+          <h1 class="h10 mb-3 font-weight-normal">Eliminar mi perfil</h1>
+          
+          <hr>
             <div class="container">    
                 <table class="table table-striped">
                 <thead>
@@ -38,15 +24,13 @@
                 </tbody>
                 
                 </table>
-            </div>  
+            </div> 
+          <form method="post" id="miformulario" action="<?php echo base_url(); ?>eliminar_perfil/" class="form-signin">
+          <button class="btn btn-default btn-sm" name="eliminar" type="submit" value="eliminar">
+                <a href="#" class="btn btn-info btn-lg">
+                    <span class="glyphicon glyphicon-trash"></span> Eliminar perfil
+                </a>        </button> 
+          </form>
+        </div> 
 
-
-   
-
-    <br>
-
-
-
-
-
-</div>
+ 

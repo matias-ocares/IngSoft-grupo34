@@ -8,7 +8,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>ver_perfil/mi_perfil">Ver perfil</a></li>
                     <li><a href="<?php echo base_url() ?>editar_perfil/">Editar perfil</a></li>
-                    <li><a href="<?php echo base_url() ?>eliminar_perfil/">Eliminar perfil</a></li>
+                    <li><a href="<?php echo base_url() ?>eliminar_perfil/ver_eliminar_perfil">Eliminar perfil</a></li>
                     <li><a href="<?php echo base_url() ?>tarjeta_credito/">Tarjeta de credito</a></li>
                 </ul>
             </li>

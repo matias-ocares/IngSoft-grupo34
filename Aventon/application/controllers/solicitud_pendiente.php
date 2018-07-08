@@ -100,7 +100,7 @@ class solicitud_pendiente extends controller {
         } else {//no tiene creado ningún viaje, redirijo al listado de viajes
             $this->session->set_flashdata('notifico', 'No tiene ninguna solicitud ya que no ha creado ningún viaje');
             $data['notifico'] = $this->session->flashdata('notifico');
-            redirect('viaje/');
+            redirect('viaje/mi_perfil');
         }
     }
     
