@@ -29,7 +29,8 @@
                   <td><?php echo $viaje->costo; ?></td>
                   <td><?php echo $viaje->plazas_total; ?></td>
                   <td><?php echo $viaje->plazas_libre; ?></td>
-                  <td><?php echo $nombre.", ".$apellido; ?></td>
+                  <td><a href="<?php echo base_url("solicitud_pendiente/ver_perfil/$viaje->id_chofer") ?>"><?php echo $nombre.", ".$apellido;?></a></td>
+                  
                   
                   
                 </tr>
