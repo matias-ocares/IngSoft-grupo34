@@ -106,11 +106,18 @@ class solicitud_enviada extends controller {
             foreach ($lista_solicitudes as $solicitud) {
                 $hora_inicio = substr($solicitud['hora_inicio'], 0, -3);
                 $newDate = date("d-m-Y", strtotime($solicitud['fecha']));
+                $fecha_actual = date("d-m-Y");
+                
                 if($estado == 'rechazada'){
                 $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']));
                 }
-                else{$this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']), anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
-                
+                else{
+                if(($estado=='aprobada') &&(strtotime($fecha_actual) > strtotime($newDate))){
+                 $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']), anchor('calificacion/ver_calificar_como_pasajero/'. $solicitud['id_viaje'].'/'.$solicitud['id_user'], 'Calificar'));
+                 
+                }else{    
+                    $this->table->add_row($solicitud['origen'], $solicitud['destino'], $newDate, $hora_inicio, anchor('solicitud_pendiente/ver_perfil/'.$solicitud['id_user'], $solicitud['nombre'] ,",", $solicitud['apellido']), anchor('solicitud_enviada/cancelar/'. $solicitud['id_viaje'].'/'.$estado, 'Cancelar'));
+                }
                 //$this->table->add_row($solicitud['id_estado'], $solicitud['id_user'], $solicitud['id_viaje'], anchor('', 'Cancelar'));
                }
             }
