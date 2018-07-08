@@ -56,8 +56,8 @@
              <input type="hidden" id="id_postulante" name="id_postulante" value="<?php echo $id_postulante; ?>"> 
           
 
-
-<textarea rows="4" cols="50" name="comentario" form="miformulario" maxlength="150" placeholder="Comentario..."> Un comentario... </textarea>
+             <div>
+                 <textarea rows="4" cols="50" name="comentario" form="miformulario" maxlength="150" placeholder="Realice un comentario..."></textarea> </div>
             <button class="btn btn-default btn-sm" name="califica" type="submit" value="positivo">
                 <a href="#" class="btn btn-info btn-lg">
                     <span class="glyphicon glyphicon-thumbs-up"></span> Positivo
