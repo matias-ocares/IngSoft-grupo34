@@ -3,11 +3,12 @@
         <ul class="nav navbar-nav">
             <li class="active"><a class="logo" href="<?php echo base_url() ?>login/logueado"><img class="logo" src="https://image.ibb.co/de39Y8/Logo.jpg" alt="Aventon logo"></img></a></li>
             <li class="dropdown dropdown-1">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Perfil
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mi perfil
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>ver_perfil/mi_perfil">Ver perfil</a></li>
                     <li><a href="<?php echo base_url() ?>editar_perfil/">Editar perfil</a></li>
+                    <li><a href="<?php echo base_url() ?>editar_perfil/">Eliminar perfil</a></li>
                     <li><a href="<?php echo base_url() ?>tarjeta_credito/">Tarjeta de credito</a></li>
                 </ul>
             </li>
@@ -17,7 +18,7 @@
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>crear_viaje/">Crear viaje</a></li>
-                    <li><a href="<?php echo base_url() ?>viaje/">Mis viajes</a></li>
+                    <li><a href="<?php echo base_url() ?>viaje/">Todos los viajes</a></li>
                 </ul>
             </li>
 
