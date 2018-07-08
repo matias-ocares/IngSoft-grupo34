@@ -18,13 +18,15 @@
 </head>
 <body class="text-center">
 
-    <?php if ($this->session->flashdata('notifico')): ?>
-
-        <p> <?php echo $this->session->flashdata('notifico') ?></p>
-
-    <?php endif; ?>
+     
      
     <form method="post" action="login/login" onsubmit="return validateForm()" class="form-signin">
+        
+        <?php if ($this->session->flashdata('notifico')): ?>
+
+    <p style="color:green;"><b><?php echo $this->session->flashdata('notifico') ?> </b></p>
+
+    <?php endif; ?>
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Ingresar a Aventon</h1>
         <label for="inputEmail" class="sr-only">Email address</label>

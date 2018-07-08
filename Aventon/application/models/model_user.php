@@ -46,5 +46,20 @@ class model_user extends CI_Model {
         $resultado = $consulta->row_array();
         return $resultado;
     }
+    
+    public function eliminar_usuario(){
+        $usuario = array(
+                        'email' => '',
+                        'password' => '',
+                        'nombre' => $this->session->userdata('nombre'),
+                        'apellido' => $this->session->userdata('apellido'),
+                        'id_user'=>$this->session->userdata('id_user'),
+                       
+                    );
+         $id = $this->session->userdata('id_user');
+        $this->db->where('id_user', $id);
+         $this->db->update('user', $usuario);
+        
+    }
 
 }

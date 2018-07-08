@@ -19,6 +19,11 @@ class login extends controller {
     public function index() {
 
     if (!$this->session->userdata('logueado')) {
+        
+        if ($this->session->flashdata('notifico')){
+         $noti= $this->session->flashdata('notifico') ;
+         $this->session->set_flashdata('notifico', $noti);
+        }
         $data = array();
         $data['error'] = $this->session->flashdata('error');
         parent::index_page('view_login', $data);}

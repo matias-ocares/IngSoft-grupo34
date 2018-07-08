@@ -338,4 +338,29 @@ class model_viaje extends CI_Model {
     return $resultado2;
     
     }
+    
+    public function viaje_pendiente_chofer() {
+        $id = $this->session->userdata('id_user');
+        $this->db->where('id_chofer', $id);
+        $this->db->where('estado', 0);
+        $amount_results = $this->db->count_all_results('viaje');
+        return ($amount_results >= 1);
+    }
+    
+    public function viaje_pendiente_pasajero() {
+        $id = $this->session->userdata('id_user');
+        $this->db->where('id_user', $id);
+        $this->db->where('id_estado', 1);
+        $amount_results = $this->db->count_all_results('postulacion_viaje');
+        return ($amount_results >= 1);
+    }
+    
+    public function viaje_aprobado_pasajero() {
+        $id = $this->session->userdata('id_user');
+        $this->db->where('id_user', $id);
+        $this->db->where('id_estado', 2);
+        $amount_results = $this->db->count_all_results('postulacion_viaje');
+        return ($amount_results >= 1);
+    }
+    
 }
