@@ -2,7 +2,13 @@
 
 
     <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h1 class="h10 mb-3 font-weight-normal">Perfil</h1> 
+    <h1 class="h10 mb-3 font-weight-normal">Datos de perfil</h1> 
+    
+     <?php if ($this->session->flashdata('notifico')): ?>
+
+    <p style="color:green;"><b><?php echo $this->session->flashdata('notifico') ?> </b></p>
+
+    <?php endif; ?>
     <table >
         <tr>    
             <Td> <b>Nombre</b></td>
@@ -26,11 +32,7 @@
     </table>
 
 
-    <?php if ($this->session->flashdata('notifico')): ?>
-
-    <p style="color:green;"><b><?php echo $this->session->flashdata('notifico') ?> </b></p>
-
-    <?php endif; ?>
+   
 
     <br>
 

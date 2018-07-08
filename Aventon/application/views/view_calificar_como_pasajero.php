@@ -10,7 +10,7 @@
                     <th style="text-align:center;" height=45 width=100>Fecha</th>
                     <th style="text-align:center;" height=45 width=100>Hora salida</th>
                     <th style="text-align:center;" height=45 width=100>¿Quién califica?</th>
-                    <th style="text-align:center;" height=45 width=100>Califica a pasajero:</th>
+                    <th style="text-align:center;" height=45 width=100>Califica a chofer:</th>
 
                 </tr>
             </thead>
@@ -45,7 +45,7 @@
 
 
     <div class="container col-sm-4 text-left" >
-        <form method="post" id="miformulario" action="<?php echo base_url(); ?>calificacion/calificar_como_chofer/" class="form-signin">
+        <form method="post" id="miformulario" action="<?php echo base_url(); ?>calificacion/calificar_como_pasajero/" class="form-signin">
             <input type="hidden" id="id_viaje" name="id_viaje" value="<?php echo $viaje->id_viaje; ?>">
             <input type="hidden" id="fecha" name="fecha" value="<?php echo $viaje->fecha; ?>">
             <input type="hidden" id="hora" name="hora" value="<?php echo $viaje->hora_inicio; ?>">
@@ -78,4 +78,3 @@
 
     </div>
 </div>
-
