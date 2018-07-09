@@ -39,11 +39,11 @@ class tarjeta_credito extends controller {
     }
      private function set_flash_tarjeta_db($tarjeta) {
         $ult_campos_data = array(
-            'tipo' => $tarjeta['tipo'],
-            'titular' => $tarjeta['titular'],
-            'numero' => $tarjeta['numero'],
-            'codigo' => $tarjeta['codigo'],
-            'fecha' => $tarjeta['fecha'],
+            'tipo' => $tarjeta->tipo,
+            'titular' => $tarjeta->titular,
+            'numero' => $tarjeta->numero,
+            'codigo' => $tarjeta->codigo,
+            'fecha' => $tarjeta->fecha,
         );
         $this->session->set_flashdata($ult_campos_data);
     }
@@ -66,8 +66,8 @@ class tarjeta_credito extends controller {
     }
     function notExistCreditCard() {
         $numero_post = $this->input->post('numero');
-        $numero_session = $this->session->userdata('numero');
-        if ($numero_post == $numero_session) {
+        $numero_bd = $this->model_tarjeta->consultar_tarjeta($this->session->userdata('id_user'));
+        if ($numero_post == $numero_bd->numero) {
             return TRUE;
         } else {
             //verifies email no existe in DB
@@ -208,7 +208,7 @@ class tarjeta_credito extends controller {
             if ($this->form_validation->run() == TRUE) { 
                 $tarjeta=$this->array_tarjeta();
                 if ($this->model_tarjeta->actualizar_tarjeta($tarjeta,$this->session->userdata('id_user')) == TRUE){                
-                    $this->session->set_flashdata('notifico','SE CARGÓ LA TARJETA EXITOSAMENTE.');
+                    $this->session->set_flashdata('exito','SE CARGÓ LA TARJETA EXITOSAMENTE.');
                     redirect('viaje/');
                 }else{
                     $this->session->set_flashdata('notifico','Por el momento no pudo realizar la modificación.');
