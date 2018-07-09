@@ -212,8 +212,9 @@ class viaje extends controller {
 
     // ------------------COMIENZAN METODOS DE BUSQUEDA --------------------------------
     
-    function alpha_spaces($str) {
-        return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    function alpha_num_spaces($str) {
+        //return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+        return (!preg_match(" /^[a-zA-Z\s0-9]*$/", $str)) ? FALSE : TRUE;
     }
     
     //Un destino es válido si es diferente al orígen
@@ -231,12 +232,12 @@ class viaje extends controller {
             array(
                 'field' => 'search_origen',
                 'label' => 'Origen',
-                'rules' => 'required|callback_alpha_spaces['.$origen.']'
+                'rules' => 'required|callback_alpha_num_spaces['.$origen.']'
             ),
             array(
                 'field' => 'search_destino',
                 'label' => 'Destino',
-                'rules' => 'required|callback_alpha_spaces['.$destino.']|callback_destino_valido'
+                'rules' => 'required|callback_alpha_num_spaces['.$destino.']|callback_destino_valido'
             )
         );
         return $config;

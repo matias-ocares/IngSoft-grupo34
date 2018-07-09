@@ -45,8 +45,8 @@
             $cant_resultados = $this->session->userdata('total');
             if ($this->session->userdata('busqueda'))
             { 
-                $si_hubo = "Hay ".$cant_resultados." coincidencias con tu búsqueda"; 
-                $no_hubo = "No hubo ninguna coincidencias con tu búsqueda";       
+                $si_hubo = "Hay ".$cant_resultados." coincidencia con tu búsqueda"; 
+                $no_hubo = "No hubo ninguna coincidencia con tu búsqueda";       
                 echo ($cant_resultados > 0) ? $si_hubo : $no_hubo;
             }
             else{
@@ -73,24 +73,25 @@
         destino = document.getElementById("search_destino").value;
         fecha = document.getElementById("search_fecha").value;
 
-        var expresion_regular_texto = /^[A-Za-z\s]+$/;
+        //var expresion_regular_texto = /^[A-Za-z\s]+$/;
+        var expresion_regular_texto = new RegExp(/^[a-zA-Z\s0-9]*$/);
 
         if (origen === "" || origen.length === 0 || /^\s+$/.test(origen)) {
-            alert('[!] Todos los campos con son obligatorios.');
+            alert('[!] Orígen y Destino, son obligatorios.');
             return false;
         }
 
         if (destino === "" || destino.length === 0 || /^\s+$/.test(destino)) {
-            alert('[!] Todos los campos con son obligatorios.');
+            alert('[!] Orígen y Destino, son obligatorios.');
             return false;
         }
 
         if (!expresion_regular_texto.test(origen)) {
-            alert("[!] El campo origen contiene caracteres no permitidos");
+            alert("[!] El campo Orígen contiene caracteres no permitidos");
             return false;
         }
         if (!expresion_regular_texto.test(destino)) {
-            alert("[!] El campo destino contiene caracteres no permitidos");
+            alert("[!] El campo Destino contiene caracteres no permitidos");
             return false;
         }
 
