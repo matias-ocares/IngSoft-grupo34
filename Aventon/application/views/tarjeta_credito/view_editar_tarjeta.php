@@ -1,5 +1,5 @@
 <div class="col-sm-8 text-left"> 
-    <form id="formulario2" method="post"  onsubmit="return validar();" action="<?php echo base_url(); ?>tarjeta_credito/actualizar" class="form-signin">
+    <form id="formulario2" method="post"  onsubmit="return validar();" action="<?php echo base_url();?>tarjeta_credito/actualizar_tarjeta" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Editar tarjeta</h1>
 
@@ -30,9 +30,9 @@
         <br>
 
 
-        <?php if ($error): ?>
+        <?php if ($notifico): ?>
 
-            <p> <?php echo $error ?> </p>
+            <p> <?php echo $notifico ?> </p>
 
         <?php endif; ?>
 

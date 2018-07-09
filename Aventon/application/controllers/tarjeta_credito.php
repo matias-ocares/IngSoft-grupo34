@@ -20,7 +20,7 @@ class tarjeta_credito extends controller {
         $data=array();    
         $data['error'] = $this->session->flashdata('error');
         if($this->model_tarjeta->tarjeta_cargada($this->session->userdata('id_user')) > 0){
-            parent::index_page('tarjeta_credito/view_editar_tarjeta',$data);
+            redirect('tarjeta_credito/ver_datos_tarjeta');
         }
         else{
            parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data); 
@@ -36,6 +36,16 @@ class tarjeta_credito extends controller {
                     'fecha' => $this->input->post('fecha'),
                );
         $this->session->set_flashdata($campos_data);     
+    }
+     private function set_flash_tarjeta_db($tarjeta) {
+        $ult_campos_data = array(
+            'tipo' => $tarjeta['tipo'],
+            'titular' => $tarjeta['titular'],
+            'numero' => $tarjeta['numero'],
+            'codigo' => $tarjeta['codigo'],
+            'fecha' => $tarjeta['fecha'],
+        );
+        $this->session->set_flashdata($ult_campos_data);
     }
 
 
@@ -55,9 +65,14 @@ class tarjeta_credito extends controller {
         }
     }
     function notExistCreditCard() {
-        $numero = $this->input->post('numero');
-        //verifies credit card not exists in DB
-        return (!($this->model_tarjeta->is_registered($numero)));
+        $numero_post = $this->input->post('numero');
+        $numero_session = $this->session->userdata('numero');
+        if ($numero_post == $numero_session) {
+            return TRUE;
+        } else {
+            //verifies email no existe in DB
+            return (!$this->model_tarjeta->is_registered($numero_post));
+        }
     }
     
     private function validation_rules(){
@@ -177,33 +192,34 @@ class tarjeta_credito extends controller {
         {return FALSE;}
     }
     
-    public function actualizar($id_tarjeta = null) {
-        if ($this->input->post()) {
-            
-            $this->set_flash_campos_tarjeta();
+    public function ver_datos_tarjeta() {
 
+        $tarjeta = $this->model_tarjeta->consultar_tarjeta($this->session->userdata('id_user'));
+        $this->set_flash_tarjeta_db($tarjeta);
+        $data = array();
+        $data['notifico'] = $this->session->flashdata('notifico');
+        parent::index_page('tarjeta_credito/view_editar_tarjeta',$data);        
+    }
+    
+    public function actualizar_tarjeta(){
+        if ($this->input->post()) {   
             $this->form_validation->set_rules($this->validation_rules());
-            
+            $this->set_flash_campos_tarjeta();
             if ($this->form_validation->run() == TRUE) { 
-                
                 $tarjeta=$this->array_tarjeta();
-                $tarjeta = $this->model_tarjeta->actualizar_tarjeta($tarjeta,$this->session->userdata('id_user'));
-                
-                 $data = array();
-                 $this->session->set_flashdata('exito','SE CARGÓ LA TARJETA EXITOSAMENTE.');
-                 $this->session->set_flashdata('error','');
-         
-                $data['error'] = $this->session->flashdata('error');
-                $data['exito'] = $this->session->flashdata('exito');
-                redirect('viaje/');
-
-            }
-            else {
-                $this->session->set_flashdata('error', validation_errors());
-                redirect('tarjeta_credito/');
+                if ($this->model_tarjeta->actualizar_tarjeta($tarjeta,$this->session->userdata('id_user')) == TRUE){                
+                    $this->session->set_flashdata('notifico','SE CARGÓ LA TARJETA EXITOSAMENTE.');
+                    redirect('viaje/');
+                }else{
+                    $this->session->set_flashdata('notifico','Por el momento no pudo realizar la modificación.');
+                    redirect('tarjeta/');                    
+                }
+            } else {
+                $this->session->set_flashdata('notifico', validation_errors());
+                $data['notifico'] = $this->session->flashdata('notifico');
+                parent::index_page('tarjeta_credito/view_editar_tarjeta',$data);    
             } 
         } 
-        
     }
     
 
