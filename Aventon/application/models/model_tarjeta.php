@@ -74,10 +74,12 @@ class model_tarjeta extends CI_Model {
         return $resultado;
     }
     
-    public function actualizar_tarjeta($tarjeta,$id_user){
+    public function actualizar_tarjeta($tarjeta,$id_user = null){
         $this->db->where('id_user', $id_user);
         $this->db->where('activo',1);
         $this->db->update('tarjeta',$tarjeta);
+                $this->db->trans_complete();
+        return ($this->db->trans_status() === TRUE);
     }
 
 }

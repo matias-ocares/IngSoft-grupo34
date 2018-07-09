@@ -65,6 +65,11 @@ class tarjeta_credito extends controller {
         }
     }
     function notExistCreditCard() {
+<<<<<<< Updated upstream
+        $numero = $this->input->post('numero');
+        //verifies credit card not exists in DB
+        return (!($this->model_tarjeta->is_registered($numero)));
+=======
         $numero_post = $this->input->post('numero');
         $numero_session = $this->session->userdata('numero');
         if ($numero_post == $numero_session) {
@@ -73,6 +78,7 @@ class tarjeta_credito extends controller {
             //verifies email no existe in DB
             return (!$this->model_tarjeta->is_registered($numero_post));
         }
+>>>>>>> Stashed changes
     }
     
     private function validation_rules(){
