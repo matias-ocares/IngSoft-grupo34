@@ -140,6 +140,20 @@ class model_viaje extends CI_Model {
 
         return $this->db->count_all_results();
     }
+    
+    //Un usuario tiene un viaje activo, cuando la fecha del viaje es >= fecha actual, y el estado del viaje no es "rechazado"
+    public function tiene_viaje_activo($id_user){ 
+        //estados de viajes distinto de rechazado(3): 1 (pendiente), 2(aprobado), 4 (inactivo)
+        $estado = array(1,2,4);
+        $current_date = date("Y-m-d");
+        $this->db->from('postulacion_viaje');
+        $this->db->join('viaje', 'viaje.id_viaje = postulacion_viaje.id_viaje');
+        $this->db->where('postulacion_viaje.id_user', $id_user);
+        $this->db->where('fecha >= ', $current_date);
+        $this->db->where_in('id_estado', $estado);
+        $amount = $this->db->count_all_results();
+        return ($amount >= 1);   
+    }
 /*
     public function getrecordCount($search) {
         if (!empty($search)) {

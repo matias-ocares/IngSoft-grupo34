@@ -10,6 +10,7 @@ class tarjeta_credito extends controller {
         $this->load->helper(array('form', 'url'));
         //load model
         $this->load->model('model_tarjeta');
+        $this->load->model('model_viaje');
         //load code igniter library to validate form
         $this->load->library('form_validation');
         $this->load->helper('url');
@@ -25,7 +26,7 @@ class tarjeta_credito extends controller {
            parent::index_page('tarjeta_credito/view_registrar_tarjeta',$data); 
         }
     }
-
+    
    private function set_flash_campos_tarjeta(){
         $campos_data = array(
                     'tipo' => $this->input->post('tipo'),
@@ -55,7 +56,7 @@ class tarjeta_credito extends controller {
     }
     function notExistCreditCard() {
         $numero = $this->input->post('numero');
-        //verifies email exists in DB
+        //verifies credit card not exists in DB
         return (!($this->model_tarjeta->is_registered($numero)));
     }
     
@@ -141,6 +142,24 @@ class tarjeta_credito extends controller {
         
         redirect('viaje/');
     }  
+    
+    function eliminar_cc(){
+        $id_user = $this->session-> userdata('id_user');
+        
+        // Si tiene viaje activo (viaje pendiente, inactivo o aprobado) cuya fecha viaje >= fecha actual
+        if ($this -> model_viaje -> tiene_viaje_activo($id_user))
+        {
+            //redirecciono vista tarjeta con mensaje de error de que no se puede borrar
+            $this->session->set_flashdata('error', 'No puede borrar su tarjeta porque tiene viajes pendientes de realizar.');
+        }
+        else //no tiene viaje activo
+        {
+          $tarjeta = $this->model_tarjeta->consultar_tarjeta($id_user);
+          $this->model_tarjeta->eliminar_tarjeta($tarjeta->id_tarjeta);
+          $this->session->set_flashdata('exito', 'Tarjeta borrada exitosamente.');
+        }
+        redirect('viaje/');
+    }
 
     public function valida_fecha($id){ //VALIDA QUE LA TARJETA NO VENCIO
         $fecha = $this->input->post('fecha');
