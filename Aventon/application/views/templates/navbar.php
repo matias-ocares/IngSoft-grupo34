@@ -18,7 +18,7 @@
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url() ?>crear_viaje/">Crear viaje</a></li>
-                    <li><a href="<?php echo base_url() ?>viaje/">Todos los viajes</a></li>
+                    <li><a href="<?php echo base_url() ?>viaje/mostrar_todos">Todos los viajes</a></li>
                 </ul>
             </li>
 
