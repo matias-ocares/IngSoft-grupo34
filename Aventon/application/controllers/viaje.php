@@ -164,13 +164,15 @@ class viaje extends controller {
 
     public function postularse() {
         $bool = $this->exist_tarjeta();
-        if ($bool == TRUE) {
-            $postulacion['id_user'] = $this->session->userdata('id_user');
+       $postulacion['id_user'] = $this->session->userdata('id_user');
             $postulacion['id_viaje'] = $this->input->post('id_viaje');
             $viaje_id = $this->input->post('id_viaje');
             $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
             $data['nombre']=$this->input->post('nombre');
-            $data['apellido']= $this->input->post('apellido');       
+            $data['apellido']= $this->input->post('apellido');
+        
+        if ($bool == TRUE) {
+                   
             $sup = $this->hay_superposicion();
             $otrasup = $this->hay_superposicion_mi_viaje();
             if ($otrasup == False) {

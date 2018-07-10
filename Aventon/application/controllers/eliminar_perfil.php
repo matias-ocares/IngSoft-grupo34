@@ -9,7 +9,10 @@ class eliminar_perfil extends controller {
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->model('model_user');
+        $this->load->model('model_tarjeta');
+        $this->load->model('model_auto');
         $this->load->model('model_viaje');
+        $this->load->model('model_solicitud');
         $this->load->model('model_calificacion');
         $this->load->library('form_validation');
         $this->load->helper('url');
@@ -28,6 +31,10 @@ class eliminar_perfil extends controller {
                 $this->session->set_flashdata('error', 'POSEE VIAJES PENDIENTES. NO PODRÁ ELIMINAR SU PERFIL.');
                redirect('ver_perfil/mi_perfil'); 
             }else{
+              $this->model_solicitud->eliminar_postulaciones_inactivas($this->session->userdata('id_user')) ; 
+              $this->model_auto->eliminar_all_autos($this->session->userdata('id_user'));   
+              $tarjeta = $this->model_tarjeta->consultar_tarjeta($this->session->userdata('id_user'));
+              $this->model_tarjeta->eliminar_tarjeta($tarjeta->id_tarjeta);  
               $this->model_user->eliminar_usuario();
               
                $usuario_data = array(
