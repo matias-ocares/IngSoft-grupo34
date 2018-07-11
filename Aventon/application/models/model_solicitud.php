@@ -272,6 +272,12 @@ public function getrecordCountAprobada($search = "") {
         }
     }
     
+    public function eliminar_postulaciones_inactivas($id_user){
+      $this->db->where('id_estado', 4);
+       $this->db->where('id_user', $id_user);
+      $this->db->delete('postulacion_viaje');   
+    }
+    
     
 
 }

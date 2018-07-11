@@ -164,13 +164,15 @@ class viaje extends controller {
 
     public function postularse() {
         $bool = $this->exist_tarjeta();
-        if ($bool == TRUE) {
-            $postulacion['id_user'] = $this->session->userdata('id_user');
+       $postulacion['id_user'] = $this->session->userdata('id_user');
             $postulacion['id_viaje'] = $this->input->post('id_viaje');
             $viaje_id = $this->input->post('id_viaje');
             $data['viaje'] = $this->model_viaje->viaje_por_id($viaje_id);
             $data['nombre']=$this->input->post('nombre');
-            $data['apellido']= $this->input->post('apellido');       
+            $data['apellido']= $this->input->post('apellido');
+        
+        if ($bool == TRUE) {
+                   
             $sup = $this->hay_superposicion();
             $otrasup = $this->hay_superposicion_mi_viaje();
             if ($otrasup == False) {
@@ -260,14 +262,28 @@ class viaje extends controller {
     // Para limpiar la búsqueda
     public function mostrar_todos(){
         
-        if ($this->session->userdata('busqueda')) {
+        if ($this->session->userdata('busqueda') or $this->session->userdata('solo_mis_viajes')) {
             //limpio sesión
-            $array_items = array('origen', 'destino', 'busqueda','fecha');
+            $array_items = array('origen', 'destino', 'busqueda','fecha','solo_mis_viajes');
             $this->session->unset_userdata($array_items);     
-        }
+        }   
          redirect('viaje/', 'refresh');
     }
     
+    //Mostrar solo mis viajes
+    public function mostrar_solo_mis_viajes() {
+        $search = array(
+            'solo_mis_viajes' => true);
+        $this->session->set_userdata($search);
+        
+        if ($this->session->userdata('busqueda')) {
+            //limpio sesión
+            $array_items = array('origen', 'destino', 'busqueda', 'fecha');
+            $this->session->unset_userdata($array_items);
+        }
+        redirect('viaje/', 'refresh');
+    }
+
     // Guardo criterios de búsqueda en la sesión, para usar en el paginado
     private function session_search_viaje() {
         $search = array(
@@ -337,9 +353,12 @@ class viaje extends controller {
             $hora_inicio = substr($viaje['hora_inicio'], 0, -3);
             $newDate = date("d-m-Y", strtotime($viaje['fecha']));
             if ($pertenece) {
+
                 $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver_datos_viaje/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' . '<span class>Postularme</span>');
+
+
             } else {
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span class="glyphicon glyphicon-trash"></span>' . ' | ' . anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class>Postularme</span>'));
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span style="visibility: hidden" class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span style="visibility: hidden" class="glyphicon glyphicon-trash"></span>' . ' | ' . anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class>Postularme</span>'));
             }
         }
         //Call view

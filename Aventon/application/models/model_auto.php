@@ -185,7 +185,11 @@ class model_auto extends CI_Model {
         $this->db->update('viaje');
     }
 
-
+    function eliminar_all_autos($id_user){ 
+         $this->db->where('id_user',$id_user);
+        $this->db->set('estado',1);
+        $this->db->update('auto');
+    }     
 
 
     
