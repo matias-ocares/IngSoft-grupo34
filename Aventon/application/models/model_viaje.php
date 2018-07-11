@@ -376,5 +376,21 @@ class model_viaje extends CI_Model {
         $amount_results = $this->db->count_all_results('postulacion_viaje');
         return ($amount_results >= 1);
     }
-    
+    public function consultar_viaje($id_viaje) { 
+        $this->db->where('id_viaje', $id_viaje);
+        $consulta = $this->db->get('viaje');
+        $resultado = $consulta->row();
+        return $resultado;
+    }
+    public function estado_viaje($id_viaje){
+        $this->db->where('id_viaje',$id_viaje);
+        $this->db->where('id_estado',1);
+        $this->db->where('id_estado',2);
+        $amount_results = $this->db->count_all_results('postulacion_viaje');
+        return ($amount_results >= 1);
+    }
+    public function actualizar_viaje($viaje,$id_viaje){
+        $this->db->where('id_viaje',$id_viaje);
+        $this->db->update('viaje',$viaje);
+    }
 }

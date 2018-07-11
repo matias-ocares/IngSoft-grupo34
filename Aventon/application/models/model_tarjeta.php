@@ -82,4 +82,5 @@ class model_tarjeta extends CI_Model {
         return ($this->db->trans_status() === TRUE);
     }
 
+
 }
