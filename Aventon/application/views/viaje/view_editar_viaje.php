@@ -48,7 +48,8 @@
         </div> 
         <br>
 
-        <p> Mi auto</p>                 
+
+<<<<<<< Updated upstream
         <select class="form-control" name="auto" id="auto_edit">
             <option value="">Elija un auto</option>';
             <?php foreach ($groups as $each) { ?>
@@ -56,6 +57,8 @@
             <?php } ?> 
         </select>
         <br>
+=======
+>>>>>>> Stashed changes
 
         <p>Plazas disponibles</p>
         <label for="plazas" class="sr-only">Plazas</label>                       
