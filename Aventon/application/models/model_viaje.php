@@ -102,6 +102,14 @@ class model_viaje extends CI_Model {
                 $this->db->where('fecha', $search['fecha']);
             }
         }
+        // Si selecciono "solo mis viajes"
+        $solo_mis_viajes =$this->session->userdata('solo_mis_viajes');
+        if ($solo_mis_viajes)
+            {
+             $id_chofer=$this->session->userdata('id_user');
+             $this->db->where('id_chofer', $id_chofer);
+            }
+        
         //ordered desc to display the new element at the top
         $current_date = date("Y-m-d");
         $this->db->order_by('fecha', 'asc');
@@ -132,6 +140,15 @@ class model_viaje extends CI_Model {
                 $this->db->where('fecha', $search['fecha']);
             }
         }
+        
+          // Si selecciono "solo mis viajes"
+        $solo_mis_viajes =$this->session->userdata('solo_mis_viajes');
+        if ($solo_mis_viajes)
+            {
+             $id_chofer=$this->session->userdata('id_user');
+             $this->db->where('id_chofer', $id_chofer);
+            }
+        
         $current_date = date("Y-m-d");
 
         $this->db->from('viaje');
