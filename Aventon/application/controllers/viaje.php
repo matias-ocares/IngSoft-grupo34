@@ -353,7 +353,10 @@ class viaje extends controller {
             $hora_inicio = substr($viaje['hora_inicio'], 0, -3);
             $newDate = date("d-m-Y", strtotime($viaje['fecha']));
             if ($pertenece) {
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>').'| <span style="visibility: hidden" class>Postularme</span>');
+
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver_datos_viaje/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' . '<span class>Postularme</span>');
+
+
             } else {
                 $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . '<span style="visibility: hidden" class="glyphicon glyphicon-pencil"></span>' . ' | ' . '<span style="visibility: hidden" class="glyphicon glyphicon-trash"></span>' . ' | ' . anchor('viaje/ver_postularse/' . $viaje['id_viaje'], '<span class>Postularme</span>'));
             }
@@ -363,6 +366,63 @@ class viaje extends controller {
         $data['error'] = $this->session->flashdata('error');
         $data['exito'] = $this->session->flashdata('exito');   
         parent::index_page('viaje/view_listar_viajes', $data);
+    }
+    
+    public function ver_datos_viaje() {
+        $id_viaje = $this->uri->segment(3);
+        $viaje = $this->model_viaje->consultar_viaje($id_viaje);
+        $this->set_flash_viaje_db($viaje);
+        $data = array();
+        $data['notifico'] = $this->session->flashdata('notifico');
+        parent::index_page('viaje/view_editar_viaje',$data);        
+    }
+ 
+    private function set_flash_viaje_db($viaje) {
+        $ult_campos_data = array(
+            'origen' => $viaje->origen,
+            'destino' => $viaje->destino,
+            'hora' => $viaje->hora_inicio,
+            'duracion' => $viaje->duracion_horas,
+            'costo' => $viaje->costo,
+            'fecha' => $viaje->fecha,
+            'auto' => $viaje->id_auto,
+            'plazas' => $viaje->plazas_total,
+        );
+        $this->session->set_flashdata($ult_campos_data);
+    }
+       private function set_flash_campos_editar_viaje(){
+        $campos_data = array(
+                    'origen' => $this->input->post('origen'),
+                    'destino' => $this->input->post('destino'),
+                    'hora' => $this->input->post('hora'),
+                    'duracion' => $this->input->post('duracion'),
+                    'costo' => $this->input->post('costo'),
+                    'fecha' => $this->input->post('fecha'),
+                    'plazas' => $this->input->post('plazas'),
+               );
+        $this->session->set_flashdata($campos_data);     
+    }
+    public function actualizar_tarjeta(){
+        if ($this->input->post()) { 
+            $id_viaje = $this->uri->segment(3);
+            $this->form_validation->set_rules($this->validation_rules());
+            $this->set_flash_campos_editar_viaje();
+            if($this->model_viaje->estado_viaje($id_viaje) == 0){
+                if ($this->form_validation->run() == TRUE) { 
+                    $viaje=$this->array_viaje();
+                    $this->model_viaje->actualizar_viaje($viaje,$id_viaje);                
+                    $this->session->set_flashdata('exito','Se modifico el viaje correctamente.');
+                    redirect('viaje/');
+                } else {
+                    $this->session->set_flashdata('notifico', validation_errors());
+                    $data['notifico'] = $this->session->flashdata('notifico');
+                    parent::index_page('viaje/view_editar_viaje',$data);    
+                } 
+            }else{
+                $this->session->set_flashdata('notifico','Por el momento no pudo realizar la modificación.');
+                redirect('viaje/');  
+            }
+        } 
     }
 
 }
