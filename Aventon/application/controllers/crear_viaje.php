@@ -46,10 +46,10 @@ class crear_viaje extends controller {
             'destino' => $this->input->post('destino'),
             'fecha' => $this->input->post('fecha'),
             'hora' => $this->input->post('hora'),
-            'duracion_horas' => $this->input->post('duracion'),
+            'duracion' => $this->input->post('duracion'),
             'costo' => $this->input->post('costo'),
             'plazas' => $this->input->post('plazas'),
-            'auto' => $this->input->post('id_auto')
+            'auto' => $this->input->post('auto')
         );
         $this->session->set_flashdata($campos_data);
     }
