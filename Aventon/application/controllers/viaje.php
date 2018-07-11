@@ -225,8 +225,9 @@ class viaje extends controller {
         $destino = strtoupper(trim($this->input->post('search_destino')));
         return ( $origen != $destino );
     }
-    
+
     private function validation_rules_search() {
+
         $origen = $this->input->post('search_origen');
         $destino = $this->input->post('search_destino');
         //funcón provada que crea las reglas de validación
@@ -380,6 +381,7 @@ class viaje extends controller {
  
     private function set_flash_viaje_db($viaje) {
         $ult_campos_data = array(
+            'id_viaje'=>$viaje->id_viaje,
             'origen' => $viaje->origen,
             'destino' => $viaje->destino,
             'hora' => $viaje->hora_inicio,
@@ -400,9 +402,11 @@ class viaje extends controller {
                     'costo' => $this->input->post('costo'),
                     'fecha' => $this->input->post('fecha'),
                     'plazas' => $this->input->post('plazas'),
+                    'auto' => $this->input->post('auto'),
                );
         $this->session->set_flashdata($campos_data);     
     }
+
     
         private function crear_array_fechas() {
         //Agrego al array la primer fecha
@@ -419,12 +423,25 @@ class viaje extends controller {
             'duracion' => $this->input->post('duracion'),
             'id_chofer' => $this->session->userdata('id_user')
         );
-        $resultado = $this->model_viaje->is_registered($viaje);
 
-        if ($resultado > 0)
-            return false;
-        else
+        $id_viaje = $this->session->flashdata('id_viaje');
+        $unviaje = $this->model_viaje->consultar_viaje($id_viaje);
+        $fecha_bd = $unviaje->fecha;
+        $hora_bd = $unviaje->hora_inicio;
+        $fecha_post = $this->input->post('fecha');
+        $hora_post = $this->input->post('hora');
+        //Ninguno de los dos se modifico. No se realiza la validacion
+        if (($hora_bd == $hora_post) and ( $fecha_bd == $fecha_post)) {
             return true;
+        } else {
+            //Alguno de los campos fueron modificacion. Se requiere validacion
+            $resultado = $this->model_viaje->is_registered($viaje);
+
+            if ($resultado > 0)
+                return false;
+            else
+                return true;
+        }
     }
 
     function alpha_dash_space($str) {
@@ -479,24 +496,42 @@ class viaje extends controller {
         return $config;
     }
 
+
+
+    private function array_viaje() {
+        $viaje = array();
+        
+        $viaje ['origen'] = $this->input->post('origen');
+        $viaje  ['destino'] = $this->input->post('destino');
+        $viaje ['hora_inicio'] = $this->input->post('hora'); 
+        $viaje ['duracion_horas'] = $this->input->post('duracion');
+        $viaje ['costo'] =$this->input->post('costo');
+        $viaje ['fecha'] =$this->input->post('fecha');
+        $viaje ['plazas_total'] =$this->input->post('plazas');
+        return $viaje;
+    }
     public function actualizar_viaje(){
+        $id_viaje = $this->uri->segment(3);
+        $this->session->set_flashdata('id_viaje',$id_viaje);
         if ($this->input->post()) { 
-            $id_viaje = $this->uri->segment(3);
+          
             $this->form_validation->set_rules($this->validation_rules());
             $this->set_flash_campos_editar_viaje();
             if($this->model_viaje->estado_viaje($id_viaje) == 0){
                 if ($this->form_validation->run() == TRUE) { 
                     $viaje=$this->array_viaje();
-                    $this->model_viaje->actualizar_viaje($viaje,$id_viaje);                
+                    if($this->model_viaje->actualizar_viaje($viaje,$id_viaje) == TRUE){                
                     $this->session->set_flashdata('exito','Se modifico el viaje correctamente.');
-                    redirect('viaje/');
+                    redirect('viaje/');}
                 } else {
+                    $data = array();
+                    $data['groups'] = $this->model_viaje->getMisAutos();
                     $this->session->set_flashdata('notifico', validation_errors());
                     $data['notifico'] = $this->session->flashdata('notifico');
                     parent::index_page('viaje/view_editar_viaje',$data);    
                 } 
             }else{
-                $this->session->set_flashdata('notifico','Por el momento no pudo realizar la modificación.');
+                $this->session->set_flashdata('notifico','No se ha podido producir los cambios. El viaje al que desea modificar posee solicitudes pendientes/aprobadas.');
                 redirect('viaje/');  
             }
         } 
