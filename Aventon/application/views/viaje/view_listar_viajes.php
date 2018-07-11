@@ -5,6 +5,12 @@
 
     <form id="formBuscarViaje" name="formBuscarViaje" method="post" action="<?php echo base_url(); ?>viaje/verificar_search" class="form-signin">
         <div style="display:inline">
+            
+            <a id="mostrar_todos" href="../viaje/mostrar_todos"> Mostrar todos </a>
+            |
+            <a id="mostrar_mis_viajes" href="../viaje/mostrar_solo_mis_viajes"> Mostrar solo Mis Viajes </a>
+            <br>
+            
             <label class="search_viaje_label"> Desde <input type="text" id="search_origen" name="search_origen" class="form-control" placeholder="Origen"  required autofocus value="<?php echo $this->session->userdata('origen'); ?>"> </label>      
 
             <label class="search_viaje_label"> Hasta <input type="text" id="search_destino" name="search_destino" class="form-control" placeholder="Destino"  required autofocus value="<?php echo $this->session->userdata('destino'); ?>"> </label>   
@@ -16,9 +22,8 @@
                                                             ?>" 
                                                             max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
             </label>
-
+            
             <button class="btn btn-lg btn-primary btn_search_viaje" type="submit" onClick="return validacionBusqueda();"> Buscar </button>
-            <a id="mostrar_todos" href="../viaje/mostrar_todos"> Mostrar todos </a>
         </div>
     </form>  
     
@@ -38,8 +43,11 @@
 
     <?php endif; ?>
 
-
-    <h1 class="h11">Listado de viajes</h1>    
+    <h1 class="h11">Listado de 
+        <?php $todos="todos los "; $mis = "solo mis "; 
+            echo $this->session->userdata('solo_mis_viajes')?$mis:$todos
+        ?>
+    viajes</h1>   
     
       <?php
             $cant_resultados = $this->session->userdata('total');

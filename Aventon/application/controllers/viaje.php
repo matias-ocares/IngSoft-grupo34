@@ -262,14 +262,28 @@ class viaje extends controller {
     // Para limpiar la búsqueda
     public function mostrar_todos(){
         
-        if ($this->session->userdata('busqueda')) {
+        if ($this->session->userdata('busqueda') or $this->session->userdata('solo_mis_viajes')) {
             //limpio sesión
-            $array_items = array('origen', 'destino', 'busqueda','fecha');
+            $array_items = array('origen', 'destino', 'busqueda','fecha','solo_mis_viajes');
             $this->session->unset_userdata($array_items);     
-        }
+        }   
          redirect('viaje/', 'refresh');
     }
     
+    //Mostrar solo mis viajes
+    public function mostrar_solo_mis_viajes() {
+        $search = array(
+            'solo_mis_viajes' => true);
+        $this->session->set_userdata($search);
+        
+        if ($this->session->userdata('busqueda')) {
+            //limpio sesión
+            $array_items = array('origen', 'destino', 'busqueda', 'fecha');
+            $this->session->unset_userdata($array_items);
+        }
+        redirect('viaje/', 'refresh');
+    }
+
     // Guardo criterios de búsqueda en la sesión, para usar en el paginado
     private function session_search_viaje() {
         $search = array(
