@@ -1,29 +1,30 @@
 <div class="col-sm-8 text-left"> 
-    <form id="formulario2" name="formAuto" method="post" action="<?php echo base_url(); ?>crear_viaje/editar_viaje" class="form-signin">
+    <form id="formulario2" name="formAuto" method="post" action="<?php echo base_url(); ?>viaje/actualizar_viaje" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Editar viaje</h1>
 
 
         <p>Desde</p>
         <label for="origen" class="sr-only">Origen</label> 
-        <input type="text" id="origen" name="origen" class="form-control" placeholder="Origen"  required autofocus value="<?php echo $this->session->flashdata('origen'); ?>">        
+        <input type="text" id="origen_edit" name="origen" class="form-control" placeholder="Origen"  required autofocus value="<?php echo $this->session->flashdata('origen'); ?>">        
         <br>        
 
         <p> Hasta</p>
         <label for="destino" class="sr-only">Destino</label>           
-        <input type="text" id="destino" name="destino" class="form-control" placeholder="Destino"  required autofocus value="<?php echo $this->session->flashdata('destino'); ?>">        
+        <input type="text" id="destino_edit" name="destino" class="form-control" placeholder="Destino"  required autofocus value="<?php echo $this->session->flashdata('destino'); ?>">        
         <br>
 
         <p> Fecha</p>
         <label for="fecha" class="sr-only">Fecha</label>  
-        <input type="date" id= "fecha" name="fecha" class="form-control" placeholder="Fecha: dd/mm/aaaa" required autofocus 
-               min="<?php echo $this->session->flashdata('fecha'); ?> <?php $hoy = date("Y-m-d");
-                    echo $hoy;?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
+        <input type="date" id= "fecha_edit" name="fecha" class="form-control" placeholder="Fecha: dd/mm/aaaa" required autofocus 
+               min="<?php $hoy = date("Y-m-d"); echo $hoy;?>"
+               max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>"
+               value="<?php echo $this->session->flashdata('fecha'); ?>">
         <br>
 
         <p> Hora</p>     
         <label for="hora" class="sr-only">Hora</label>
-        <input type="time" id= "hora" name="hora" class="form-control" placeholder="Hora de inicio" 
+        <input type="time" id= "hora_edit" name="hora" class="form-control" placeholder="Hora de inicio" 
                value="<?php
                if ($this->session->flashdata('hora')) {
                    echo $this->session->flashdata('hora');
@@ -35,7 +36,7 @@
 
         <p> Duración</p>
         <label for="duracion" class="sr-only">Duracion</label>                       
-        <input type="number" id="duracion" name="duracion" class="form-control" placeholder="Duracion"  required autofocus 
+        <input type="number" id="duracion_edit" name="duracion" class="form-control" placeholder="Duracion"  required autofocus 
                min="1" value="<?php echo $this->session->flashdata('duracion'); ?>">
         <br>
 
@@ -43,22 +44,22 @@
         <label for="costo" class="sr-only">Costo</label> 
         <div class="input-group"> 
             <span class="input-group-addon">$</span>
-            <input type="number" id="costo" name="costo" class="form-control currency" placeholder="Costo"  required autofocus  min="0.00" max="10000.00" step="10.00" value="<?php echo $this->session->flashdata('costo'); ?>">
+            <input type="number" id="costo_edit" name="costo" class="form-control currency" placeholder="Costo"  required autofocus  min="0.00" max="10000.00" step="10.00" value="<?php echo $this->session->flashdata('costo'); ?>">
         </div> 
         <br>
 
         <p> Mi auto</p>                 
-        <select class="form-control" name="auto" id="auto">
+        <select class="form-control" name="auto" id="auto_edit">
             <option value="">Elija un auto</option>';
             <?php foreach ($groups as $each) { ?>
-                <option value=" <?php echo $this->session->flashdata('auto'); ?> <?php echo $each->id_auto ?>"> <?php echo $each->marca ?> <?php echo $each->modelo ?> - <?php echo $each->num_patente ?> </option>;
+                <option value="<?php echo $each->id_auto ?>" <?php $result = ($each->id_auto == $this->session->flashdata('auto')) ? "selected" : " "; echo $result;?> > <?php echo $each->marca ?> <?php echo $each->modelo ?> - <?php echo $each->num_patente ?> </option>;
             <?php } ?> 
         </select>
         <br>
 
         <p>Plazas disponibles</p>
         <label for="plazas" class="sr-only">Plazas</label>                       
-        <input type="number" id="plazas" name="plazas" class="form-control" placeholder="Plazas"  required autofocus 
+        <input type="number" id="plazas_edit" name="plazas" class="form-control" placeholder="Plazas"  required autofocus 
                min="1" max="10" value="<?php echo $this->session->flashdata('plazas'); ?>">
         </br>
 
