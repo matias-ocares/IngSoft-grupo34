@@ -407,7 +407,7 @@ class model_viaje extends CI_Model {
         return ($amount_results >= 1);
     }
     public function actualizar_viaje($viaje,$id_viaje){
-        $this->db->where('id_viaje',11113);
+        $this->db->where('id_viaje',$id_viaje);
         $this->db->update('viaje',$viaje);
         $this->db->trans_complete();
         return ($this->db->trans_status() === TRUE);

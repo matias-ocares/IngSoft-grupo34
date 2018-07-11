@@ -226,12 +226,8 @@ class viaje extends controller {
         return ( $origen != $destino );
     }
 
-<<<<<<< Updated upstream
     private function validation_rules_search() {
-=======
-    
-    private function validation_rules() {
->>>>>>> Stashed changes
+
         $origen = $this->input->post('search_origen');
         $destino = $this->input->post('search_destino');
         //funcón provada que crea las reglas de validación
@@ -385,6 +381,7 @@ class viaje extends controller {
  
     private function set_flash_viaje_db($viaje) {
         $ult_campos_data = array(
+            'id_viaje'=>$viaje->id_viaje,
             'origen' => $viaje->origen,
             'destino' => $viaje->destino,
             'hora' => $viaje->hora_inicio,
@@ -408,7 +405,7 @@ class viaje extends controller {
                );
         $this->session->set_flashdata($campos_data);     
     }
-<<<<<<< Updated upstream
+
     
         private function crear_array_fechas() {
         //Agrego al array la primer fecha
@@ -427,10 +424,10 @@ class viaje extends controller {
         );
         $resultado = $this->model_viaje->is_registered($viaje);
 
-        if ($resultado > 0)
-            return false;
-        else
+        if ($resultado = 1)
             return true;
+        else
+            return false;
     }
 
     function alpha_dash_space($str) {
@@ -485,8 +482,8 @@ class viaje extends controller {
         return $config;
     }
 
-    public function actualizar_viaje(){
-=======
+
+
     private function array_viaje() {
         $viaje = array();
         
@@ -500,23 +497,23 @@ class viaje extends controller {
         return $viaje;
     }
     public function actualizar_viaje(){
-        $id_viaje = 11113;
->>>>>>> Stashed changes
+        $id_viaje = $this->uri->segment(3);
+
         if ($this->input->post()) { 
           
-            //$this->form_validation->set_rules($this->validation_rules());
+            $this->form_validation->set_rules($this->validation_rules());
             $this->set_flash_campos_editar_viaje();
             if($this->model_viaje->estado_viaje($id_viaje) == 0){
-                //if ($this->form_validation->run() == TRUE) { 
+                if ($this->form_validation->run() == TRUE) { 
                     $viaje=$this->array_viaje();
                     if($this->model_viaje->actualizar_viaje($viaje,$id_viaje) == TRUE){                
                     $this->session->set_flashdata('exito','Se modifico el viaje correctamente.');
                     redirect('viaje/');}
-                //} else {
-                    //$this->session->set_flashdata('notifico', validation_errors());
-                    //$data['notifico'] = $this->session->flashdata('notifico');
-                    //parent::index_page('viaje/view_editar_viaje',$data);    
-                //} 
+                } else {
+                    $this->session->set_flashdata('notifico', validation_errors());
+                    $data['notifico'] = $this->session->flashdata('notifico');
+                    parent::index_page('viaje/view_editar_viaje',$data);    
+                } 
             }else{
                 $this->session->set_flashdata('notifico','No se ha podido producir los cambios. El viaje al que desea modificar posee solicitudes pendientes/aprobadas.');
                 redirect('viaje/');  

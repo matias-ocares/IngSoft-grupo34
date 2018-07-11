@@ -1,8 +1,7 @@
 <div class="col-sm-8 text-left"> 
-    <form id="formulario2" name="formAuto" method="post" action="<?php echo base_url(); ?>viaje/actualizar_viaje" class="form-signin">
+    <form id="formulario2" name="formAuto" method="post" action="<?php echo base_url(); ?>viaje/actualizar_viaje/<?php echo $this->session->flashdata('id_viaje');?>" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Editar viaje</h1>
-
 
         <p>Desde</p>
         <label for="origen" class="sr-only">Origen</label> 
@@ -49,7 +48,7 @@
         <br>
 
 
-<<<<<<< Updated upstream
+
         <select class="form-control" name="auto" id="auto_edit">
             <option value="">Elija un auto</option>';
             <?php foreach ($groups as $each) { ?>
@@ -57,8 +56,7 @@
             <?php } ?> 
         </select>
         <br>
-=======
->>>>>>> Stashed changes
+
 
         <p>Plazas disponibles</p>
         <label for="plazas" class="sr-only">Plazas</label>                       
