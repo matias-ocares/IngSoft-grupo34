@@ -403,6 +403,82 @@ class viaje extends controller {
                );
         $this->session->set_flashdata($campos_data);     
     }
+    
+        private function crear_array_fechas() {
+        //Agrego al array la primer fecha
+        $fecha_desde = date_create($this->input->post('fecha'));
+        $array_fechas = array($fecha_desde->format('Y-m-d'));
+        return $array_fechas;
+    }
+
+    function existFecha() {
+        // uso un array de array, porque cuando tenga los viajes con periodicidad, voy a tener que pasarle más de un viaje
+        $viaje = array(
+            'array_fechas' => $this->crear_array_fechas(),
+            'hora' => $this->input->post('hora'),
+            'duracion' => $this->input->post('duracion'),
+            'id_chofer' => $this->session->userdata('id_user')
+        );
+        $resultado = $this->model_viaje->is_registered($viaje);
+
+        if ($resultado > 0)
+            return false;
+        else
+            return true;
+    }
+
+    function alpha_dash_space($str) {
+        return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    }
+
+    private function validation_rules() {
+        //funcón provada que crea las reglas de validación
+
+        $config = array(
+            array(
+                'field' => 'origen',
+                'label' => 'Origen',
+                'rules' => 'required|callback_alpha_dash_space'
+            ),
+            array(
+                'field' => 'destino',
+                'label' => 'Destino',
+                'rules' => 'required|callback_alpha_dash_space'
+            ),
+            array(
+                'field' => 'fecha',
+                'label' => 'Fecha',
+                'rules' => 'required|callback_existFecha'
+            ),
+            array(
+                'field' => 'hora',
+                'label' => 'Hora',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'duracion',
+                'label' => 'Duracion',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'costo',
+                'label' => 'Costo',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'auto',
+                'label' => 'Auto',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'plazas',
+                'label' => 'Plazas',
+                'rules' => 'required'
+            )
+        );
+        return $config;
+    }
+
     public function actualizar_viaje(){
         if ($this->input->post()) { 
             $id_viaje = $this->uri->segment(3);
