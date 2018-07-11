@@ -17,9 +17,9 @@
         <p> Fecha</p>
         <label for="fecha" class="sr-only">Fecha</label>  
         <input type="date" id= "fecha" name="fecha" class="form-control" placeholder="Fecha: dd/mm/aaaa" required autofocus 
-               min="<?php $hoy = date("Y-m-d");
-echo $hoy;
-?>" max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>">
+               min="<?php $hoy = date("Y-m-d"); echo $hoy;?>"
+               max="<?php echo date("Y-m-d", strtotime("+30 days")); ?>"
+               value="<?php echo $this->session->flashdata('fecha'); ?>">
         <br>
 
         <p> Hora</p>     
@@ -52,7 +52,7 @@ echo $hoy;
         <select class="form-control" name="auto" id="auto">
             <option value="">Elija un auto</option>';
             <?php foreach ($groups as $each) { ?>
-                <option value="<?php echo $each->id_auto ?>"> <?php echo $each->marca ?> <?php echo $each->modelo ?> - <?php echo $each->num_patente ?> </option>;
+                <option value="<?php echo $each->id_auto ?>" <?php $result = ($each->id_auto == $this->session->flashdata('auto')) ? "selected" : " "; echo $result;?> > <?php echo $each->marca ?> <?php echo $each->modelo ?> - <?php echo $each->num_patente ?> </option>;
             <?php } ?> 
         </select>
         <br>
