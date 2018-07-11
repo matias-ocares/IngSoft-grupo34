@@ -354,7 +354,7 @@ class viaje extends controller {
             $newDate = date("d-m-Y", strtotime($viaje['fecha']));
             if ($pertenece) {
 
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/ver_datos_viaje/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' . '<span class>Postularme</span>');
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/editar_datos_viaje/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' . '<span class>Postularme</span>');
 
 
             } else {
@@ -368,11 +368,12 @@ class viaje extends controller {
         parent::index_page('viaje/view_listar_viajes', $data);
     }
     
-    public function ver_datos_viaje() {
+    public function editar_datos_viaje() {
         $id_viaje = $this->uri->segment(3);
         $viaje = $this->model_viaje->consultar_viaje($id_viaje);
         $this->set_flash_viaje_db($viaje);
         $data = array();
+        $data['groups'] = $this->model_viaje->getMisAutos();
         $data['notifico'] = $this->session->flashdata('notifico');
         parent::index_page('viaje/view_editar_viaje',$data);        
     }
@@ -402,7 +403,7 @@ class viaje extends controller {
                );
         $this->session->set_flashdata($campos_data);     
     }
-    public function actualizar_tarjeta(){
+    public function actualizar_viaje(){
         if ($this->input->post()) { 
             $id_viaje = $this->uri->segment(3);
             $this->form_validation->set_rules($this->validation_rules());
