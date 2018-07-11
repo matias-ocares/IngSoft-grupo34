@@ -226,7 +226,7 @@ class viaje extends controller {
         return ( $origen != $destino );
     }
     
-    private function validation_rules() {
+    private function validation_rules_search() {
         $origen = $this->input->post('search_origen');
         $destino = $this->input->post('search_destino');
         //funcón provada que crea las reglas de validación
@@ -251,7 +251,7 @@ class viaje extends controller {
             //guardo en la sesión los datos del post
             $this->session_search_viaje();
             //valido los datos del formulario
-            $this->form_validation->set_rules($this->validation_rules());
+            $this->form_validation->set_rules($this->validation_rules_search());
             if ($this->form_validation->run() == FALSE) {
                $this->session->set_flashdata('notifico', validation_errors());
             }
