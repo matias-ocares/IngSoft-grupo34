@@ -99,16 +99,16 @@
     }
     
     function validacionViaje() {
-        origen = document.getElementById("origen").value;
-        destino = document.getElementById("destino").value;
-        fecha = document.getElementById("fecha").value;
-        hora = document.getElementById("hora").value;
-        duracion = document.getElementById("duracion").value;
-        costo = document.getElementById("costo").value;
-        auto = document.getElementById("auto").value;
-        plazas = document.getElementById("plazas").value;
+        origen = document.getElementById("origen_edit").value;
+        destino = document.getElementById("destino_edit").value;
+        fecha = document.getElementById("fecha_edit").value;
+        hora = document.getElementById("hora_edit").value;
+        duracion = document.getElementById("duracion_edit").value;
+        costo = document.getElementById("costo_edit").value;
+        auto = document.getElementById("auto_edit").value;
+        plazas = document.getElementById("plazas_edit").value;
 
-        var expresion_regular_texto = /^[A-Za-z\s]+$/;
+        var expresion_regular_texto = new RegExp(/^[a-zA-Z\s0-9]*$/);
 
         if (origen === "" || origen.length === 0 || /^\s+$/.test(origen)) {
             alert('[!] Todos los campos con son obligatorios.');
@@ -152,6 +152,14 @@
         }
         if (!expresion_regular_texto.test(destino)) {
             alert("[!] El campo destino contiene caracteres no permitidos");
+            return false;
+        }
+        
+         if ((origen.trim()).toUpperCase() == (destino.trim()).toUpperCase()) {
+            //remuevo los espacios delante y detrás
+            document.getElementById("origen_edit").value = origen.trim();
+            document.getElementById("destino_edit").value = destino.trim();
+            alert("[!] Origen y Destino deben ser diferentes");
             return false;
         }
 

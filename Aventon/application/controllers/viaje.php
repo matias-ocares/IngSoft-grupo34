@@ -215,11 +215,10 @@ class viaje extends controller {
     // ------------------COMIENZAN METODOS DE BUSQUEDA --------------------------------
     
     function alpha_num_spaces($str) {
-        //return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
         return (!preg_match(" /^[a-zA-Z\s0-9]*$/", $str)) ? FALSE : TRUE;
     }
     
-    //Un destino es válido si es diferente al orígen
+    //Un destino es válido si es diferente al orígen, en el formulario de búsqueda
     function destino_valido() {
         $origen = strtoupper(trim($this->input->post('search_origen')));
         $destino = strtoupper(trim($this->input->post('search_destino')));
@@ -260,28 +259,32 @@ class viaje extends controller {
         redirect('viaje/', 'refresh');
     }
 
+    public function clean_session(){
+        //limpio sesión
+        $array_items = array('origen', 'destino', 'busqueda','fecha','solo_mis_viajes');
+        $this->session->unset_userdata($array_items);
+    } 
+    
     // Para limpiar la búsqueda
     public function mostrar_todos(){
         
         if ($this->session->userdata('busqueda') or $this->session->userdata('solo_mis_viajes')) {
             //limpio sesión
-            $array_items = array('origen', 'destino', 'busqueda','fecha','solo_mis_viajes');
-            $this->session->unset_userdata($array_items);     
+            $this->clean_session();   
         }   
          redirect('viaje/', 'refresh');
     }
     
     //Mostrar solo mis viajes
     public function mostrar_solo_mis_viajes() {
-        $search = array(
-            'solo_mis_viajes' => true);
-        $this->session->set_userdata($search);
-        
+       
         if ($this->session->userdata('busqueda')) {
             //limpio sesión
-            $array_items = array('origen', 'destino', 'busqueda', 'fecha');
-            $this->session->unset_userdata($array_items);
+            $this->clean_session();
         }
+        $search = array('solo_mis_viajes' => true);
+        $this->session->set_userdata($search);
+
         redirect('viaje/', 'refresh');
     }
 
@@ -355,7 +358,7 @@ class viaje extends controller {
             $newDate = date("d-m-Y", strtotime($viaje['fecha']));
             if ($pertenece) {
 
-                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/editar_datos_viaje/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>') . ' | ' . '<span class>Postularme</span>');
+                $this->table->add_row($viaje['origen'], $viaje['destino'], $newDate, $hora_inicio, anchor('viaje/ver/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-eye-open"></span>') . ' | ' . anchor('viaje/editar_datos_viaje/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-pencil"></span>') . ' | ' . anchor('viaje/ver_eliminar/' . $viaje['id_viaje'], '<span class="glyphicon glyphicon-trash"></span>'). ' | ' . '<span class>Postularme</span>');
 
 
             } else {
@@ -444,23 +447,28 @@ class viaje extends controller {
         }
     }
 
-    function alpha_dash_space($str) {
-        return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    //Un destino es válido si es diferente al orígen, en el formulario de edición
+    function destino_valido_edit() {
+        $origen = strtoupper(trim($this->input->post('origen')));
+        $destino = strtoupper(trim($this->input->post('destino')));
+        return ( $origen != $destino );
     }
-
+   
     private function validation_rules() {
+        
+        $origen = $this->input->post('origen');
+        $destino = $this->input->post('destino');
         //funcón provada que crea las reglas de validación
-
         $config = array(
             array(
                 'field' => 'origen',
                 'label' => 'Origen',
-                'rules' => 'required|callback_alpha_dash_space'
+                'rules' => 'required|callback_alpha_num_spaces['.$origen.']'
             ),
             array(
                 'field' => 'destino',
                 'label' => 'Destino',
-                'rules' => 'required|callback_alpha_dash_space'
+                'rules' => 'required|callback_alpha_num_spaces['.$destino.']|callback_destino_valido_edit'
             ),
             array(
                 'field' => 'fecha',
@@ -508,6 +516,7 @@ class viaje extends controller {
         $viaje ['costo'] =$this->input->post('costo');
         $viaje ['fecha'] =$this->input->post('fecha');
         $viaje ['plazas_total'] =$this->input->post('plazas');
+        $viaje ['id_auto'] =$this->input->post('auto');
         return $viaje;
     }
     public function actualizar_viaje(){
@@ -522,6 +531,7 @@ class viaje extends controller {
                     $viaje=$this->array_viaje();
                     if($this->model_viaje->actualizar_viaje($viaje,$id_viaje) == TRUE){                
                     $this->session->set_flashdata('exito','Se modifico el viaje correctamente.');
+                    $this->clean_session();
                     redirect('viaje/');}
                 } else {
                     $data = array();
@@ -532,6 +542,7 @@ class viaje extends controller {
                 } 
             }else{
                 $this->session->set_flashdata('notifico','No se ha podido producir los cambios. El viaje al que desea modificar posee solicitudes pendientes/aprobadas.');
+                $this->clean_session();
                 redirect('viaje/');  
             }
         } 

@@ -128,7 +128,7 @@
         auto = document.getElementById("auto").value;
         plazas = document.getElementById("plazas").value;
 
-        var expresion_regular_texto = /^[A-Za-z\s]+$/;
+        var expresion_regular_texto = new RegExp(/^[a-zA-Z\s0-9]*$/);
 
         if (origen === "" || origen.length === 0 || /^\s+$/.test(origen)) {
             alert('[!] Todos los campos con son obligatorios.');
@@ -172,6 +172,14 @@
         }
         if (!expresion_regular_texto.test(destino)) {
             alert("[!] El campo destino contiene caracteres no permitidos");
+            return false;
+        }
+        
+         if ((origen.trim()).toUpperCase() == (destino.trim()).toUpperCase()) {
+            //remuevo los espacios delante y detrás
+            document.getElementById("origen").value = origen.trim();
+            document.getElementById("destino").value = destino.trim();
+            alert("[!] Origen y Destino deben ser diferentes");
             return false;
         }
 
