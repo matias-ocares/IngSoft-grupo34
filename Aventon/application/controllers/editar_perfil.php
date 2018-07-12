@@ -18,9 +18,9 @@ class editar_perfil extends controller {
     public function index() {
         if ($this->session->userdata('logueado')) { //si está logueado
             $id = $this->session->userdata('id_user');
-            $perfil_db = $this->model_user->user_by_id($id);
-            $this->session->set_flashdata($perfil_db);
-            $data = array();
+            $data['perfil']  = $this->model_user->user_by_id($id);
+            //$this->session->set_flashdata($perfil_db);
+
             parent::index_page('view_editar_perfil', $data);
         } else {
             redirect('login');
@@ -41,8 +41,8 @@ class editar_perfil extends controller {
 
     function notExistEmail() {
         $email_post = $this->input->post('email');
-        $email_session = $this->session->userdata('email');
-        if ($email_post == $email_session) {
+        $email_session = $this->model_user->compare_email($this->session->userdata('id_user'));
+        if ($email_post == $email_session->email) {
             return TRUE;
         } else {
             //verifies email no existe in DB
@@ -79,7 +79,7 @@ class editar_perfil extends controller {
                         'nombre' => $this->input->post('nombre'),
                         'apellido' => $this->input->post('apellido'),
                         'id_user'=>$this->session->userdata('id_user'),
-                        'logueado' => FALSE
+                        'logueado' => TRUE
                     );
                     $this->session->set_userdata($usuario_data);
         /*
@@ -116,8 +116,8 @@ class editar_perfil extends controller {
                     $this->update_user_session_data(); //actualizo datos de la sesión, y seteo logueado=FALSE (CIERRO SESION, PERO SIN DESTRUIRLA)
                     //cierro sesión y redirijo al login,con EMAIL precargado y mostrando mensaje de exito 
                     $this->session->set_flashdata('email', $this->input->post('email')); 
-                    $this->session->set_flashdata('notifico', 'La modificacion se realizó satisfactoriamente. Vuelva a iniciar sesión');
-                    redirect('login');
+                    $this->session->set_flashdata('notifico', 'La modificacion se realizó satisfactoriamente.');
+                    redirect('viaje/');
                 } else { //si fallo el guardado en la BD no actualizo los datos en la sesión
                     $this->session->set_flashdata('notifico', '[!] ERROR al actualizar los datos. Intentelo mas tarde.');
                     redirect('viaje/');

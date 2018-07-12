@@ -7,17 +7,17 @@
         <p>Nombre</p>
         <label for="nombre" class="sr-only">Nombre</label>
         <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre"  required autofocus 
-               value="<?php echo $this->session->flashdata('nombre'); ?>">
+               value="<?php echo $perfil['nombre']; ?>">
         <br>
         <p>Apellido</p>
         <label for="apellido" class="sr-only">Apellido</label>
         <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido"  required autofocus 
-               value="<?php echo $this->session->flashdata('apellido'); ?>"> 
+               value="<?php echo $perfil['apellido']; ?>"> 
         <br>
         <p>Email</p>
         <label for="email" class="sr-only">Email</label>
         <input type="email" id="email" name="email" class="form-control" placeholder="Email"  required autofocus 
-               value="<?php echo $this->session->flashdata('email'); ?>">
+               value="<?php echo $perfil['email']; ?>">
 
         <?php if ($this->session->flashdata('notifico')): ?>
 
