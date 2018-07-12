@@ -29,13 +29,13 @@ class crear_viaje extends controller {
             redirect('login');
         } else {
             $this->session->set_flashdata('notifico', '');
-           // redirect('login/logueado');
-   
-       $this->session->set_flashdata('exito','');
-       $this->session->set_flashdata('error','NO POSEE AUTO REGISTRADO PARA CREAR UN VIAJE');
-         
-       $data['error'] = $this->session->flashdata('error');
-       $data['exito'] = $this->session->flashdata('exito');
+            // redirect('login/logueado');
+
+            $this->session->set_flashdata('exito', '');
+            $this->session->set_flashdata('error', 'NO POSEE AUTO REGISTRADO PARA CREAR UN VIAJE');
+
+            $data['error'] = $this->session->flashdata('error');
+            $data['exito'] = $this->session->flashdata('exito');
             redirect('viaje/');
         }
     }
@@ -76,23 +76,31 @@ class crear_viaje extends controller {
          */
     }
 
-    function alpha_dash_space($str) {
-        return (!preg_match("/^([-a-z_ ])+$/i", $str)) ? FALSE : TRUE;
+    function alpha_num_spaces($str) {
+        return (!preg_match(" /^[a-zA-Z\s0-9]*$/", $str)) ? FALSE : TRUE;
+    }
+
+    //Un destino es válido si es diferente al orígen, en el formulario de creación
+    function destino_valido_create() {
+        $origen = strtoupper(trim($this->input->post('origen')));
+        $destino = strtoupper(trim($this->input->post('destino')));
+        return ( $origen != $destino );
     }
 
     private function validation_rules() {
+        $origen = $this->input->post('origen');
+        $destino = $this->input->post('destino');
         //funcón provada que crea las reglas de validación
-
         $config = array(
             array(
                 'field' => 'origen',
                 'label' => 'Origen',
-                'rules' => 'required|callback_alpha_dash_space'
+                'rules' => 'required|callback_alpha_num_spaces[' . $origen . ']'
             ),
             array(
                 'field' => 'destino',
                 'label' => 'Destino',
-                'rules' => 'required|callback_alpha_dash_space'
+                'rules' => 'required|callback_alpha_num_spaces[' . $destino . ']|callback_destino_valido_create'
             ),
             array(
                 'field' => 'fecha',
@@ -180,6 +188,12 @@ class crear_viaje extends controller {
         return $array_viajes;
     }
 
+    public function clean_session() {
+        //limpio sesión
+        $array_items = array('origen', 'destino', 'busqueda', 'fecha', 'solo_mis_viajes');
+        $this->session->unset_userdata($array_items);
+    }
+
     private function registrar_viaje() {
         // Creo arreglos de fechas 
         $array_fechas = $this->crear_array_fechas();
@@ -187,10 +201,12 @@ class crear_viaje extends controller {
         $array_viajes = $this->crear_array_viajes($array_fechas);
         //Inserto en la Base de Datos
         if ($this->model_viaje->registrar_viaje($array_viajes) == TRUE) {//guardo el viaje en la BD
-            $this->session->set_flashdata('notifico', 'Se cargó el viaje exitosamente.');
+            $this->session->set_flashdata('exito', 'Se cargó el viaje exitosamente.');
+            $this->clean_session();
             redirect('viaje/');
         } else {
-            $this->session->set_flashdata('notifico', 'Por el momento no pudo cargarse el viaje.');
+            $this->session->set_flashdata('error', 'Por el momento no pudo cargarse el viaje.');
+            $this->clean_session();
             redirect('viaje/');
         }
     }
