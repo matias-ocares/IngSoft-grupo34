@@ -20,6 +20,14 @@ class model_user extends CI_Model {
     public function register_user($user) {
         $this->db->insert('user', $user);
     }
+    public function compare_email($id_user){
+        $this->db->select('email');
+        $this->db->from('user');
+        $this->db->where('id_user',$id_user);
+        $consulta = $this->db->get();
+        $resultado = $consulta->row();
+        return $resultado;
+    }
 
     public function user_by_name_pass($email, $password) {
         $this->db->select('password, email, nombre, apellido, id_user');

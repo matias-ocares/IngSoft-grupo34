@@ -85,7 +85,7 @@
             alert("[!] La fecha de vencimiento contiene caracteres no permitidos");
             return false;
 	}
-        if(fecha < 0718){
+        if(fecha < 0818){
             alert("[!] La tarjeta de credito se encuentra vencida. Por favor ingrese otra");
             return false;
         }
